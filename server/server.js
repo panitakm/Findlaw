@@ -4,9 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const fs = require('fs');
 const path = require('path');
-const { error } = require('console');
 const saltRounds = 10;
 require('dotenv').config();
 
@@ -319,7 +317,7 @@ app.put('/lawyer/lawyer/save-profile/:id', async (req, res) => {
         let finalImagePath = data.image_path;
         let finalLicensePath = data.license_file;
 
-        if (finalImagePath && finalLicensePath.startsWith('data:')) {
+        if (finalImagePath && finalImagePath.startsWith('data:')) {
             finalImagePath = saveFileFromBase64(finalImagePath, 'profile');
         }
 
