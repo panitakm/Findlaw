@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+body {
+    margin: 120px 0 40px 0;
+    background-color: #E5EEFF;
+    color: #000000;
+}
+
+.fixed-top {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.custom-container {
+    max-width: 1000px; 
+    width: 100%;
+    margin: 0 auto;
+}
+
+.header-title {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 35px;
+    font-weight: 700;
+    color: #1E233A;
+
+}
+
+.custom-card {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 30px 40px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-header-custom {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a233a;
+    border-bottom: 1px solid #ebebeb;
+    padding-bottom: 10px;
+}
+
+.profile-img-wrapper {
+    position: relative;
+    width: 130px;
+    height: 130px;
+}
+
+.profile-img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #E5EEFF;
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #0058BE;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+}
+
+.edit-icon:hover {
+    background-color: #004494;
+}
+
+.profile-name {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.profile-username {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.btn-change-photo {
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+.form-label {
+    margin: 0 0 3px 5px; 
+}
+
+.form-input {
+    margin-bottom: 10px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-top: 10px;
+}
+
+.form-control {
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+    border: 1px solid #ced4da;
+    margin-top: 5px;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 88, 190, 0.25);
+    border-color: #0058BE;
+}
+
+.btn-save {
+    position: relative;
+    padding: 12px 30px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #0058BE;
+    transition: background-color 0.3s;
+}
+
+.btn-save:hover {
+    background-color: #004494;
+    color: #ffffff;
+}
+
+.btn-cancel {
+    padding: 12px 30px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #495057;
+    /* background-color: #ffffff; */
+    border: none;
+    transition: all 0.3s ease;
+    text-decoration: none; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-cancel:hover {
+    /* background-color: #f1f3f5; */
+    color: #212529;
+    /* border-color: #adb5bd; */
+}
+
+.btn-change-pic {
+    font-family: 'Sarabun', sans-serif;
+}

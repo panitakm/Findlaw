@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+body {
+    background-color: #E5EEFF;
+    color: #000000;
+}
+
+.container {
+    max-width: 650px;
+    padding: 1.5rem;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
+}
+
+.header {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 45px;
+    font-weight: 700;
+}
+
+.uploadProfile {
+position: relative;
+width: 120px;
+height: 120px;
+margin-bottom: 10px;
+border-radius: 50%;
+overflow: hidden; 
+}
+
+.profilePreview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.uploadPic {
+    position: absolute; 
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 2px 0 12px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.uploadPic:hover {
+    background: rgba(0, 0, 0, 0.8)
+}
+
+.form-input {
+    margin-bottom: 15px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-control {
+    font-size: 14px;
+    font-weight: 300;
+    border-radius: 10px;
+}
+
+.form-select {
+    font-size: 14px;
+    font-weight: 300;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.invalid-feedback {
+    margin-left: 10px;
+    margin-bottom: -5px;
+}
+
+.btn {
+    position: relative;
+    width: 190px;
+    height: 50px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #D5E0F8;
+    z-index: -2;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0058BE;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+} 
+
+.btn:hover::after {
+    transform: scaleX(1);
+}
+
+.btn:hover {
+    color: #ffffff;
+    transition: color 0.2s ease;
+}
+
+.btn-submit {
+    margin-right: 15px;
+}
+
+.link {
+    font-family: "Sarabun", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.link a {
+    margin-left: 5px;
+    margin-right: 15px;
+    color: #014490c0;
+}

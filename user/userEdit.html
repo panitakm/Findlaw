@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/userEdit.css">
+</head>
+<body>
+  <header class="header py-3 border-bottom fixed-top bg-white">
+    <div class="container-fluid d-flex align-items-center">
+
+        <nav class="header-nav mx-auto">
+            <ul class="nav nav-pills gap-3">
+                <li class="nav-item"><a href="#" class="nav-link active">หน้าแรก</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">ค้นหาทนายความ</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">สมัครทนายความ</a></li>
+            </ul>
+        </nav>
+
+        <div class="profile">
+            <div class="dropdown">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="/css/pic/person-circle.svg" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow">
+                    <li><a class="dropdown-item" href="#">แก้ไขโปรไฟล์</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#">ออกจากระบบ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  </header>
+
+  <main>
+  <div class="container custom-container">
+    <div class="header-title mb-2">แก้ไขข้อมูลส่วนตัว</div>
+
+    <div class="row gx-5 gy-4">
+      <div class="col-lg-4">
+        <div class="custom-card text-center">
+          <div class="profile-img-wrapper mx-auto mb-3">
+            <img src="/css/pic/person-circle.svg" alt="Profile" id="showPic" class="profile-img">
+            <label for="uploadNewpic" class="edit-icon">
+              <i class="bi bi-pencil-fill"></i>
+            </label>
+            <input type="file" id="uploadNewpic" accept="image/JPEG, image/PNG" style="display: none;">
+          </div>
+          <h4 class="profile-name" id="displayName">ชื่อ นามสกุล</h4>
+          <p class="profile-username" id="displayUsername">@Username</p>
+          <label for="uploadNewpic" class="btn btn-outline-primary w-100 mt-2 btn-change-pic">เปลี่ยนรูปประจำตัว</label>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <form id="editProfileform">
+          <div class="custom-card mb-4">
+            <div class="card-header-custom mb-4">
+              <i class="bi bi-person-vcard-fill text-primary me-2"></i> ข้อมูลส่วนตัว
+            </div>
+            <div class="row g-3">
+              <div class="form-input col-md-6">
+                <label for="inputName" class="form-label">ชื่อ</label>
+                <input type="text" class="form-control form-control-lg" id="inputName">
+              </div>
+              <div class="form-input col-md-6">
+                <label for="inputLastname" class="form-label">นามสกุล</label>
+                <input type="text" class="form-control form-control-lg" id="inputLastname">
+              </div>
+              <div class="form-input col-md-12">
+                <label for="inputUsername" class="form-label">ชื่อผู้ใช้งาน</label>
+                <input type="text" class="form-control form-control-lg" id="inputUsername">
+              </div>
+              <div class="form-input col-md-12">
+                <label for="inputEmail" class="form-label">อีเมล</label>
+                <input type="email" class="form-control form-control-lg" id="inputEmail">
+              </div>
+            </div>
+          </div>
+
+          <div class="custom-card mb-4">
+            <div class="card-header-custom mb-4">
+              <i class="bi bi-lock-fill text-primary me-2"></i> เปลี่ยนรหัสผ่าน
+            </div>
+            <div class="row g-3">
+              <div class="form-input col-md-12">
+                <label for="oldPassword" class="form-label">รหัสผ่านเดิม</label>
+                <input type="password" class="form-control form-control-lg" id="oldPassword">
+              </div>
+              <div class="form-input col-md-6">
+                <label for="newPassword" class="form-label">รหัสผ่านใหม่</label>
+                <input type="password" class="form-control form-control-lg" id="newPassword">
+              </div>
+              <div class="form-input col-md-6">
+                <label for="confirmNewpassword" class="form-label">ยืนยันรหัสผ่านใหม่</label>
+                <input type="password" class="form-control form-control-lg" id="confirmNewpassword">
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-3 mt-4">
+            <a href="#" class="btn btn-cancel">ยกเลิก</a>
+            <button type="submit" class="btn btn-save">บันทึกการเปลี่ยนแปลง</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="/js/userEdit.js"></script>
+</body>
+</html>

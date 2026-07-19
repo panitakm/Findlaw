@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/search.css">
+</head>
+<body>
+  <nav class="header py-3 border-bottom fixed-top bg-white">
+      <div class="container-fluid d-flex align-items-center justify-content-center position-relative">
+
+          <nav class="header-nav">
+              <ul class="nav nav-pills gap-3">
+                  <li class="nav-item"><a href="search.html" class="nav-link active">หน้าแรก</a></li>
+                  <li class="nav-item"><a href="#" class="nav-link">ทนายความทั้งหมด</a></li>
+                  <li class="nav-item"><a href="/lawyer/registerLawyer.html" class="nav-link">สมัครทนายความ</a></li>
+              </ul>
+          </nav>
+
+          <div class="d-flex gap-2 position-absolute end-0 me-3">
+            <a href="#" class="btn btn-outline-dark rounded-pill px-4">เข้าสู่ระบบ</a>
+            <a href="#" class="btn btn-primary rounded-pill px-4">สมัครใช้งาน</a>
+          </div>
+          
+      </div>
+  </nav>
+
+  <main class="d-flex flex-column"> 
+    <section class="title text-center" id="compactSearch">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-8 mx-auto text-center">
+            <h1>ค้นหาทนายความ</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-11">
+          <div class="search-container">
+            <h5 class="mb-4 text-center fw-bold title-text"><i class="me-2 bi bi-search"></i>ค้นหาทนายความที่ต้องการ</h5>
+            
+            <form id="searchForm">
+              <div class="row g-3">
+                <div class="col-md-12 col-lg-4">
+                  <label class="form-label">ค้นหา/ประเภทคดี</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-keyboard text-muted"></i></span>
+                    <input type="text" name="keyword" class="form-control border-start-0 ps-2" placeholder="เช่น คดีที่ดิน, มรดก, หย่าร้าง..." list="categoryList">
+                    <datalist id="categoryList"></datalist>
+
+                    <ul id="suggestionBox" class="dropdown-menu w-100 shadow-sm d-none position-absolute" style="top: 100%; left: 0; z-index: 1000; max-height: 250px; overflow-y: auto;"></ul>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                  <label class="form-label">ประสบการณ์ทำงาน</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-star text-muted"></i></span>
+                    <select class="form-select border-start-0 ps-0" name="experience" id="nameExp">
+                      <option value="">ทั้งหมด</option>
+                      <option value="0-1">น้อยกว่า 1 ปี</option>
+                      <option value="1-3">1-3 ปี</option>
+                      <option value="4-6">4-6 ปี</option>
+                      <option value="7-10">7-10 ปี</option>
+                      <option value="11-50">10 ปีขึ้นไป</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                  <label class="form-label">จังหวัดที่ให้บริการ</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-geo-alt text-muted"></i></span>
+                    <!-- <select class="form-select border-start-0 ps-0" name="province" id="nameProv"></select> -->
+                      <button class="form-select border-start-0 ps-0 text-start text-muted d-flex justify-content-between align-items-center" type="button" id="provinceBtn" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <span id="provinceBtnText">เลือกจังหวัด</span>
+                      </button>
+                      <ul class="dropdown-menu w-100 shadow-sm p-2" id="provinceList" style="max-height: 300px; overflow-y: auto;"></ul>
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-lg-2 d-flex align-items-end">
+                  <button type="submit" class="btn btn-primary-custom w-100">ค้นหา</button>
+                </div>
+
+              </div>
+            </form>
+
+            <section class="container mt-5 mb-5">
+              <div id="searchResults" class="row g-4"></div>
+            </section>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="/js/search.js"></script>
+</body>
+</html>

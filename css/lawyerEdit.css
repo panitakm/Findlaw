@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+body {
+    margin: 90px 0 0 0;
+    background-color: #eef4fd;
+}
+
+form {
+    font-family: 'Sarabun', sans-serif;
+}
+
+.fixed-top {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.custom-container {
+    max-width: 850px; 
+    width: 100%;
+    margin: 0 auto;
+}
+
+.header-title {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1E233A;
+}
+
+.custom-card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 30px 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-header-custom {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a233a;
+    border-bottom: 1px solid #ebebeb;
+    padding-bottom: 15px;
+}
+
+.profile-img-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #E5EEFF;
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: 0px;
+    right: 15px;
+    background-color: #0058BE;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    border: 2px solid #fff;
+    transition: background-color 0.3s;
+}
+
+
+.upload-zone {
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.upload-zone:hover {
+    background-color: #eef2ff;
+    border-color: #0058BE;
+}
+
+.category-badge {
+    background-color: #E5EEFF;
+    color: #0058BE;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.btn-add-tag {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.form-label { 
+    margin: 0 0 5px 5px; 
+    font-family: 'Sarabun', 
+    sans-serif; font-size: 14px; 
+    font-weight: 600; 
+    color: #495057;
+}
+
+.form-control { 
+    border-radius: 8px; 
+    font-size: 14px; 
+    font-weight: 400; 
+    background-color: #fcfcfc;
+}
+
+.form-control:focus { 
+    box-shadow: 0 0 0 0.25rem rgba(0, 88, 190, 0.25); 
+    border-color: #0058BE;
+}
+
+.btn-save {
+    padding: 12px 40px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    color: #ffffff;
+    background-color: #0058BE;
+    border: none;
+    transition: background-color 0.3s;
+}
+.btn-save:hover { 
+    background-color: #004494; 
+    color: #ffffff;
+}
+
+.btn-cancel {
+    padding: 12px 30px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.btn-cancel:hover { 
+    color: #212529; 
+}
+
+.tag-box {
+    transition: all 0.2s ease-in-out;
+}
+
+.tag-box:hover {
+    background-color: #0d6efd !important; 
+    color: #ffffff !important;
+}
+
+.tag-remove-icon {
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.tag-box:hover .tag-remove-icon {
+    color: #ffffff !important;
+    opacity: 1;
+}
+
+.tag-remove-icon:hover {
+    transform: scale(1.2);
+}

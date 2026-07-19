@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/lawyerProfile.css">
+</head>
+<body>
+  <header class="header py-3 border-bottom fixed-top bg-white">
+    <div class="container-fluid d-flex align-items-center">
+
+        <nav class="header-nav mx-auto">
+            <ul class="nav nav-pills gap-3">
+                <li class="nav-item"><a href="#" class="nav-link active">หน้าแรก</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">ค้นหาทนายความ</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">สมัครทนายความ</a></li>
+            </ul>
+        </nav>
+
+        <div class="profile">
+            <div class="dropdown">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="/css/pic/person-circle.svg" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow">
+                    <li><a class="dropdown-item" href="#">แก้ไขโปรไฟล์</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#">ออกจากระบบ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="compactSearch" class="d-none py-3 border-bottom bg-white sticky-top">
+        <div class="container">
+            <form id="searchFormCompact" class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <input type="text" name="keyword" class="form-control" placeholder="ค้นหาทนายความ...">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">ค้นหา</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div class="container pb-5">
+      <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+        <div class="lawyer-header-container d-flex position-relative p-4"> 
+          <div class="lawyer-img-wrapper">
+            <img id="profileLaw" class="img-fluid rounded shadow-sm lawyer-img" alt="Profile">
+          </div>
+
+          <div class="lawyer-info-wrapper ms-5">
+            <div class="license-container text-muted small position-absolute top-0 end-0 p-4" id="licenseNum"></div>
+            
+            <div class="pt-2">
+              <span id="verifyLaw" class="badge bg-success mb-2">
+                <i class="bi bi-check-circle-fill me-1"></i>ยืนยันตัวตนแล้ว
+              </span>
+              <div class="lawyer-name fw-bold mb-4" id="lawyerName"></div>
+              <p class="text-muted mb-2">
+                <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                <span id="locationProv"></span>
+              </p>
+              <div class="d-flex align-items-center">
+                <div class="text-warning me-2" id="starRank">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                </div>
+                <span class="fw-bold me-1" id="rankScore">4.5</span>
+                <span class="text-muted small" id="sumReview">(10 รีวิว)</span>
+              </div>
+
+              <div class="mt-4">
+                <div id="skillBox" class="d-flex flex-wrap gap-2 align-items-center" style="max-height: 85px; overflow: hidden;"></div>
+              </div>
+
+              <div class="modal fade" id="skillsModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header border-bottom-0">
+                      <h5 class="modal-title fw-bold">หมวดหมู่คดีทั้งหมด</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                      <div id="modalList" class="d-flex flex-wrap gap-2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row gx-4">
+        <div class="col-lg-4">
+          <section class="card border-0 shadow-sm mb-4 p-4 pb-3">
+            <div class="header-title d-flex align-items-center"><i class="bi bi-person-lines-fill me-3 fs-4"></i>ช่องทางติดต่อ</div>
+            <ul class="list-unstyled contact-list mt-2">
+              <li><i class="bi bi-telephone me-1"></i><span id="contactPhone"></span></li>
+              <li><i class="bi bi-envelope me-1"></i><span id="contactEmail"></span></li>
+              <li><i class="bi bi-line me-1"></i><span id="contactLine"></span></li>
+              <li><i class="bi bi-facebook me-1"></i><span id="contactFacebook"></span></li>
+            </ul>
+          </section>
+
+          <section class="card border-0 shadow-sm mb-4 p-4 pb-1">
+            <div class="header-title d-flex align-items-center"><i class="bi bi-calendar3 me-3 fs-4"></i>ตารางให้บริการ</div>
+            <div class="service-hours mx-2 my-3" id="serviceHours"></div>
+          </section>
+
+          <section class="card border-0 shadow-sm p-4">
+            <div class="header-title d-flex align-items-center"><i class="bi bi-map me-3 fs-4"></i>ที่อยู่</div> 
+            <p class="text-muted small mt-3" id="address"></p>
+            <div id="googleMap" class="rounded bg-light d-flex flex-column align-items-center justify-content-center border" style="height: 200px;">
+              <span class="text-muted small">Map Loading....</span>
+            </div>
+          </section>
+
+        </div> 
+        
+        <div class="col-lg-8">
+          <section class="card border-0 shadow-sm mb-4 p-4">
+            <div class="header-title mb-4 w-100">ประสบการณ์การทำงาน</div>
+            <div class="custom-timeline" id="workhistoryTimeline"></div>
+          </section>
+
+          <section class="card border-0 shadow-sm mb-4 p-4">
+            <div class="header-title mb-4 w-100">ประวัติการศึกษา</div> 
+            <div class="custom-timeline" id="educationTimeline"></div>
+          </section>
+
+        </div> 
+      </div> 
+      
+      <div class="mt-5">
+        <section class="d-flex justify-content-between align-items-center mb-4">
+          <div class="review-title fw-bold">รีวิวและความคิดเห็น</div>
+          <button class="btn btn-outline-primary btn-sm">ดูทั้งหมด</button>
+        </section>
+        <div class="row g-3" id="reviewBox"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="/js/lawyerProfile.js"></script>
+</body>
+</html>

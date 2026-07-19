@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ค้นหาทนายความ</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  
+  <style>
+    /* CSS ตกแต่ง Dropdown จังหวัดแบบ Custom */
+    body { background-color: #f8f9fa; }
+    .custom-dropdown-menu { max-height: 350px; overflow-y: auto; border-radius: 8px; border: 1px solid #eee; }
+    .custom-dropdown-item { cursor: pointer; padding: 8px 16px; color: #333; transition: background-color 0.2s; }
+    .custom-dropdown-item:hover { background-color: #f1f3f5; }
+    .custom-dropdown-item.active-tag { background-color: #1a237e; color: #fff; } /* สีน้ำเงินเข้มแบบในภาพ */
+    .custom-dropdown-header { font-weight: bold; color: #000; padding: 12px 16px 4px 16px; font-size: 0.95rem; }
+    .custom-select-box { min-height: 38px; cursor: pointer; background: #fff; }
+    
+    /* สีของ Badge ป้ายแท็ก */
+    .badge-province { background-color: #1a237e; color: #fff; font-weight: normal; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <main>
+    <section class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-11">
+          <div class="search-container shadow-sm p-4 rounded bg-white">
+            <h5 class="mb-4 text-center fw-bold"><i class="me-2 bi bi-search"></i>ค้นหาทนายความที่คุณต้องการ</h5>
+            
+            <form id="searchForm">
+              <div class="row g-3">
+
+                <div class="col-md-12 col-lg-4">
+                  <label class="form-label text-muted" style="font-size: 14px;">ค้นหา / ประเภทคดี</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-envelope text-muted"></i></span>
+                    <input type="text" name="keyword" class="form-control border-start-0 ps-2" placeholder="เช่น คดีที่ดิน, มรดก, หย่าร้าง...">
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                  <label class="form-label text-muted" style="font-size: 14px;">ประสบการณ์ทำงาน</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-star text-muted"></i></span>
+                    <select name="experience" class="form-select border-start-0 ps-0 text-muted">
+                      <option value="">ทุกระดับประสบการณ์</option>
+                      <option value="0-1">น้อยกว่า 1 ปี</option>
+                      <option value="1-3">1 - 3 ปี</option>
+                      <option value="4-6">4 - 6 ปี</option>
+                      <option value="7-10">7 - 10 ปี</option>
+                      <option value="11-99">10 ปีขึ้นไป</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                  <label class="form-label text-muted" style="font-size: 14px;">จังหวัด</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-geo-alt text-muted"></i></span>
+                    <div class="dropdown flex-grow-1">
+                      
+                      <div class="form-control border-start-0 custom-select-box d-flex align-items-center justify-content-between rounded-end" 
+                           data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <div id="provinceDisplay" class="d-flex flex-wrap gap-1 align-items-center" style="overflow: hidden; max-height: 28px;">
+                            <span class="text-muted" style="font-size: 15px;">ทั่วประเทศ</span>
+                        </div>
+                        <i class="bi bi-chevron-down text-muted" style="font-size: 12px;"></i>
+                      </div>
+                      
+                      <ul class="dropdown-menu w-100 shadow custom-dropdown-menu mt-1" id="provinceList">
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-lg-2 d-flex align-items-end">
+                  <button type="submit" class="btn w-100 fw-bold" style="background-color: #1a237e; color: #fff;">ค้นหาเลย</button>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container mt-5 mb-5">
+        <div id="searchResults" class="row g-4"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  
+  <script>
+    (() => {
+        'use strict';
+
+        let selectedProvinces = [];
+
+        // ฟังก์ชันโหลดข้อมูลจังหวัด
+        const loadProvinces = async () => {
+            try {
+                const res = await fetch('http://localhost:3000/lawyer/provinces');
+                const provinces = await res.json();
+                const dropdownList = document.getElementById('provinceList');
+                const displayArea = document.getElementById('provinceDisplay');
+
+                if (!dropdownList) return;
+
+                // จัดกลุ่มตามภาค
+                const grouped = {};
+                provinces.forEach(p => {
+                    const region = p.region || 'อื่นๆ';
+                    if (!grouped[region]) grouped[region] = [];
+                    grouped[region].push(p);
+                });
+
+                // วาดตัวเลือก "ทั่วประเทศ" ไว้บนสุด
+                dropdownList.innerHTML = `
+                    <li><a class="dropdown-item custom-dropdown-item fw-bold" href="#" data-id="all">ทั่วประเทศ</a></li>
+                `;
+
+                // วาดหัวข้อภาคและชื่อจังหวัด
+                for (const region in grouped) {
+                    dropdownList.innerHTML += `<li><div class="custom-dropdown-header">ภาค${region}</div></li>`;
+                    
+                    grouped[region].forEach(p => {
+                        dropdownList.innerHTML += `
+                            <li>
+                                <a class="dropdown-item custom-dropdown-item d-flex justify-content-between align-items-center" 
+                                   href="#" data-id="${p.id}" data-name="${p.name}">
+                                   <span>${p.name}</span>
+                                   <i class="bi bi-check-lg text-white d-none check-icon"></i>
+                                </a>
+                            </li>
+                        `;
+                    });
+                }
+
+                // ดักจับ Event ตอนคลิกเลือกจังหวัด
+                const items = dropdownList.querySelectorAll('.custom-dropdown-item');
+                items.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const id = item.getAttribute('data-id');
+                        const name = item.getAttribute('data-name');
+
+                        if (id === 'all') {
+                            selectedProvinces = []; // เคลียร์ทั้งหมด
+                        } else {
+                            const index = selectedProvinces.findIndex(sp => sp.id === id);
+                            if (index > -1) selectedProvinces.splice(index, 1); // เอาออกถ้ามีแล้ว
+                            else selectedProvinces.push({ id, name }); // ใส่เข้าไปใหม่
+                        }
+                        updateProvinceUI(items, displayArea);
+                    });
+                });
+
+            } catch (error) {
+                console.error("โหลดข้อมูลจังหวัดล้มเหลว:", error);
+            }
+        };
+
+        // ฟังก์ชันอัปเดตหน้าตา Dropdown ให้เป็น Badge หรือแสดงข้อความ "เลือกแล้ว X จังหวัด"
+        const updateProvinceUI = (items, displayArea) => {
+            // อัปเดตไฮไลท์ในลิสต์ Dropdown
+            items.forEach(item => {
+                const id = item.getAttribute('data-id');
+                const checkIcon = item.querySelector('.check-icon');
+                
+                if (id === 'all') {
+                    if (selectedProvinces.length === 0) item.classList.add('fw-bold');
+                    else item.classList.remove('fw-bold');
+                } else {
+                    const isSelected = selectedProvinces.some(sp => sp.id === id);
+                    if (isSelected) {
+                        item.classList.add('active-tag');
+                        if (checkIcon) checkIcon.classList.remove('d-none');
+                    } else {
+                        item.classList.remove('active-tag');
+                        if (checkIcon) checkIcon.classList.add('d-none');
+                    }
+                }
+            });
+
+            // อัปเดตกล่องแสดงผลด้านหน้า
+            if (selectedProvinces.length === 0) {
+                displayArea.innerHTML = `<span class="text-muted" style="font-size: 15px;">ทั่วประเทศ</span>`;
+            } else if (selectedProvinces.length <= 2) {
+                // ถ้าเลือกไม่เกิน 2 โชว์เป็นแท็ก Badge 
+                displayArea.innerHTML = selectedProvinces.map(sp => 
+                    `<span class="badge badge-province d-flex align-items-center rounded-pill px-2 py-1">
+                        ${sp.name}
+                    </span>`
+                ).join('');
+            } else {
+                // ถ้าเลือกเกิน 2 ให้ขึ้นข้อความแทนกันทะลุกรอบ
+                displayArea.innerHTML = `<span class="fw-bold" style="color: #1a237e; font-size: 15px;">เลือกแล้ว ${selectedProvinces.length} จังหวัด</span>`;
+            }
+        };
+
+        // วาดการ์ดผลลัพธ์การค้นหา
+        const renderResults = (lawyers) => {
+            const container = document.getElementById('searchResults');
+            container.innerHTML = ''; 
+
+            if (lawyers.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center text-muted mt-5"><h5>ไม่พบทนายความที่ตรงกับเงื่อนไข</h5></div>';
+                return;
+            }
+
+            lawyers.forEach(lawyer => {
+                const imgSrc = lawyer.image_path ? lawyer.image_path : 'https://via.placeholder.com/150?text=No+Image';
+                const expText = lawyer.total_experience > 0 ? `${lawyer.total_experience} ปี` : 'น้อยกว่า 1 ปี';
+
+                container.innerHTML += `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="${imgSrc}" class="card-img-top" style="height: 220px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold" style="color: #1a237e;">${lawyer.full_name}</h5>
+                                <p class="card-text text-muted mb-1"><i class="bi bi-geo-alt-fill text-danger me-2"></i>จ.${lawyer.province_name || 'ไม่ระบุ'}</p>
+                                <p class="card-text text-muted"><i class="bi bi-briefcase-fill text-warning me-2"></i>ประสบการณ์: ${expText}</p>
+                            </div>
+                            <div class="card-footer bg-white border-top-0 pb-4 text-center">
+                                <a href="#" class="btn btn-outline-primary rounded-pill w-100">ดูโปรไฟล์</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        // จัดการเมื่อกดปุ่ม "ค้นหาเลย"
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            
+            const keyword = document.querySelector('input[name="keyword"]').value;
+            const experience = document.querySelector('select[name="experience"]').value;
+            const provinceIds = selectedProvinces.map(sp => sp.id).join(',');
+
+            try {
+                document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center mt-5"><div class="spinner-border text-primary"></div></div>';
+                
+                const url = `http://localhost:3000/lawyer/search?keyword=${encodeURIComponent(keyword)}&experience=${experience}&province=${provinceIds}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                renderResults(data);
+            } catch (error) {
+                console.error("ค้นหาล้มเหลว:", error);
+                document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center text-danger mt-5">ระบบขัดข้อง ดึงข้อมูลไม่สำเร็จ</div>';
+            }
+        });
+
+        // โหลดข้อมูลอัตโนมัติตอนเปิดเว็บ
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProvinces();
+            // ยิงคำสั่ง submit อัตโนมัติ 1 ครั้งเพื่อดึงทนายทั้งหมดมาโชว์
+            document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+        });
+
+    })();
+  </script>
+</body>
+</html>
