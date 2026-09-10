@@ -1,61 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="/css/registerUser.css">
-</head>
-<body class="d-flex justify-content-center align-items-center min-vh-100">
-  <main class="w-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FindLawyer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/registerUser.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  </head>
+  <body class="d-flex justify-content-center align-items-center min-vh-100">
+    <main class="w-100">
       <div class="container">
         <form class="row g-2 needs-validation" novalidate>
           <div class="header text-center">สมัครสมาชิก</div>
-          <div class="col-12 d-flex justify-content-center align-items-center mb-3 mt-2 ">
-            <div class="uploadProfile">
-              <img src="/css/pic/person-circle.svg" id="previewProfile" class="profilePreview" alt="Profile">
-              <label for="inputPic" class="uploadPic">
-                <span>เพิ่มรูปประจำตัว</span>
+          <div class="col-12 d-flex flex-column justify-content-center align-items-center mb-4 mt-2">
+            <div class="position-relative d-flex justify-content-center align-items-center bg-light rounded-circle shadow-sm border border-2" 
+              style="width: 100px; height: 100px; border-color:  #c1d1d9 !important;">
+              <i class="fa-solid fa-user position-absolute" id="profileIcon" style="font-size: 60px; color: #dee2e6; z-index: 1"></i>
+              <img
+                id="previewProfile"
+                class="position-absolute w-100 h-100 top-0 start-0 rounded-circle object-fit-cover"
+                alt="Profile"
+                style="z-index: 2; display: none"
+              />
+              <label for="inputPic" class="position-absolute bottom-0 end-0 text-white rounded-circle cursor-pointer shadow d-flex justify-content-center align-items-center"
+                style="background-color: #4987a4; width: 36px; height: 36px; cursor: pointer; z-index: 3; transform: translate(-10%, -10%)">
+                <i class="fa-solid fa-camera"></i>
               </label>
-              <input type="file" id="inputPic" name="profilePic" accept="image/JPEG, image/PNG" style="display: none;">
+              <input type="file" id="inputPic" name="profilePic" accept="image/JPEG, image/PNG" class="d-none" />
             </div>
+            <div class="invalid-feedback text-center mt-3 mb-4" id="picFeedback" style="display: none; font-size: 14px; font-weight: 500;">กรุณาเพิ่มรูปประจำตัว</div>
+          </div>
+
+          <div class="form-input col-md-6">
+            <label for="inputFirsname" class="form-label px-2">ชื่อ <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="inputFirsname" placeholder=" " required />
+            <div class="invalid-feedback">กรุณากรอกชื่อ</div>
           </div>
           <div class="form-input col-md-6">
-            <label for="inputFirsname" class="form-label px-2">ชื่อ <span style="color: red;">*</span></label>
-            <input type="text" class="form-control form-control-lg" id="inputFirsname" placeholder=" " required/>
-            <div class="invalid-feedback"></div>
-          </div>
-          <div class="form-input col-md-6">
-            <label for="inputLastname" class="form-label px-2">นามสกุล <span style="color: red;">*</span></label>
-            <input type="text" class="form-control form-control-lg" id="inputLastname" placeholder=" " required/>
-            <div class="invalid-feedback"></div>
+            <label for="inputLastname" class="form-label px-2">นามสกุล <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="inputLastname" placeholder=" " required />
+            <div class="invalid-feedback">กรุณากรอกนามสกุล</div>
           </div>
           <div class="form-input col-md-12">
-            <label for="inputEmail" class="form-label px-2">Email Address <span style="color: red;">*</span></label>
-            <input type="email" class="form-control form-control-lg" id="inputEmail" placeholder="exmple@gmail.com" required/>
-            <div class="invalid-feedback"></div>
+            <label for="inputEmail" class="form-label px-2">อีเมล <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="inputEmail" placeholder="example@gmail.com" required />
+            <div class="invalid-feedback">กรุณากรอกอีเมล</div>
           </div>
+
           <div class="form-input col-md-6">
-            <label for="inputPassword" class="form-label px-2">สร้างรหัสผ่าน <span style="color: red;">*</span></label>
-            <input type="password" class="form-control form-control-lg" id="inputPassword" required 
-            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="รหัสผ่านต้องประกอบไปด้วย A-Z, a-z, 0-9 อย่างน้อย 8 ตัว"/>
-            <div id="passwordFeedback" class="invalid-feedback"></div>
+            <label for="inputPassword" class="form-label px-2">สร้างรหัสผ่าน <span class="text-danger">*</span></label>
+            <div class="position-relative">
+              <input
+                type="password"
+                class="form-control password-input"
+                id="inputPassword"
+                required
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}"
+                title="รหัสผ่านต้องประกอบไปด้วย A-Z, a-z, 0-9 อย่างน้อย 8 ตัว"
+              />
+              <i
+                class="fa-solid fa-eye position-absolute text-secondary d-none toggle-password-icon"
+                id="togglePassword"
+                style="cursor: pointer; z-index: 10"
+              ></i>
+              <div id="passwordFeedback" class="invalid-feedback"></div>
+            </div>
+            <div class="progress mt-2" style="height: 6px; background-color: #e9ecef; border-radius: 4px">
+              <div id="passwordStrengthBar" class="progress-bar" role="progressbar" style="width: 0%; transition: width 0.3s ease"></div>
+            </div>
           </div>
+
           <div class="form-input col-md-6">
-            <label for="confirmPassword" class="form-label px-2">ยืนยันรหัสผ่าน <span style="color: red;">*</span></label>
-            <input type="password" class="form-control form-control-lg" id="confirmPassword" required/>
-            <div id="confirmFeedback" class="invalid-feedback"></div>
+            <label for="confirmPassword" class="form-label px-2">ยืนยันรหัสผ่าน <span class="text-danger">*</span></label>
+            <div class="position-relative">
+              <input type="password" class="form-control password-input" id="confirmPassword" required />
+              <i
+                class="fa-solid fa-eye position-absolute text-secondary d-none toggle-password-icon"
+                id="toggleConfirmPassword"
+                style="cursor: pointer; z-index: 10"
+              ></i>
+              <div id="confirmFeedback" class="invalid-feedback"></div>
+            </div>
           </div>
-          <div class="link d-flex justify-content-end">มีบัญชีแล้ว?<a href="">เข้าสู่ระบบ</a></div>
-          <div class="col-12 d-flex justify-content-center align-items-center mt-4">
-                <button type="submit" class="btn btn-submit">สมัครสมาชิก</button>
+          <div class="col-12 d-flex justify-content-center align-items-center mt-2">
+            <button type="submit" class="btn btn-submit w-100">สมัครสมาชิก</button>
           </div>
+          <div class="link d-flex justify-content-end mt-3">มีบัญชีแล้ว?<a href="../login.html">เข้าสู่ระบบ</a></div>
         </form>
       </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="/js/registerLawyer.js"></script>
-  </main>
-</body>
+      <script src="/js/registerUser.js"></script>
+    </main>
+  </body>
 </html>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FindLawyer - โปรไฟล์ทนายความ</title>
+    <meta name="description" content="ดูข้อมูลโปรไฟล์ทนายความ ประสบการณ์ ช่องทางติดต่อ และรีวิวจากผู้ใช้บริการ" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/showdata.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  </head>
+  <body class="fade-in d-flex flex-column min-vh-100" style="overflow-x: hidden">
+    <!-- Background Decorations -->
+    <div class="bg-decor-top"></div>
+    <div class="bg-decor-circle"></div>
+    <div class="bg-decor-circle-left"></div>
+
+    <!-- Navbar -->
+    <nav class="header position-absolute w-100 mt-3 mt-md-4 px-2 px-md-4" style="z-index: 1030; border: none; background: transparent">
+      <div
+        class="container bg-white shadow-sm rounded-pill d-flex align-items-center justify-content-between px-3 px-md-4 py-2"
+        style="background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px)"
+      >
+        <a class="navbar-brand fw-bold text-dark d-flex align-items-center gap-2" href="/search.html" style="text-decoration: none">
+          <span style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px">FindLawyer</span>
+        </a>
+
+        <nav class="header-nav d-none d-lg-block position-absolute start-50 translate-middle-x">
+          <ul class="nav nav-pills gap-1 align-items-center mb-0">
+            <li class="nav-item">
+              <a href="/search.html" class="nav-link fw-semibold text-muted px-3 py-2" style="border-radius: 20px; font-size: 0.95rem">หน้าแรก</a>
+            </li>
+            <li class="nav-item">
+              <a href="/lawyers.html" class="nav-link fw-semibold text-muted px-3 py-2" style="border-radius: 20px; font-size: 0.95rem">ทนายความทั้งหมด</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle fw-semibold text-muted px-3 py-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 20px; font-size: 0.95rem">สำหรับทนายความ</a>
+              <ul class="dropdown-menu shadow-sm border-0 rounded-4 mt-2 p-2" style="background: rgba(255, 255, 255, 0.98)">
+                <li><a class="dropdown-item py-2 px-3 fw-medium rounded-3" href="/lawyer/registerLawyer.html">สมัครทนายความ</a></li>
+                <li><a class="dropdown-item py-2 px-3 fw-medium rounded-3" href="/login.html">เข้าสู่ระบบทนายความ</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="d-flex align-items-center gap-2" id="navRightSection"></div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="padding-top: 100px; position: relative;">
+      <section
+        id="compactSearch"
+        class="d-none py-3 border-bottom bg-white sticky-top glass-panel"
+        style="border-radius: 0; top: 70px; z-index: 1020"
+      >
+        <div class="container">
+          <form id="searchFormCompact" class="row g-2 align-items-center">
+            <div class="col-md-6">
+              <input type="text" name="keyword" class="form-control rounded-pill" placeholder="ค้นหาทนายความ..." />
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-primary w-100 rounded-pill btn-glow">ค้นหา</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <div class="container pb-5 mt-4">
+        <!-- Back Button -->
+        <div class="mb-3 slide-up delay-100">
+          <button onclick="history.back()" class="btn btn-back rounded-pill px-4">
+            <i class="fa-solid fa-arrow-left me-2"></i>ย้อนกลับ
+          </button>
+        </div>
+
+        <!-- Profile Header Card -->
+        <div class="profile-header-card mb-4 slide-up delay-200">
+          <div class="d-flex flex-column flex-md-row position-relative p-3 p-md-4">
+            <!-- Profile Image -->
+            <div
+              class="lawyer-img-wrapper d-flex align-items-center justify-content-center bg-light text-muted position-relative mx-auto mx-md-0 mb-4 mb-md-0"
+              style="width: 100%; max-width: 350px; height: 250px; flex-shrink: 0"
+            >
+              <i class="fa-solid fa-user position-absolute" style="font-size: 120px; color: #dee2e6; z-index: 1"></i>
+              <img id="profileLaw" class="position-absolute w-100 h-100" alt="Profile" style="object-fit: cover; z-index: 2; display: none" />
+            </div>
+
+            <!-- Profile Info -->
+            <div class="ms-0 ms-md-4 ms-lg-5 w-100 d-flex flex-column justify-content-center">
+              <div class="d-flex justify-content-between align-items-start mb-2 flex-column flex-sm-row gap-3">
+                <div class="lawyer-name" id="lawyerName"></div>
+                <div class="d-flex flex-column align-items-start align-items-sm-end flex-shrink-0">
+                  <button
+                    id="btnSaveLawyerProfile"
+                    class="btn btn-outline-secondary rounded-pill btn-sm d-flex align-items-center shadow-sm mb-2"
+                    title="ยังไม่บันทึก"
+                  >
+                    <i class="fa-solid fa-heart text-secondary me-2" id="saveLawyerIcon"></i>
+                    <span id="saveLawyerText" class="fw-medium">บันทึกทนายความ</span>
+                  </button>
+                  <div class="license-container" id="licenseNum"></div>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <p class="info-tag mb-2">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <span id="locationProv"></span>
+                </p>
+                <p class="info-tag mb-2">
+                  <i class="fa-solid fa-coins"></i>
+                  <span id="feeRate"></span>
+                </p>
+                <div class="d-flex align-items-center star-rating-display">
+                  <div class="text-warning me-2" id="starRank">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                  </div>
+                  <span class="fw-bold me-1" id="rankScore"></span>
+                  <span class="text-muted small" id="sumReview"></span>
+                </div>
+
+                <div class="mt-4">
+                  <div id="skillBox" class="d-flex flex-wrap gap-2 align-items-center" style="max-height: 85px; overflow: hidden"></div>
+                </div>
+
+                <!-- Skills Modal -->
+                <div class="modal fade" id="skillsModal" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg">
+                      <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title fw-bold">หมวดหมู่คดีทั้งหมด</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body pt-0">
+                        <div id="modalList" class="d-flex flex-wrap gap-2"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="row gx-4">
+          <!-- Left Column: Contact & Schedule -->
+          <div class="col-lg-4">
+            <section class="info-card mb-4 p-4 pb-3 slide-up delay-200">
+              <div class="header-title"><i class="fa-solid fa-address-card"></i>ช่องทางติดต่อ</div>
+              <ul class="list-unstyled contact-list mt-3">
+                <li>
+                  <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                  <span id="contactPhone"></span>
+                </li>
+                <li>
+                  <div class="contact-icon"><i class="fa-regular fa-envelope"></i></div>
+                  <span id="contactEmail"></span>
+                </li>
+                <li>
+                  <div class="contact-icon"><i class="fa-brands fa-line"></i></div>
+                  <span id="contactLine"></span>
+                </li>
+                <li>
+                  <div class="contact-icon"><i class="fa-brands fa-facebook"></i></div>
+                  <span id="contactFacebook"></span>
+                </li>
+                <li>
+                  <div class="contact-icon"><i class="fa-solid fa-map"></i></div>
+                  <span id="address"></span>
+                </li>
+              </ul>
+            </section>
+
+            <section class="info-card mb-4 p-4 pb-3 slide-up delay-300">
+              <div class="header-title"><i class="fa-regular fa-calendar"></i>ตารางให้บริการ</div>
+              <div class="service-hours mt-3" id="serviceHours"></div>
+            </section>
+          </div>
+
+          <!-- Right Column: Work & Education -->
+          <div class="col-lg-8">
+            <section class="info-card mb-4 p-4 slide-up delay-200">
+              <div class="header-title mb-4 w-100">
+                <i class="fa-solid fa-briefcase"></i>ประสบการณ์การทำงาน
+              </div>
+              <div class="custom-timeline" id="workhistoryTimeline"></div>
+            </section>
+
+            <section class="info-card mb-4 p-4 slide-up delay-300">
+              <div class="header-title mb-4 w-100">
+                <i class="fa-solid fa-graduation-cap"></i>ประวัติการศึกษา
+              </div>
+              <div class="custom-timeline" id="educationTimeline"></div>
+            </section>
+          </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="mt-5 slide-up delay-400">
+          <section class="d-flex justify-content-between align-items-center mb-4">
+            <div class="review-title">
+              <i class="fa-solid fa-comment-quote me-2" style="color: #4987A4"></i>รีวิวและความคิดเห็น
+            </div>
+            <div>
+              <button id="btnWriteReview" class="btn btn-primary btn-sm me-2 rounded-pill px-3 shadow-sm btn-glow" onclick="Auth.requireLoginAction(() => { var m = new bootstrap.Modal(document.getElementById('writeReviewModal')); m.show(); })">
+                <i class="fa-solid fa-pen-to-square me-1"></i>เขียนรีวิว
+              </button>
+            </div>
+          </section>
+
+          <div class="row g-4" id="reviewBox">
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Write Review Modal -->
+    <div class="modal fade" id="writeReviewModal" tabindex="-1" aria-labelledby="writeReviewModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header border-bottom-0 pb-0 mt-2">
+            <h5 class="modal-title fw-bold fs-5" id="writeReviewModalLabel">
+              <i class="fa-solid fa-star text-warning me-2"></i>เขียนรีวิวและให้คะแนน
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body pt-3 pb-4 px-4">
+            <form id="addReviewForm">
+              <div class="mb-4 text-center">
+                <p class="mb-2 fw-semibold text-muted">คลิกเพื่อให้คะแนนทนายความท่านนี้</p>
+                <div
+                  class="star-rating-interactive display-6 text-warning d-flex justify-content-center gap-2"
+                  id="reviewStarRating"
+                  style="cursor: pointer"
+                >
+                  <i class="fa-regular fa-star" data-rating="1"></i>
+                  <i class="fa-regular fa-star" data-rating="2"></i>
+                  <i class="fa-regular fa-star" data-rating="3"></i>
+                  <i class="fa-regular fa-star" data-rating="4"></i>
+                  <i class="fa-regular fa-star" data-rating="5"></i>
+                </div>
+                <input type="hidden" id="selectedRating" value="0" required />
+              </div>
+              <div class="mb-3">
+                <label for="reviewComment" class="form-label fw-semibold">ความคิดเห็นของคุณ</label>
+                <textarea
+                  class="form-control bg-light"
+                  id="reviewComment"
+                  rows="4"
+                  placeholder="บอกเล่าประสบการณ์ ความประทับใจ หรือข้อเสนอแนะ..."
+                  style="resize: none; border-radius: 12px; border: 1px solid #dee2e6"
+                ></textarea>
+              </div>
+
+              <div class="text-end">
+                <button type="button" class="btn btn-light rounded-pill px-4 me-2 fw-semibold text-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="submit" class="btn btn-primary px-4 rounded-pill fw-semibold shadow-sm">บันทึกรีวิว</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px)">
+          <div class="modal-header border-bottom-0 pb-0 mt-2">
+            <h5 class="modal-title fw-bold fs-5 text-danger" id="reportModalLabel"><i class="fa-solid fa-flag me-2"></i>รายงานความไม่เหมาะสม</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body pt-3 pb-4 px-4">
+            <form id="reportForm">
+              <input type="hidden" id="reportReviewId" value="" />
+              <input type="hidden" id="reportTarget" value="" />
+
+              <div class="mb-4">
+                <label class="form-label fw-semibold text-dark">เหตุผลที่ต้องการรายงาน</label>
+                <select class="form-select bg-light" id="reportReason" style="border-radius: 12px; border: 1px solid #dee2e6" required>
+                  <option value="" selected disabled>-- เลือกเหตุผล --</option>
+                  <option value="ใช้คำหยาบคายหรือไม่สุภาพ">ใช้คำหยาบคายหรือไม่สุภาพ</option>
+                  <option value="เนื้อหาสแปมหรือโฆษณาแอบแฝง">เนื้อหาสแปมหรือโฆษณาแอบแฝง</option>
+                  <option value="ข้อมูลเท็จหรือบิดเบือน">ข้อมูลเท็จหรือบิดเบือน</option>
+                  <option value="ละเมิดความเป็นส่วนตัว">ละเมิดความเป็นส่วนตัว</option>
+                  <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+              </div>
+
+              <div class="text-end mt-2">
+                <button type="button" class="btn btn-light rounded-pill px-4 me-2 fw-semibold text-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="submit" class="btn btn-danger px-4 rounded-pill fw-semibold shadow-sm">ส่งรายงาน</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto footer-custom"></footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/showdata.js"></script>
+    <script src="/js/auth.js"></script>
+  </body>
+</html>

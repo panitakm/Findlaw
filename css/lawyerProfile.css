@@ -1,37 +1,113 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 body {
-    margin: 120px 0 40px 0;
-    background-color: #E5EEFF;
-    color: #000000;
-}
-
-main {
+    background-color: #dcf2ff;
     font-family: 'Sarabun', sans-serif;
 }
 
+.btn-register,
+.btn-login {
+    font-size: 0.85rem;
+    border-radius: 20px;
+}
+
+.btn-register {
+    background: rgba(255, 255, 255, 0.75);
+    color: #1A435A;
+    border: 1px solid #4987A4 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    background: rgba(255, 255, 255, 0.75);
+    color: #1A435A;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26, 67, 90, 0.3);
+}
+
+.btn-login, #btnWriteReview, .btn-save {
+    background: #4987A4;
+    color: #FFFFFF;
+    border: 1px solid rgba(26, 67, 90, 0.2) !important;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover, #btnWriteReview:hover, .btn-save:hover {
+    background: #4987A4;
+    color: #ffffff;
+    border: 1px solid #4987A4 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-back {
+    background: rgba(73, 135, 164, 0.2);
+    color: #1A435A;
+    border: none;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 2px 4px rgba(26, 67, 90, 0.2);
+}
+
+.btn-back i {
+    font-size: 1rem;
+    -webkit-text-stroke: -0.95px;
+}
+
+.btn-back:hover {
+    background: rgba(73, 135, 164, 0.3);
+    color: #1A435A;
+    transform: translateY(-0.9px);
+    box-shadow: 0 2px 4px rgba(26, 67, 90, 0.2);
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 8px 32px rgba(26, 67, 90, 0.08);
+}
+
+.license-container {
+    background: rgba(73, 135, 164, 0.08);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: #4987A4;
+    font-weight: 500;
+}
+
 .fixed-top {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .lawyer-name {
-    font-size: 30px; 
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1A435A;
 }
 
 .review-title {
-    font-size: 25px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
 }
 
 .header-title {
     font-family: 'Noto Sans Thai', sans-serif;
     font-weight: 700;
-    font-size: 22px;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 12px;
+    font-size: 1.2rem;
+    color: #1A435A;
+    border-bottom: 2px solid #f0f4f8;
+    padding-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .timeline-title {
-    font-size: 1rem; 
+    font-size: 1rem;
 }
 
 .lawyer-img {
@@ -44,31 +120,48 @@ main {
 .contact-list li {
     display: flex;
     align-items: center;
-    padding: 5px;
-    border-bottom: 1px dashed #eee;
-    font-weight: 400;
-    font-size: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f8f9fa;
+    font-weight: 500;
+    font-size: 15px;
+    color: #1A435A;
 }
 
-.contact-list li i {
-    width: 30px;
-    color: #1b222c; 
+.contact-list li:last-child {
+    border-bottom: none;
+}
+
+.contact-icon-box {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    background-color: #eef5f9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.contact-icon-box i {
+    color: #4987A4;
     font-size: 18px;
 }
 
 .badge-expertise {
-    background-color: #3686ff;
+    background-color: #4987A4;
+    padding: 12px 14px;
+    border-radius: 50px !important;
+    font-size: 0.9rem;
     color: #ffffff;
-    border-radius: 100px; 
-    padding: 6px 14px;
-    font-weight: 400;
-    font-size: 14px;
+    font-weight: 550;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .skill {
     max-width: 500px;
     overflow: hidden;
-    transition: max-height 0.3s ease-in-out; 
+    transition: max-height 0.3s ease-in-out;
 }
 
 .skill-hide {
@@ -84,11 +177,12 @@ main {
 .custom-timeline::after {
     content: '';
     position: absolute;
-    left: 25px;   
+    left: 25px;
     top: 0;
     bottom: 0;
     width: 3px;
-    background: #e9ecef;
+    background: linear-gradient(180deg, #4987A4 0%, rgba(233, 236, 239, 0) 100%);
+    border-radius: 3px;
 }
 
 .timeline-item {
@@ -100,21 +194,27 @@ main {
 .timeline-item::before {
     content: '';
     position: absolute;
-    left: -29.5px; 
+    left: -29.5px;
     top: 5px;
     width: 12px;
     height: 12px;
-    background: #0d6efd;
+    background: #4987A4;
     border: 3px solid #fff;
     border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(0, 88, 190, 0.1);
+    box-shadow: 0 0 0 3px rgba(73, 135, 164, 0.1);
     z-index: 1;
+}
+
+.timeline-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1A435A;
 }
 
 .timeline-date {
     font-size: 13px;
     font-weight: 700;
-    color: #0d6efd;
+    color: #1A435A;
     white-space: nowrap;
-    margin-right: 10px;   
-} 
+    margin-right: 10px;
+}

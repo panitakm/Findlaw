@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="th" data-bs-theme="light" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>โปรไฟล์ของฉัน</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/userProfile.css" />
+    <link rel="stylesheet" href="/css/userTheme.css" />
+    <script src="/js/userTheme.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  </head>
+  <body>
+    <div class="container-fluid p-0">
+      <div class="row g-0 min-vh-100">
+        <!-- Curved Navigation Sidebar (Exact design from sample image) -->
+        <aside class="col-md-3 col-lg-2 p-0 d-md-block sidebar-curved position-sticky top-0" style="height: 100vh; overflow-y: auto">
+          <div class="d-flex flex-column h-100">
+            <!-- Logo & System Title -->
+            <a href="/search.html" class="logo-brand">
+              <i class="fa-solid fa-scale-balanced fs-3"></i>
+              <span>FindLaw</span>
+            </a>
+
+            <!-- Menu Items -->
+            <ul class="sidebar-nav-list mb-auto">
+              <li>
+                <a href="userProfile.html" class="nav-link active">
+                  <span class="nav-icon-badge"><i class="fa-solid fa-id-badge"></i></span>
+                  <span>โปรไฟล์ของฉัน</span>
+                </a>
+              </li>
+              <li>
+                <a href="favorites.html" class="nav-link">
+                  <span class="nav-icon-badge"><i class="fa-solid fa-bookmark"></i></span>
+                  <span>ทนายที่บันทึกไว้</span>
+                </a>
+              </li>
+              <li>
+                <a href="reviews.html" class="nav-link">
+                  <span class="nav-icon-badge"><i class="fa-solid fa-star"></i></span>
+                  <span>ประวัติการรีวิว</span>
+                </a>
+              </li>
+            </ul>
+
+            <hr class="my-4 border-secondary opacity-25 me-3" />
+
+            <!-- Logout Button -->
+            <ul class="sidebar-nav-list pb-4">
+              <li>
+                <a href="#" class="nav-link text-danger" id="logoutBtn" onclick="Auth.clearSession()">
+                  <span class="nav-icon-badge text-danger"><i class="fa-solid fa-right-to-bracket"></i></span>
+                  <span>ออกจากระบบ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 p-0">
+          <!-- Header Bar -->
+          <div class="user-header-bar d-flex justify-content-between align-items-center ps-4 pt-3 pb-3 pe-4">
+            <form action="/lawyers.html" method="GET" class="mb-0 flex-grow-1">
+              <div class="input-group bg-white rounded-3 shadow-sm border p-1">
+                <button
+                  class="btn border-0 dropdown-toggle text-muted fw-bold pe-3 shadow-none"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  id="filterDropdownBtn"
+                  data-bs-auto-close="outside"
+                  style="border-right: 1px solid #e0e0e0 !important; border-radius: 0"
+                >
+                  ตัวกรอง
+                </button>
+                <div class="dropdown-menu p-3 shadow-sm" style="width: 280px; z-index: 1050; border: none; border-radius: 10px">
+                  <div class="mb-3">
+                    <label class="form-label small fw-bold">ประสบการณ์</label>
+                    <select name="experience" class="form-select form-select-sm filter-select">
+                      <option value="">ทั้งหมด</option>
+                      <option value="0-1">น้อยกว่า 1 ปี</option>
+                      <option value="1-3">1-3 ปี</option>
+                      <option value="4-6">4-6 ปี</option>
+                      <option value="7-10">7-10 ปี</option>
+                      <option value="11-50">10 ปีขึ้นไป</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label small fw-bold">อัตราค่าบริการ</label>
+                    <select name="price" class="form-select form-select-sm filter-select">
+                      <option value="">ทั้งหมด</option>
+                      <option value="0-1000">0 - 1,000</option>
+                      <option value="1001-3000">1,000 - 3,000</option>
+                      <option value="3001-5000">3,000 - 5,000</option>
+                      <option value="5000+">5,000 ขึ้นไป</option>
+                    </select>
+                  </div>
+                </div>
+
+                <input
+                  type="text"
+                  name="keyword"
+                  class="form-control border-0 shadow-none bg-transparent ps-3"
+                  placeholder="ค้นหาทนายความ กฎหมาย หรือคดี..."
+                />
+
+                <button class="btn border-0 text-muted px-3 shadow-none" type="submit" style="border-radius: 0">
+                  <i class="fa-solid fa-magnifying-glass" style="font-size: 1.1rem; font-weight: bold; -webkit-text-stroke: 0.5px"></i>
+                </button>
+              </div>
+            </form>
+
+            <div class="d-flex align-items-center gap-3">
+              <!-- User Profile Avatar Header -->
+              <div class="d-flex align-items-center gap-3 border-start ps-3 ms-2">
+                <div class="d-none d-md-block text-end">
+                  <div class="fw-bold" style="font-size: 0.95rem" id="headerUsername"></div>
+                  <div class="text-muted small">ผู้ใช้งานทั่วไป</div>
+                </div>
+                <img
+                  src="/css/pic/person-circle.svg"
+                  alt="Profile"
+                  width="44"
+                  height="44"
+                  id="headerPic"
+                  class="rounded-circle border border-2 border-primary"
+                  style="object-fit: cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Workspace -->
+          <div class="p-4 p-md-5">
+            <!-- Hero Profile Banner Card -->
+            <div class="profile-banner-card p-4 mb-4">
+              <div class="d-flex flex-column flex-md-row align-items-center gap-4 text-center text-md-start">
+                <div class="avatar-wrapper">
+                  <img src="/css/pic/person-circle.svg" alt="Profile" id="showPic" class="profile-avatar-img" />
+                  <label for="uploadNewpic" class="avatar-edit-badge" title="เปลี่ยนรูปโปรไฟล์">
+                    <i class="fa-solid fa-camera fs-6"></i>
+                  </label>
+                  <input type="file" id="uploadNewpic" accept="image/jpeg, image/png, image/jpg" class="d-none" />
+                </div>
+
+                <div>
+                  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
+                    <h2 class="fw-bold mb-0" id="bannerUsername"></h2>
+                  </div>
+                  <p class="text-white-50 mb-3">ผู้ใช้งานทั่วไป</p>
+
+                  <div>
+                    <label for="uploadNewpic" class="btn btn-sm btn-light rounded-pill px-4 py-2 fw-semibold text-primary shadow-sm">
+                      <i class="fa-solid fa-image me-1"></i>เปลี่ยนรูปโปรไฟล์
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Summary Stats Cards (24px Glass Cards) -->
+            <div class="row g-4 mb-5">
+              <div class="col-md-6">
+                <a href="favorites.html" class="text-decoration-none">
+                  <div class="glass-card glass-card-hover p-4">
+                    <div class="d-flex align-items-center">
+                      <div
+                        class="bg-danger bg-opacity-10 text-danger rounded-4 d-flex align-items-center justify-content-center p-3 me-4"
+                        style="width: 64px; height: 64px"
+                      >
+                        <i class="fa-solid fa-bookmark fs-2"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <p class="text-muted mb-1 small fw-semibold">ทนายความที่บันทึกไว้</p>
+                        <div class="d-flex align-items-baseline gap-2">
+                          <h2 class="fw-bold mb-0" id="savedCount">0</h2>
+                          <span class="text-muted small">คน</span>
+                        </div>
+                      </div>
+                      <div class="text-muted fs-4">
+                        <i class="fa-solid fa-chevron-right"></i>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-md-6">
+                <a href="reviews.html" class="text-decoration-none">
+                  <div class="glass-card glass-card-hover p-4">
+                    <div class="d-flex align-items-center">
+                      <div
+                        class="bg-warning bg-opacity-10 text-warning rounded-4 d-flex align-items-center justify-content-center p-3 me-4"
+                        style="width: 64px; height: 64px"
+                      >
+                        <i class="fa-solid fa-star fs-2"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <p class="text-muted mb-1 small fw-semibold">ประวัติการรีวิวของคุณ</p>
+                        <div class="d-flex align-items-baseline gap-2">
+                          <h2 class="fw-bold mb-0" id="reviewCount">0</h2>
+                          <span class="text-muted small">รายการ</span>
+                        </div>
+                      </div>
+                      <div class="text-muted fs-4">
+                        <i class="fa-solid fa-chevron-right"></i>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <!-- Edit Profile Form (Glass Card) -->
+            <div class="glass-card p-4 p-md-5">
+              <form id="editProfileform">
+                <!-- Personal Info Section -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <div class="card-header-custom border-0 pb-0 mb-0"><i class="fa-solid fa-id-card me-2"></i>ข้อมูลส่วนตัว</div>
+                  <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="btnEditProfile">
+                    <i class="fa-solid fa-pen-to-square me-1"></i>แก้ไขข้อมูล
+                  </button>
+                </div>
+
+                <div class="row g-4 mb-5">
+                  <div class="col-md-6">
+                    <label for="inputName" class="form-label text-muted small fw-semibold">ชื่อจริง</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-0"><i class="fa-regular fa-user"></i></span>
+                      <input type="text" class="form-control form-control-custom border-start-0" id="inputName" placeholder="กรอกชื่อจริง" disabled />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="inputLastname" class="form-label text-muted small fw-semibold">นามสกุล</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-0"><i class="fa-regular fa-user"></i></span>
+                      <input
+                        type="text"
+                        class="form-control form-control-custom border-start-0"
+                        id="inputLastname"
+                        placeholder="กรอกนามสกุล"
+                        disabled
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="inputEmail" class="form-label text-muted small fw-semibold">อีเมล</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-0"><i class="fa-regular fa-envelope"></i></span>
+                      <input
+                        type="email"
+                        class="form-control form-control-custom border-start-0 text-muted"
+                        id="inputEmail"
+                        placeholder="example@email.com"
+                        disabled
+                        readonly
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Password Section -->
+                <!-- Password Section Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <div class="card-header-custom mb-0"><i class="fa-solid fa-shield-halved me-2"></i>เปลี่ยนรหัสผ่าน</div>
+                </div>
+
+                <!-- Password Inputs -->
+                <div id="passwordFieldsSection">
+                  <div class="row g-4">
+                    <div class="col-md-12">
+                      <label for="oldPassword" class="form-label text-muted small fw-semibold">รหัสผ่านเดิม</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="fa-solid fa-key"></i></span>
+                        <input
+                          type="password"
+                          class="form-control form-control-custom border-start-0"
+                          id="oldPassword"
+                          placeholder="กรอกรหัสผ่านเดิมกรณีต้องการเปลี่ยน"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="newPassword" class="form-label text-muted small fw-semibold">รหัสผ่านใหม่</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="fa-solid fa-lock"></i></span>
+                        <input
+                          type="password"
+                          class="form-control form-control-custom border-start-0"
+                          id="newPassword"
+                          placeholder="รหัสผ่านใหม่อย่างน้อย 8 ตัวอักษร"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="confirmNewpassword" class="form-label text-muted small fw-semibold">ยืนยันรหัสผ่านใหม่</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="fa-solid fa-check2-circle"></i></span>
+                        <input
+                          type="password"
+                          class="form-control form-control-custom border-start-0"
+                          id="confirmNewpassword"
+                          placeholder="ยืนยันรหัสผ่านใหม่อีกครั้ง"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-end gap-3 mt-5">
+                  <button type="button" class="btn btn-cancel" id="btnCancelEdit" style="display: none">ยกเลิก</button>
+                  <button type="submit" class="btn btn-save-custom" id="btnSaveSubmit" style="display: none">
+                    <i class="fa-solid fa-check me-1"></i>บันทึกการเปลี่ยนแปลง
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/globalSearch.js"></script>
+    <script src="/js/userProfile.js"></script>
+  </body>
+</html>

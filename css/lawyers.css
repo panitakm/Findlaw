@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+body {
+    background-color: #f1f9fe;
+    color: #333333;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* ป้ายแสดงตัวกรองที่เลือกแล้ว (Filter Chips) */
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    background-color: #D3EBF9;
+    color: #4987A4;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* ปุ่มกากบาทสำหรับลบป้ายตัวกรอง */
+.filter-chip .remove-chip {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #4987A4;
+    transition: color 0.2s;
+}
+
+.filter-chip .remove-chip:hover {
+    transform: scale(1.2);
+}
+
+/* การตกแต่งแถบค้นหาแบบแคปซูล (Pill/Circle Search Bar) */
+.search-pill-container {
+    background-color: #ffffff;
+    border-radius: 50px;
+    padding: 6px;
+    border: 1px solid #e9ecef;
+    
+}
+
+.search-pill-input {
+    border: none;
+    background: transparent;
+    padding: 10px 20px;
+    outline: none;
+    color: #1A435A;
+    font-weight: 500;
+}
+
+.search-pill-input::placeholder {
+    color: #a0aec0;
+}
+
+.search-pill-button {
+    background-color: #1A435A;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.search-pill-button:hover {
+    background-color: #112d3d;
+    transform: scale(1.05);
+}
+
+/* การตกแต่งการ์ดแสดงผลทนายความ (Lawyer Cards) */
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* เอฟเฟกต์เวลาเอาเมาส์ชี้ไปที่การ์ด (Hover Effect) */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* ปุ่มกดสไตล์ขอบสี (Outline Button) */
+.btn-outline-primary {
+    color: #4987A4;
+    border-color: #4987A4;
+}
+
+/* เอฟเฟกต์เวลาเอาเมาส์ชี้ปุ่ม */
+.btn-outline-primary:hover {
+    background-color: var(--primary-color, #4987A4);
+    color: #ffffff;
+}
+
+/* การตั้งค่าเฉพาะหน้าค้นหาทนายความ (Page Layout) */
+body.lawyers-page {
+    overflow-x: hidden;
+}
+
+/* แถบนำทางด้านบน (Navbar) */
+.navbar-custom {
+    z-index: 1030;
+    border: none;
+    background: transparent;
+}
+.navbar-custom .container {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+}
+.navbar-brand-logo {
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+}
+.nav-link-custom {
+    border-radius: 20px;
+    font-size: 0.95rem;
+}
+.nav-link-active {
+    background: rgba(0,0,0,0.05);
+}
+.dropdown-menu-custom {
+    background: rgba(255,255,255,0.98);
+}
+
+/* ของตกแต่งพื้นหลังด้านบนและขวา (Background Decorations) */
+.bg-decor-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 400px;
+    background: linear-gradient(180deg, rgba(229, 238, 255, 0.8) 0%, rgba(229, 238, 255, 0) 100%);
+    z-index: -1;
+}
+.bg-decor-circle {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(63,81,181,0.1) 0%, rgba(63,81,181,0) 70%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* ระยะห่างด้านบนของเนื้อหาหลัก (Main Container) */
+.main-content-container {
+    padding-top: 120px;
+}
+
+/* รายการตัวเลือกที่กดแล้วตกลงมา (เช่น จังหวัด, คดี) */
+.filter-dropdown-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+.filter-dropdown-label {
+    cursor: pointer;
+}
+
+/* ลดความสูงของช่องตัวกรองด้านซ้าย (ทำให้แคบลง) */
+.filter-input {
+    padding: 10px 10px !important; 
+    min-height: 36px;
+    font-size: 0.95rem;
+}
+
+.filter-label{
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1A435A;
+    padding-left: 6px;
+}
+
+/* แถบด้านล่างสุดของเว็บ (Footer) */
+.footer-custom {
+    background: linear-gradient(135deg, rgba(26, 67, 90, 0.95), rgba(73, 135, 164, 0.9));
+    height: 50px;
+    width: 100%;
+}
+
+/* การตกแต่งย่อยในแต่ละการ์ดทนาย (Lawyer Card Internal Styling) */
+.lawyer-card-img {
+    height: 220px;
+    object-fit: cover;
+}
+.lawyer-name-color {
+    color: #1A435A !important;
+}
+.lawyer-icon-color {
+    color: #1A435A !important;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+/* จุดไข่ปลาเมื่อข้อความประเภทคดียาวเกินไป */
+.lawyer-specialty-text {
+    max-width: 150px;
+    vertical-align: bottom;
+}
+/* ปุ่มกดบันทึกทนายความ (รูปหัวใจ) */
+.btn-save-lawyer-custom {
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+}
+
+.btn-seemore {
+    background-color: #ffffff;
+    color: #4987A4;
+    border: 1px solid #4987A4;
+    transition: all 0.3s ease;
+}
+
+.btn-seemore:hover {
+    background-color: #4987A4;
+    color: #ffffff;
+    border-color: #4987A4;
+}

@@ -3,66 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>FindLawyer</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
   <link rel="stylesheet" href="/css/search.css">
-</head>
-<body>
-  <nav class="header py-3 border-bottom fixed-top bg-white">
-      <div class="container-fluid d-flex align-items-center justify-content-center position-relative">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  </head>
+<body class="fade-in d-flex flex-column min-vh-100" style="overflow-x: hidden;">
+    <nav class="header position-absolute w-100 mt-3 mt-md-4 px-2 px-md-4" style="z-index: 1030; border: none; background: transparent;">
+        <div class="container bg-white shadow-sm rounded-pill d-flex align-items-center justify-content-between px-3 px-md-4 py-2" style="background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px);">
+            <a class="navbar-brand fw-bold text-dark d-flex align-items-center gap-2" href="/search.html" style="text-decoration: none;">
+                <span style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;">FindLawyer</span>
+            </a>
+            
+            <nav class="header-nav d-none d-lg-block position-absolute start-50 translate-middle-x">
+                <ul class="nav nav-pills gap-1 align-items-center mb-0">
+                    <li class="nav-item"><a href="/search.html" class="nav-link fw-semibold text-dark px-3 py-2" style="border-radius: 20px; background: rgba(0,0,0,0.05); font-size: 0.95rem;">หน้าแรก</a></li>
+                    <li class="nav-item"><a href="/lawyers.html" class="nav-link fw-semibold text-muted px-3 py-2" style="border-radius: 20px; font-size: 0.95rem;">ทนายความทั้งหมด</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold text-muted px-3 py-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 20px; font-size: 0.95rem;">
+                            สำหรับทนายความ
+                        </a>
+                        <ul class="dropdown-menu shadow-sm border-0 rounded-4 mt-2 p-2" style="background: rgba(255,255,255,0.98);">
+                            <li><a class="dropdown-item py-2 px-3 fw-medium rounded-3" href="/lawyer/registerLawyer.html">สมัครทนายความ</a></li>
+                            <li><a class="dropdown-item py-2 px-3 fw-medium rounded-3" href="/login.html">เข้าสู่ระบบทนายความ</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
 
-          <nav class="header-nav">
-              <ul class="nav nav-pills gap-3">
-                  <li class="nav-item"><a href="search.html" class="nav-link active">หน้าแรก</a></li>
-                  <li class="nav-item"><a href="#" class="nav-link">ทนายความทั้งหมด</a></li>
-                  <li class="nav-item"><a href="/lawyer/registerLawyer.html" class="nav-link">สมัครทนายความ</a></li>
-              </ul>
-          </nav>
+            <div class="d-flex align-items-center gap-2" id="navRightSection">
+            </div>
+            
+        </div>
+    </nav>
 
-          <div class="d-flex gap-2 position-absolute end-0 me-3">
-            <a href="#" class="btn btn-outline-dark rounded-pill px-4">เข้าสู่ระบบ</a>
-            <a href="#" class="btn btn-primary rounded-pill px-4">สมัครใช้งาน</a>
-          </div>
-          
-      </div>
-  </nav>
-
-  <main class="d-flex flex-column"> 
-    <section class="title text-center" id="compactSearch">
+  <main class="swiper main-swiper vh-100 w-100"> 
+    <div class="swiper-wrapper">
+    <!-- SNAP SECTION 1: Banner & Search Box -->
+    <div class="swiper-slide snap-section d-flex flex-column" style="min-height: 100vh;">
+    <section class="title text-center" id="topBanner">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-8 mx-auto text-center">
-            <h1>ค้นหาทนายความ</h1>
+            <h1 id="typingTitle"></h1>
+            <p class="subtitle">คัดกรองตามประเภทคดี ประสบการณ์ พื้นที่ให้บริการ และค่าบริการ</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="container">
+
+    <section class="container" style="position: relative; z-index: 1050;">
       <div class="row justify-content-center">
-        <div class="col-lg-11">
+        <div class="col-lg-12">
           <div class="search-container">
-            <h5 class="mb-4 text-center fw-bold title-text"><i class="me-2 bi bi-search"></i>ค้นหาทนายความที่ต้องการ</h5>
-            
             <form id="searchForm">
               <div class="row g-3">
-                <div class="col-md-12 col-lg-4">
-                  <label class="form-label">ค้นหา/ประเภทคดี</label>
-                  <div class="input-group">
-                    <span class="input-group-text bg-white"><i class="bi bi-keyboard text-muted"></i></span>
-                    <input type="text" name="keyword" class="form-control border-start-0 ps-2" placeholder="เช่น คดีที่ดิน, มรดก, หย่าร้าง..." list="categoryList">
-                    <datalist id="categoryList"></datalist>
-
-                    <ul id="suggestionBox" class="dropdown-menu w-100 shadow-sm d-none position-absolute" style="top: 100%; left: 0; z-index: 1000; max-height: 250px; overflow-y: auto;"></ul>
+                <div class="col-md-6 col-lg">
+                  <label class="form-label">ประเภทคดี</label>
+                  <div class="input-group position-relative">
+                    <span class="input-group-text bg-white"><i class="fa-regular fa-keyboard text-muted"></i></span>
+                    <input type="text" id="keywordInput" name="keyword" class="form-control border-start-0 ps-2" placeholder="เช่น คดีที่ดิน, มรดก..." autocomplete="off">
+                    
+                    <!-- Custom Suggestion Box -->
+                    <ul id="suggestionBox" class="dropdown-menu w-100 shadow-sm position-absolute" style="top: 100%; left: 0; z-index: 1050; max-height: 250px; overflow-y: auto; border-radius: 12px;"></ul>
                   </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-md-6 col-lg">
+                  <label class="form-label">จังหวัดที่ให้บริการ</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-location-dot text-muted"></i></span>
+                      <button class="form-select border-start-0 ps-2 text-start text-muted d-flex justify-content-between align-items-center px-2" type="button" id="provinceBtn" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <span id="provinceBtnText" class="text-truncate">เลือกจังหวัด</span>
+                      </button>
+                      <ul class="dropdown-menu w-100 shadow-sm p-2" id="provinceList" style="max-height: 300px; overflow-y: auto;"></ul>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg">
                   <label class="form-label">ประสบการณ์ทำงาน</label>
                   <div class="input-group">
-                    <span class="input-group-text bg-white"><i class="bi bi-star text-muted"></i></span>
-                    <select class="form-select border-start-0 ps-0" name="experience" id="nameExp">
+                    <span class="input-group-text bg-white"><i class="fa-regular fa-star text-muted"></i></span>
+                    <select class="form-select border-start-0 ps-2" name="experience" id="nameExp">
                       <option value="">ทั้งหมด</option>
                       <option value="0-1">น้อยกว่า 1 ปี</option>
                       <option value="1-3">1-3 ปี</option>
@@ -73,35 +98,141 @@
                   </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
-                  <label class="form-label">จังหวัดที่ให้บริการ</label>
+
+                <div class="col-md-6 col-lg">
+                  <label class="form-label">ค่าบริการ (บาท)</label>
                   <div class="input-group">
-                    <span class="input-group-text bg-white"><i class="bi bi-geo-alt text-muted"></i></span>
-                    <!-- <select class="form-select border-start-0 ps-0" name="province" id="nameProv"></select> -->
-                      <button class="form-select border-start-0 ps-0 text-start text-muted d-flex justify-content-between align-items-center" type="button" id="provinceBtn" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                        <span id="provinceBtnText">เลือกจังหวัด</span>
-                      </button>
-                      <ul class="dropdown-menu w-100 shadow-sm p-2" id="provinceList" style="max-height: 300px; overflow-y: auto;"></ul>
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-coins text-muted"></i></span>
+                    <select class="form-select border-start-0 ps-2 px-1" name="price" id="priceRange">
+                      <option value="">ทั้งหมด</option>
+                      <option value="0-1000">0 - 1,000</option>
+                      <option value="1001-3000">1,000 - 3,000</option>
+                      <option value="3001-5000">3,000 - 5,000</option>
+                      <option value="5000+">5,000 ขึ้นไป</option>
+                    </select>
                   </div>
                 </div>
 
-                <div class="col-md-12 col-lg-2 d-flex align-items-end">
-                  <button type="submit" class="btn btn-primary-custom w-100">ค้นหา</button>
+                <div class="col-md-12 col-lg-auto d-flex align-items-end">
+                  <button type="submit" class="btn btn-search">ค้นหา</button>
                 </div>
 
               </div>
             </form>
 
-            <section class="container mt-5 mb-5">
-              <div id="searchResults" class="row g-4"></div>
-            </section>
-            
           </div>
         </div>
       </div>
     </section>
+    </div>
+
+    <!-- SNAP SECTION 2: Categories -->
+    <div class="swiper-slide snap-section d-flex flex-column justify-content-center" style="min-height: 100vh; background-color: #FFFDF5;">
+      <section class="container" id="categoriesSection">
+      <h5 class="text-center fw-bold">หมวดหมู่คดีแนะนำ</h5>
+      <div class="row g-3 row-cols-2 row-cols-md-5" id="categoryGrid">
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีแพ่ง" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-briefcase fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีแพ่ง</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีอาญา" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-shield-cat fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีอาญา</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีครอบครัว" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-house fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีครอบครัว</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีที่ดิน" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-building fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีที่ดิน</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีมรดก" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-coins fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีมรดก</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีจราจร" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-car fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีจราจร</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีแรงงาน" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-id-card fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีแรงงาน</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีผู้บริโภค" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-shop fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีผู้บริโภค</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html?keyword=คดีไซเบอร์" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-laptop fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">คดีไซเบอร์</div>
+            </a>
+        </div>
+        <div class="col text-center">
+            <a href="/lawyers.html" class="d-block p-4 border-0 rounded-4 shadow-sm category-card text-decoration-none h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="category-icon-wrapper rounded-circle d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-solid fa-arrow-right fs-3"></i>
+                </div>
+                <div class="small fw-bold category-title">ดูทั้งหมด</div>
+            </a>
+        </div>
+      </div>
+      </section>
+    </div>
+
+    <div class="swiper-slide snap-section d-flex flex-column justify-content-between lawyer-section" style="min-height: 100vh;">
+      <section class="container" style="margin-top: 120px;">
+      <h5 class="text-center fw-bold">ทนายความแนะนำ</h5>
+      
+      <div class="position-relative swiper lawyer-swiper py-3 px-2">
+        <div class="swiper-wrapper" id="searchResults">
+        </div>
+        <div class="swiper-button-prev" style="color: #1a435a;"></div>
+        <div class="swiper-button-next" style="color: #1a435a;"></div>
+      </div>
+      </section>
+    </div>
+    </div>
   </main>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="/js/search.js"></script>
+  <script src="/js/auth.js?v=3"></script>
 </body>
 </html>

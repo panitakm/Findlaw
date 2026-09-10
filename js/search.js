@@ -63,21 +63,72 @@
         }
     };
 
+    let allCategories = [];
+
     const loadCategoriesForSuggestion = async () => {
-    try {
-        const res = await fetch('http://localhost:3000/lawyer/categories');
-        const categories = await res.json();
-        const datalist = document.getElementById('categoryList');
-        
-        if (datalist) {
-            categories.forEach(cat => {
-                datalist.innerHTML += `<option value="${cat.name}">`;
-            });
+        try {
+            const res = await fetch('http://localhost:3000/lawyer/categories');
+            const data = await res.json();
+            
+            // กรองคดีที่ซ้ำกันออก
+            const uniqueCategories = [];
+            const seen = new Set();
+            for (const cat of data) {
+                if (!seen.has(cat.name)) {
+                    seen.add(cat.name);
+                    uniqueCategories.push(cat);
+                }
+            }
+            allCategories = uniqueCategories;
+            
+            setupAutocomplete();
+        } catch (error) {
+            console.error("โหลดหมวดหมู่ล้มเหลว:", error);
         }
-    } catch (error) {
-        console.error("โหลดหมวดหมู่ล้มเหลว:", error);
-    }
-};
+    };
+
+    const setupAutocomplete = () => {
+        const input = document.getElementById('keywordInput');
+        const box = document.getElementById('suggestionBox');
+        if (!input || !box) return;
+
+        const renderSuggestions = (filterText = '') => {
+            box.innerHTML = '';
+            const filtered = allCategories.filter(cat => cat.name.toLowerCase().includes(filterText.toLowerCase()));
+            
+            if (filtered.length === 0) {
+                box.classList.remove('show');
+                return;
+            }
+
+            filtered.forEach(cat => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.className = 'dropdown-item py-2';
+                a.href = '#';
+                a.textContent = cat.name;
+                
+                // ใช้ click แทน mousedown เพื่อให้รองรับมือถือได้ดีขึ้น
+                a.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    input.value = cat.name;
+                    box.classList.remove('show');
+                });
+                
+                li.appendChild(a);
+                box.appendChild(li);
+            });
+            box.classList.add('show');
+        };
+
+        input.addEventListener('focus', () => renderSuggestions(input.value));
+        input.addEventListener('input', (e) => renderSuggestions(e.target.value));
+        
+        // หน่วงเวลาตอน blur เพื่อให้ event click ทำงานทัน
+        input.addEventListener('blur', () => {
+            setTimeout(() => box.classList.remove('show'), 200);
+        });
+    };
 
 document.addEventListener('DOMContentLoaded', () => {
     loadProvinces();
@@ -93,67 +144,154 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        lawyers.forEach(lawyer => {
-            const imgSrc = lawyer.image_path || 'https://via.placeholder.com/150?text=No+Image';
+        // ใช้ array จริงๆ ของทนายความเลย Swiper จะจัดการ Loop ให้เอง
+        const displayLawyers = lawyers;
+
+        displayLawyers.forEach(lawyer => {
+            const imgSrc = lawyer.image_path || '/css/pic/person-circle.svg';
             const expText = lawyer.total_experience > 0 ? `${lawyer.total_experience} ปี` : 'น้อยกว่า 1 ปี';
+            let feeRate = 'ไม่ระบุ';
+            if (lawyer.fee_rate) {
+                const fee = parseInt(lawyer.fee_rate, 10);
+                if (fee <= 1000) feeRate = '0 - 1,000';
+                else if (fee <= 3000) feeRate = '1,000 - 3,000';
+                else if (fee <= 5000) feeRate = '3,000 - 5,000';
+                else feeRate = 'เริ่มต้น 5,000';
+            }
+            const specialties = lawyer.specialties || 'ไม่ระบุ';
 
             container.innerHTML += `
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="${imgSrc}" class="card-img-top" style="height: 220px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold text-primary">${lawyer.full_name}</h5>
-                            <p class="card-text text-muted mb-1"><i class="bi bi-geo-alt-fill text-danger me-2"></i>จ.${lawyer.province_name || 'ไม่ระบุ'}</p>
-                            <p class="card-text text-muted"><i class="bi bi-briefcase-fill text-warning me-2"></i>ประสบการณ์: ${expText}</p>
+                <div class="swiper-slide lawyer-slide-item">
+                    <a href="lawyerProfile.html?id=${lawyer.id}" class="text-decoration-none text-dark d-block h-100">
+                        <div class="card h-100 shadow-sm border-0 rounded-4 lawyer-card-item pb-4" style="min-height: 380px;">
+                            <img src="${imgSrc}" class="card-img-top rounded-top-4 lawyer-card-img">
+                            <div class="lawyer-card-body">
+                                <h5 class="lawyer-card-title">${lawyer.full_name}</h5>
+                                <p class="lawyer-card-info"><i class="fa-solid fa-location-dot lawyer-card-icon lawyer-icon-location"></i>จ. ${lawyer.province_name || 'ไม่ระบุ'}</p>
+                                <p class="lawyer-card-info"><i class="fa-solid fa-briefcase lawyer-card-icon lawyer-icon-exp"></i>ประสบการณ์: ${expText}</p>
+                                <p class="lawyer-card-info"><i class="fa-solid fa-coins lawyer-card-icon lawyer-icon-fee"></i>ค่าบริการ: ${feeRate} บาท</p>
+                                <p class="lawyer-card-info mb-0"><i class="fa-solid fa-tags lawyer-card-icon lawyer-icon-case"></i><span class="lawyer-card-specialty">${specialties}</span></p>
+                            </div>
                         </div>
-                        <div class="card-footer bg-white border-top-0 pb-4 text-center">
-                            <a href="lawyerProfile.html?id=${lawyer.id}" class="btn btn-outline-primary rounded-pill w-100">ดูโปรไฟล์</a>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             `;
         });
+        
+        setupCarousel();
     };
 
-    //ตอนกดปุ่มค้นหา
+    const setupCarousel = () => {
+        // Initialize Swiper with Standard Slide Effect
+        new Swiper('.lawyer-swiper', {
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            spaceBetween: 30, // เว้นระยะห่างระหว่างการ์ดให้เหมือนรูป
+            loop: true,
+            nested: true, // Prevents parent swiper from stealing touch events
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    };
+
     const searchForm = document.getElementById('searchForm');
     if (searchForm) {
-        searchForm.addEventListener('submit', async (e) => {
+        searchForm.addEventListener('submit', (e) => {
             e.preventDefault(); 
-            const searchContainer = document.querySelector('.search-container');
-            document.querySelector('.search-container')?.classList.add('compact');
-            document.querySelector('.title-text')?.classList.add('d-none');
-
             const keyword = document.querySelector('input[name="keyword"]').value;
             const experience = document.getElementById('nameExp').value;
+            const price = document.getElementById('priceRange').value;
             
             const checkedBoxes = document.querySelectorAll('.province-check:checked');
             const provinceIds = Array.from(checkedBoxes).map(chk => chk.value).join(','); 
 
-            try {
-                document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center mt-5"><div class="spinner-border text-primary"></div></div>';
-                const url = `http://localhost:3000/lawyer/search?keyword=${encodeURIComponent(keyword)}&experience=${experience}&province=${provinceIds}`;
-                console.log(url);
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                renderResults(data);
-            } catch (error) {
-                console.error("ค้นหาล้มเหลว:", error);
-                document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center text-danger mt-5">เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์</div>';
-            }
+            const url = `/lawyers.html?keyword=${encodeURIComponent(keyword)}&experience=${encodeURIComponent(experience)}&province=${encodeURIComponent(provinceIds)}&price=${encodeURIComponent(price)}`;
+            window.location.href = url;
         });
     }
+
+    const fetchInitialLawyers = async () => {
+        try {
+            document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center mt-5"><div class="spinner-border text-primary"></div></div>';
+            const response = await fetch('http://localhost:3000/lawyer/search');
+            const data = await response.json();
+            // Show more data to allow scrolling
+            renderResults(data.slice(0, 10));
+        } catch (error) {
+            console.error("ดึงข้อมูลเริ่มต้นล้มเหลว:", error);
+            document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center text-danger mt-5">เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์</div>';
+        }
+    };
+
+    const setupMainSwiper = () => {
+        // Enable full page scroll for all screen sizes as requested
+        new Swiper('.main-swiper', {
+            direction: 'vertical',
+            slidesPerView: 1,
+            mousewheel: {
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: true, // Allow native scrolling when reaching the edge
+            },
+            touchReleaseOnEdges: true, // Allow native touch scrolling when reaching the edge
+            speed: 1000, // 1 second animation duration
+            keyboard: {
+                enabled: true,
+                onlyInViewport: false,
+            },
+        });
+    };
+    // Typing Animation for Hero Title
+    const startTypingAnimation = () => {
+        const titleEl = document.getElementById('typingTitle');
+        if (!titleEl) return;
+
+        const text = 'ค้นหาที่ปรึกษาทางกฎหมายที่เหมาะกับคุณ';
+        let index = 0;
+        let isDeleting = false;
+
+        const type = () => {
+            titleEl.classList.remove('typing-done'); // ให้เคอร์เซอร์กะพริบตลอดเวลาตอนลบและพิมพ์
+            
+            if (!isDeleting) {
+                titleEl.textContent = text.substring(0, index + 1);
+                index++;
+                if (index === text.length) {
+                    isDeleting = true;
+                    setTimeout(type, 3000); // หยุดรอ 3 วินาทีเมื่อพิมพ์เสร็จ
+                } else {
+                    setTimeout(type, 80); // ความเร็วในการพิมพ์
+                }
+            } else {
+                titleEl.textContent = text.substring(0, index - 1);
+                index--;
+                if (index === 0) {
+                    isDeleting = false;
+                    setTimeout(type, 800); // หยุดรอ 0.8 วินาทีก่อนเริ่มพิมพ์ใหม่
+                } else {
+                    setTimeout(type, 40); // ความเร็วในการลบ (เร็วกว่าพิมพ์)
+                }
+            }
+        };
+
+        // เริ่มพิมพ์หลังจากโหลดหน้าเสร็จ 0.5 วินาที
+        setTimeout(type, 500);
+    };
 
     document.addEventListener('DOMContentLoaded', () => {
         loadProvinces();
         loadCategoriesForSuggestion();
-
-        // if (searchForm) {
-        //     setTimeout(() => {
-        //         searchForm.dispatchEvent(new Event('submit'));
-        //     }, 500); 
-        // }
+        fetchInitialLawyers();
+        setupMainSwiper();
+        startTypingAnimation();
     });
 
 })();

@@ -1,4 +1,4 @@
-const lawyerId = 1; 
+let lawyerId = null;
 
 let currentSpecialties = []; 
 let allSpecialtiesDB = []; 
@@ -8,6 +8,20 @@ let profilePicBase64 = null;
 let existingProfilePic = null;  
 
 window.onload = async () => {
+    if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+        const user = Auth.getUser();
+        if (user.role !== 'lawyer') {
+            alert('คุณไม่มีสิทธิ์เข้าถึงหน้านี้');
+            window.location.href = '/search.html';
+            return;
+        }
+        lawyerId = user.id;
+    } else {
+        alert('กรุณาเข้าสู่ระบบก่อน');
+        window.location.href = '/login.html';
+        return;
+    }
+
     // โหลดจังหวัดเป็นตัวเลือก
     const provRes = await fetch('http://localhost:3000/lawyer/provinces');
     const provinces = await provRes.json();
@@ -28,27 +42,52 @@ window.onload = async () => {
     document.getElementById('inputEmail').value = p.email || '';
     document.getElementById('inputPhone').value = p.phone || '';
     document.getElementById('inputLicNum').value = p.license_number || '';
-
     existingLicenseFile = p.license_file || null;
     if (p.license_file) {
-        document.getElementById('fileNameDisplay').style.display = 'block';
-
+        let fileNameText = 'ไฟล์ใบอนุญาต (ไม่สามารถแก้ไขได้)';
         try {
             const fileObj = JSON.parse(p.license_file);
-            document.getElementById('fileNameText').innerHTML = `<a href="${fileObj.data}" download="${fileObj.name}" class="text-decoration-none text-primary">ไฟล์: ${fileObj.name}</a>`;
+            fileNameText = fileObj.name + ' (ไม่สามารถแก้ไขได้)';
         } catch (e) {
-            document.getElementById('fileNameText').innerHTML = `<a href="${p.license_file}" download="license_file" class="text-decoration-none text-primary">ไฟล์:</a>`;
+            // If it's a URL or path, extract the last segment as filename
+            let extractedName = p.license_file;
+            if (typeof extractedName === 'string' && extractedName.includes('/')) {
+                extractedName = extractedName.split('/').pop();
+            }
+            fileNameText = extractedName + ' (ไม่สามารถแก้ไขได้)';
         }
+        document.getElementById('licenseFileSection').innerHTML = `
+            <label class="form-label">ใบอนุญาตทนายความ</label>
+            <div class="form-control form-control-custom bg-light d-flex align-items-center text-muted">
+                <i class="fa-regular fa-file-pdf text-danger me-2"></i>
+                <span>${fileNameText}</span>
+            </div>
+        `;
+    } else {
+        document.getElementById('licenseFileSection').innerHTML = `
+            <label class="form-label">ใบอนุญาตทนายความ</label>
+            <div class="form-control form-control-custom bg-light d-flex align-items-center text-muted">
+                <i class="fa-solid fa-file-circle-xmark me-2"></i>
+                <span>ยังไม่มีไฟล์ใบอนุญาต</span>
+            </div>
+        `;
     }
 
     document.getElementById('line').value = p.line_id || '';
     document.getElementById('facebook').value = p.facebook_url || '';
     document.getElementById('province').value = p.province_id || '';
     document.getElementById('address').value = p.office_address || '';
+    if (p.fee_rate) document.getElementById('feeRate').value = p.fee_rate;
     existingProfilePic = p.image_path || null;
 
     if (p.image_path) {
-        document.getElementById('previewProfile').src = p.image_path;
+        const showPicEl = document.getElementById('showPic');
+        if(showPicEl) showPicEl.src = p.image_path;
+    }
+    
+    const bannerUsernameEl = document.getElementById('bannerUsername');
+    if (bannerUsernameEl) {
+        bannerUsernameEl.innerText = (p.first_name || '') + ' ' + (p.last_name || '');
     }
 
     currentSpecialties = data.specialties || [];
@@ -60,7 +99,7 @@ window.onload = async () => {
 };
 
 function previewImage() {
-    const file = document.getElementById('inputPic').files[0];
+    const file = document.getElementById('uploadNewpic').files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -76,16 +115,27 @@ async function saveAllData() {
     const newPass = document.getElementById('newPassword').value;
     const confirmPass = document.getElementById('confirmNewpassword').value;
 
-    if (newPass || oldPass) {
-        if (!oldPass) return alert("กรุณากรอกรหัสผ่านปัจจุบันก่อน");
-        if (newPass !== confirmPass) return alert("รหัสผ่านใหม่ไม่ตรงกัน");
+    if (!oldPass) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'คำเตือน',
+            text: 'กรุณาระบุรหัสผ่านปัจจุบันก่อนบันทึกข้อมูล'
+        }).then(() => {
+            document.getElementById('oldPassword').focus();
+        });
+        return;
+    }
+
+    if (newPass && newPass !== confirmPass) {
+        return Swal.fire('ข้อผิดพลาด', 'รหัสผ่านใหม่ไม่ตรงกัน', 'error');
     }
 
     const payload = {
         old_password: oldPass,
         new_password: newPass,
         image_path: profilePicBase64 || existingProfilePic,
-        full_name: document.getElementById('inputName').value + ' ' + document.getElementById('inputLastname').value,
+        first_name: document.getElementById('inputName').value,
+        last_name: document.getElementById('inputLastname').value,
         email: document.getElementById('inputEmail').value,
         phone: document.getElementById('inputPhone').value,
         line_id: document.getElementById('line').value,
@@ -106,8 +156,29 @@ async function saveAllData() {
         body: JSON.stringify(payload)
     });
     const result = await res.json();
-    alert(result.message || result.error);
-    if(res.ok) location.reload();
+    
+    if(res.ok) {
+        const user = Auth.getUser();
+        if (user) {
+            if (result.image_path) {
+                user.image_path = result.image_path;
+            } else if (payload.image_path) {
+                user.image_path = payload.image_path;
+            }
+            user.first_name = document.getElementById('inputName').value;
+            user.last_name = document.getElementById('inputLastname').value;
+            Auth.setSession(Auth.getToken(), user);
+        }
+        Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: 'บันทึกข้อมูลเรียบร้อยแล้ว'
+        }).then(() => {
+            window.location.reload();
+        });
+    } else {
+        Swal.fire('ข้อผิดพลาด', result.error || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
+    }
 }
 
 const dayMap = { 'monday':'mon','tuesday':'tue','wednesday':'wed','thursday':'thu','friday':'fri','saturday':'sat','sunday':'sun' };
@@ -140,9 +211,10 @@ async function loadAllSpecialties() {
     if (res.ok) {
         const opts = (await res.json()).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
         document.getElementById('selectSpecialty').innerHTML = 
-            `<option value="">-- เลือก --</option>${opts}<option value="custom">+ พิมพ์เพิ่ม</option>`;
+            `<option value="">-- เลือก --</option>${opts}<option value="custom">+ เพิ่มเอง</option>`;
     }
 }
+
 
 // ซ่อน/แสดงช่องพิมพ์
 function toggleCustomInput() {
@@ -174,7 +246,7 @@ function drawTags() {
     document.getElementById('categoryTags').innerHTML = currentSpecialties.length ? 
         currentSpecialties.map((s, i) => 
             `<span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary px-3 py-2 ms-2 tag-box">
-                ${s.name} <i class="bi bi-x-circle-fill ms-2" onclick="deleteTag(${i})" style="cursor:pointer"></i>
+                ${s.name} <i class="fa-solid fa-circle-xmark ms-2" onclick="deleteTag(${i})" style="cursor:pointer"></i>
             </span>`
         ).join('') 
         : '<span class="text-muted mt-2">ยังไม่มีหมวดหมู่คดี</span>';
@@ -200,27 +272,27 @@ function renderEducations(educations) {
 function addEducation(school = '', degree = '', start = '', end = '') {
 
     const div = document.createElement('div');
-    div.className = 'row g-3 mb-3 border-bottom pb-3'; 
+    div.className = 'row g-3 mb-4 border-bottom pb-3'; 
     div.innerHTML = `
         <div class="form-input col-md-6">
             <label class="form-label">มหาวิทยาลัย/สถาบัน</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="edu_school[]" value="${school}">
+            <input type="text" class="form-control form-control-custom" name="edu_school[]" value="${school}">
         </div>
         <div class="form-input col-md-6">
             <label class="form-label">หลักสูตร/วุฒิการศึกษา</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="edu_degree[]" value="${degree}">
+            <input type="text" class="form-control form-control-custom" name="edu_degree[]" value="${degree}">
         </div>
         <div class="form-input col-md-6">
             <label class="form-label">ปีที่เริ่มศึกษา</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="edu_start[]" value="${start}" maxlength="4">
+            <input type="text" class="form-control form-control-custom" name="edu_start[]" value="${start}" maxlength="4">
         </div>
         <div class="form-input col-md-6">
             <label class="form-label">ปีที่จบ</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="edu_end[]" value="${end}" maxlength="4">
+            <input type="text" class="form-control form-control-custom" name="edu_end[]" value="${end}" maxlength="4">
         </div>
-        <div class="col-md-12 d-flex justify-content-end">
+        <div class="col-md-12 d-flex justify-content-end mt-3">
             <button type="button" class="btn btn-outline-danger" style="width: 75px;" onclick="removeItem(this)">
-                <i class="bi bi-trash"></i>
+                <i class="fa-solid fa-trash"></i>
             </button>
         </div>
     `;
@@ -241,27 +313,27 @@ function renderWorks(works) {
 function addWork(company = '', position = '', start = '', end = '') {
 
     const div = document.createElement('div');
-    div.className = 'row g-3 mb-3 border-bottom pb-3';
+    div.className = 'row g-3 mb-4 border-bottom pb-3';
     div.innerHTML = `
         <div class="form-input col-md-6">
             <label class="form-label">ชื่อสถานที่ทำงาน</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="work_company[]" value="${company}">
+            <input type="text" class="form-control form-control-custom" name="work_company[]" value="${company}">
         </div>
         <div class="form-input col-md-6">
             <label class="form-label">ตำแหน่งงาน</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="work_position[]" value="${position}">
+            <input type="text" class="form-control form-control-custom" name="work_position[]" value="${position}">
         </div>
         <div class="form-input col-md-6">
             <label class="form-label">ปีที่เริ่มทำงาน</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="work_start[]" value="${start}" maxlength="4">
+            <input type="text" class="form-control form-control-custom" name="work_start[]" value="${start}" maxlength="4">
         </div>
         <div class="form-input col-md-6">
             <label class="form-label">จนถึงปี</label>
-            <input type="text" class="form-control form-control-lg font-sarabun" name="work_end[]" value="${end} " maxlength="4">
+            <input type="text" class="form-control form-control-custom" name="work_end[]" value="${end} " maxlength="4">
         </div>
-        <div class="col-md-12 d-flex justify-content-end">
+        <div class="col-md-12 d-flex justify-content-end mt-3">
             <button type="button" class="btn btn-outline-danger" style="width: 75px;" onclick="removeItem(this)">
-                <i class="bi bi-trash"></i>
+                <i class="fa-solid fa-trash"></i>
             </button>
         </div>
     `;
@@ -321,6 +393,17 @@ function showFileName() {
         text.innerText = "ไฟล์: " + file.name;
         display.style.display = 'block'; 
 
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            licenseFileData = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+window.handleNewLicenseFile = function(input) {
+    if (input.files && input.files.length > 0) {
+        const file = input.files[0];
         const reader = new FileReader();
         reader.onload = function(e) {
             licenseFileData = e.target.result;

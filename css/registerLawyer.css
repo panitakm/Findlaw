@@ -1,35 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
 body {
-    background-color: #E5EEFF;
-    color: #000000;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    background-color: #bfd8e2;
+    font-family: 'Noto Sans Thai', sans-serif;
 }
 
 .container {
-    max-width: 700px;
-    padding: 1.5rem;
+    max-width: 500px;
+    padding: 2rem;
     background-color: #FFFFFF;
-    border-radius: 8px;
+    border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
 }
 
 .header {
-    margin-top: 25px;
-    margin-bottom: 15px;
-    font-family: 'Noto Sans Thai', sans-serif;
-    font-size: 45px;
-    font-weight: 700;
+    margin-top: 15px;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #4987a4;
+}
+
+.step-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-btn {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50% !important;
+    z-index: 2;
 }
 
 .uploadProfile {
-position: relative;
-width: 120px;
-height: 120px;
-margin-bottom: 10px;
-border-radius: 50%;
-overflow: hidden; 
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .profilePreview {
@@ -41,14 +69,13 @@ overflow: hidden;
 }
 
 .uploadPic {
-    position: absolute; 
+    position: absolute;
     bottom: 0;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
     color: white;
     text-align: center;
     padding: 2px 0 12px;
-    font-family: 'Sarabun', sans-serif;
     font-size: 12px;
     cursor: pointer;
     transition: 0.3s;
@@ -60,22 +87,38 @@ overflow: hidden;
 
 .form-input {
     margin-bottom: 15px;
-    font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 500;
+    color: #1A435A;
 }
 
 .form-control {
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 500;
+    height: 40px;
     border-radius: 10px;
+    color: #1A435A;
 }
 
 .form-select {
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 500;
     height: 40px;
     border-radius: 10px;
+    color: #1A435A;
+}
+
+input[type="file"].form-control {
+    padding: 8px 12px;
+}
+
+input[type="file"].form-control::file-selector-button {
+    padding: 8px 12px;
+    margin: -8px -12px;
+    margin-inline-end: 12px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
 }
 
 .invalid-feedback {
@@ -83,67 +126,208 @@ overflow: hidden;
     margin-bottom: -5px;
 }
 
+.btn-link {
+    background-color: transparent !important;
+    color: #4987a4 !important;
+    border: none;
+    box-shadow: none !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-link:hover {
+    color: #1A435A !important;
+    background-color: transparent !important;
+    transform: none !important;
+}
+
+#btnPrev, #btnNext, #btnSubmit {
+    min-width: 130px;
+}
+
 .btn {
-    position: relative;
-    width: 190px;
-    height: 50px;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    font-family: 'Noto Sans Thai', sans-serif;
-    font-size: 20px;
+    background-color: #4987a4;
+    color: #ffffff;
+    border: none;
+    padding: 8px 20px;
+    margin: 4px 0px;
+    font-size: 1rem;
     font-weight: 600;
     border-radius: 50px;
-    cursor: pointer;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.btn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #D5E0F8;
-    z-index: -2;
-}
-
-.btn::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #0058BE;
-    z-index: -1;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease;
-} 
-
-.btn:hover::after {
-    transform: scaleX(1);
+    transition: all 0.3s ease;
 }
 
 .btn:hover {
     color: #ffffff;
-    transition: color 0.2s ease;
+    background-color: #5f98b1;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26, 67, 90, 0.3);
 }
 
-.btn-submit {
-    margin-right: 15px;
+.btn-save-custom {
+    background-color: #0A3D73;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 12px 32px;
+    border-radius: 12px;
+    border: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(10, 61, 115, 0.25);
 }
 
-.link {
-    font-family: "Sarabun", sans-serif;
-    font-size: 12px;
+.btn-save-custom:hover {
+    background-color: #082F59;
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(10, 61, 115, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-add {
     font-weight: 500;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    min-width: auto;
 }
 
-.link a {
-    margin-left: 5px;
-    margin-right: 15px;
-    color: #014490c0;
+.btn.btn-sm {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    min-width: auto;
+}
+
+.btn-box-cancel, .btn-box-add {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    min-width: 100px;
+}
+
+.toggle-password-icon {
+    right: 15px;
+    top: 19px;
+    transform: translateY(-50%);
+    transition: right 0.2s ease-in-out;
+}
+
+.form-control.is-invalid~.toggle-password-icon {
+    right: 40px;
+}
+
+.password-input {
+    padding-right: 40px !important;
+}
+
+.password-input.is-invalid {
+    padding-right: 70px !important;
+}
+
+/* Remove Bootstrap's green validation styles for valid fields */
+.was-validated .form-control:valid,
+.form-control.is-valid {
+    border-color: var(--bs-border-color, #dee2e6) !important;
+    background-image: none !important;
+    padding-right: 0.75rem !important;
+}
+
+.was-validated .form-control:valid:focus,
+.form-control.is-valid:focus {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+.was-validated .form-select:valid,
+.form-select.is-valid {
+    border-color: var(--bs-border-color, #dee2e6) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+
+.was-validated .form-select:valid:focus,
+.form-select.is-valid:focus {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+/* Glass Card */
+.glass-card {
+    border: none;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    padding: 30px 40px;
+    margin-bottom: 25px;
+}
+
+/* Form Styles */
+.card-header-custom {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0A3D73;
+    border-bottom: 2px solid #EBF1F7;
+    padding-bottom: 12px;
+}
+
+.form-label {
+    margin: 0 0 5px 5px;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-control-custom {
+    background-color: #F8F9FA;
+    border: 1.5px solid #E9ECEF;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.form-control-custom:focus {
+    background-color: #ffffff;
+    border-color: #0A3D73;
+    box-shadow: 0 0 0 3px rgba(10, 61, 115, 0.12);
+}
+
+.category-badge {
+    background-color: #D3EBF9;
+    color: #4987A4;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+}
+
+.category-badge:hover {
+    background-color: #D3EBF9;
+    color: #4987A4;
+}
+
+.tag-remove-icon {
+    color: #4987A4;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+
+
+.tag-remove-icon:hover {
+    transform: scale(1.2);
+}
+
+/* Status Select Specific Fixes for Glass Card */
+select.form-control-custom,
+select.form-select {
+    cursor: pointer;
+}
+
+.box-category {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #4987a4;
 }

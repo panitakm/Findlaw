@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="th" data-bs-theme="light" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ประวัติการรีวิว - LegalPortal</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/userProfile.css" />
+    <link rel="stylesheet" href="/css/reviews.css" />
+    <link rel="stylesheet" href="/css/userTheme.css" />
+    <script src="/js/userTheme.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  </head>
+  <body>
+    <div class="container-fluid p-0">
+      <div class="row g-0 min-vh-100">
+        <!-- Curved Navigation Sidebar (Exact design from sample image) -->
+        <aside class="col-md-3 col-lg-2 p-0 d-md-block sidebar-curved position-sticky top-0" style="height: 100vh; overflow-y: auto">
+          <div class="d-flex flex-column h-100">
+            <!-- Logo & System Title -->
+            <a href="/search.html" class="logo-brand">
+              <i class="fa-solid fa-scale-balanced fs-3"></i>
+              <span>FindLaw</span>
+            </a>
+
+            <!-- Menu Items -->
+            <ul class="sidebar-nav-list mb-auto">
+              <li>
+                <a href="userProfile.html" class="nav-link">
+                  <span class="nav-icon-badge"><i class="fa-solid fa-id-badge"></i></span>
+                  <span>โปรไฟล์ของฉัน</span>
+                </a>
+              </li>
+              <li>
+                <a href="favorites.html" class="nav-link">
+                  <span class="nav-icon-badge"><i class="fa-solid fa-bookmark"></i></span>
+                  <span>ทนายที่บันทึกไว้</span>
+                </a>
+              </li>
+              <li>
+                <a href="reviews.html" class="nav-link active">
+                  <span class="nav-icon-badge"><i class="fa-solid fa-star"></i></span>
+                  <span>ประวัติการรีวิว</span>
+                </a>
+              </li>
+            </ul>
+
+            <hr class="my-4 border-secondary opacity-25 me-3" />
+
+            <!-- Logout Button -->
+            <ul class="sidebar-nav-list pb-4">
+              <li>
+                <a href="#" class="nav-link text-danger" id="logoutBtn" onclick="Auth.clearSession()">
+                  <span class="nav-icon-badge text-danger"><i class="fa-solid fa-right-to-bracket"></i></span>
+                  <span>ออกจากระบบ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 p-0">
+          <div class="user-header-bar d-flex justify-content-between align-items-center ps-4 pt-3 pb-3 pe-4">
+            <form action="/lawyers.html" method="GET" class="mb-0 flex-grow-1">
+              <div class="input-group bg-white rounded-3 shadow-sm border p-1">
+                <button
+                  class="btn border-0 dropdown-toggle text-muted fw-bold pe-3 shadow-none"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  id="filterDropdownBtn"
+                  data-bs-auto-close="outside"
+                  style="border-right: 1px solid #e0e0e0 !important; border-radius: 0"
+                >
+                  ตัวกรอง
+                </button>
+                <div class="dropdown-menu p-3 shadow-sm" style="width: 280px; z-index: 1050; border: none; border-radius: 10px">
+                  <div class="mb-3">
+                    <label class="form-label small fw-bold">ประสบการณ์</label>
+                    <select name="experience" class="form-select form-select-sm filter-select">
+                      <option value="">ทั้งหมด</option>
+                      <option value="0-1">น้อยกว่า 1 ปี</option>
+                      <option value="1-3">1-3 ปี</option>
+                      <option value="4-6">4-6 ปี</option>
+                      <option value="7-10">7-10 ปี</option>
+                      <option value="11-50">10 ปีขึ้นไป</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label small fw-bold">อัตราค่าบริการ</label>
+                    <select name="price" class="form-select form-select-sm filter-select">
+                      <option value="">ทั้งหมด</option>
+                      <option value="0-1000">0 - 1,000</option>
+                      <option value="1001-3000">1,000 - 3,000</option>
+                      <option value="3001-5000">3,000 - 5,000</option>
+                      <option value="5000+">5,000 ขึ้นไป</option>
+                    </select>
+                  </div>
+                </div>
+
+                <input
+                  type="text"
+                  name="keyword"
+                  class="form-control border-0 shadow-none bg-transparent ps-3"
+                  placeholder="ค้นหาทนายความ กฎหมาย หรือคดี..."
+                />
+
+                <button class="btn border-0 text-muted px-3 shadow-none" type="submit" style="border-radius: 0">
+                  <i class="fa-solid fa-magnifying-glass" style="font-size: 1.1rem; font-weight: bold; -webkit-text-stroke: 0.5px"></i>
+                </button>
+              </div>
+            </form>
+
+            <div class="d-flex align-items-center gap-3">
+              <!-- User Profile Avatar Header -->
+              <div class="d-flex align-items-center gap-3 border-start ps-3 ms-2">
+                <div class="d-none d-md-block text-end">
+                  <div class="fw-bold" style="font-size: 0.95rem" id="headerUsername"></div>
+                  <div class="text-muted small">ผู้ใช้งานทั่วไป</div>
+                </div>
+                <img
+                  src="/css/pic/person-circle.svg"
+                  alt="Profile"
+                  width="44"
+                  height="44"
+                  id="headerPic"
+                  class="rounded-circle border border-2 border-primary"
+                  style="object-fit: cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Workspace -->
+          <div class="p-4 p-md-5">
+            <!-- Page Header -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+              <div>
+                <h2 class="fw-bold mb-1"><i class="fa-solid fa-star text-warning me-2"></i>ประวัติการรีวิวและความคิดเห็น</h2>
+              </div>
+            </div>
+
+            <!-- Summary Stats Cards (24px Glass Cards) -->
+            <div class="row g-4 mb-4">
+              <div class="col-md-6">
+                <div class="glass-card p-4 d-flex align-items-center">
+                  <div
+                    class="bg-warning bg-opacity-10 text-warning rounded-circle p-3 me-3 d-flex align-items-center justify-content-center"
+                    style="width: 56px; height: 56px"
+                  >
+                    <i class="fa-solid fa-comment-dots fs-3"></i>
+                  </div>
+                  <div>
+                    <div class="text-muted small">รีวิวที่ส่งแล้ว</div>
+                    <h3 class="fw-bold mb-0"><span id="totalReviewsCount">0</span> รายการ</h3>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="glass-card p-4 d-flex align-items-center">
+                  <div
+                    class="bg-primary bg-opacity-10 text-primary rounded-circle p-3 me-3 d-flex align-items-center justify-content-center"
+                    style="width: 56px; height: 56px"
+                  >
+                    <i class="fa-solid fa-star-half-stroke fs-3"></i>
+                  </div>
+                  <div>
+                    <div class="text-muted small">คะแนนเฉลี่ยที่คุณให้</div>
+                    <h3 class="fw-bold mb-0"><span id="avgRatingCount">0.0</span> / 5.0</h3>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="col-md-4">
+              <div class="glass-card p-4 d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                  <i class="fa-solid fa-thumbs-up fs-3"></i>
+                </div>
+                <div>
+                  <div class="text-muted small">คนเห็นว่ามีประโยชน์</div>
+                  <h3 class="fw-bold mb-0"><span id="totalHelpfulCount">0</span> ครั้ง</h3>
+                </div>
+              </div>
+            </div> -->
+            </div>
+
+            <!-- Filter & Search Glass Card -->
+            <!-- <div class="glass-card p-4 mb-4">
+            <div class="row g-3">
+              <div class="col-md-8">
+                <div class="input-group">
+                  <span class="input-group-text input-group-text-theme"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input type="text" id="reviewSearchInput" class="form-control form-control-theme border-start-0 py-2" placeholder="ค้นหาชื่อทนาย หรือข้อความในรีวิว...">
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <select id="reviewRatingSelect" class="form-select form-select-theme py-2">
+                  <option value="">ทุกระดับคะแนน (1-5 ดาว)</option>
+                  <option value="5">5 ดาว ⭐⭐⭐⭐⭐</option>
+                  <option value="4">4 ดาว ⭐⭐⭐⭐</option>
+                  <option value="3">3 ดาว ⭐⭐⭐</option>
+                  <option value="2">2 ดาว ⭐⭐</option>
+                  <option value="1">1 ดาว ⭐</option>
+                </select>
+              </div>
+            </div>
+          </div> -->
+
+            <!-- Reviews Container -->
+            <div class="row" id="reviewsContainer">
+              <!-- Dynamic content from reviews.js -->
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Edit Review Modal -->
+    <!-- <div class="modal fade" id="editReviewModal" tabindex="-1" aria-labelledby="editReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-content-theme border-0 shadow-lg p-3">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title fw-bold" id="editReviewModalLabel">
+            <i class="fa-solid fa-pen-to-square me-2 text-primary"></i>แก้ไขรีวิว
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <form id="editReviewForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">ทนายความ</label>
+              <div class="fw-bold fs-5" id="editReviewModalLawyerName">-</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label text-muted small fw-semibold">คะแนนดาว</label>
+              <div class="d-flex align-items-center gap-3">
+                <div class="star-rating-interactive" id="interactiveStars">
+                  <i class="fa-solid fa-star" data-value="1"></i>
+                  <i class="fa-solid fa-star" data-value="2"></i>
+                  <i class="fa-solid fa-star" data-value="3"></i>
+                  <i class="fa-solid fa-star" data-value="4"></i>
+                  <i class="fa-solid fa-star" data-value="5"></i>
+                </div>
+                <span class="fw-bold text-warning fs-5" id="editRatingText">5 ดาว</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editReviewTitle" class="form-label text-muted small fw-semibold">หัวข้อรีวิว</label>
+              <input type="text" class="form-control form-control-theme py-2" id="editReviewTitle" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="editReviewComment" class="form-label text-muted small fw-semibold">ความคิดเห็น / ข้อเสนอแนะ</label>
+              <textarea class="form-control form-control-theme" id="editReviewComment" rows="4" required></textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">บันทึกการแก้ไข</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div> -->
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/globalSearch.js"></script>
+    <script src="/js/reviews.js"></script>
+  </body>
+</html>

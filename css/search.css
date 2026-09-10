@@ -1,90 +1,435 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 body {
-    margin: 120px 0 40px 0;
-    background-color: #E5EEFF;
+    background-color: #f1f9fe;
     color: #000000;
-}
-
-main {
     font-family: 'Sarabun', sans-serif;
 }
 
+main {
+    flex: 1 0 auto;
+}
+
 .title {
-    background: linear-gradient(rgba(26, 35, 126, 0.85)); 
-    /* rgba(26, 35, 126, 0.85)), url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover */
-        padding: 120px 0 150px;
-        color: white;
+    background: linear-gradient(135deg, rgba(26, 67, 90, 0.95), rgba(73, 135, 164, 0.9));
+    background-blend-mode: overlay;
+    padding: 160px 0 160px;
+    color: white;
+    border-bottom-left-radius: 75px;
+    border-bottom-right-radius: 75px;
+    position: relative;
+    overflow: hidden;
+}
+
+.title-sm {
+    padding: 140px 0 80px;
+}
+
+.title::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(73, 135, 164, 0.4) 0%, rgba(73, 135, 164, 0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.title::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(73, 135, 164, 0.4) 0%, rgba(73, 135, 164, 0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.title> * {
+    position: relative;
+    z-index: 1;
 }
 
 .title h1 {
-    font-weight: 700;
-    letter-spacing: 2px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 2.8rem;
+    min-height: 3.5rem;
+}
+
+
+.title h1::after {
+    content: '|';
+    font-weight: 300;
+    animation: blink 0.7s step-end infinite;
+    margin-left: 2px;
+}
+
+.title h1.typing-done::after {
+    display: none;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.title p.subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 15px auto 0;
 }
 
 .search-container {
     background: #ffffff;
-    border-radius: 16px;
-    padding: 35px;
+    border-radius: 24px;
+    padding: 75px 40px;
     margin-top: -80px;
     position: relative;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
     z-index: 10;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.transition-all { transition: all 0.3s ease; }
-
-.search-container.compact {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    background: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
-    margin-top: -80 !important;
-    position: sticky;
-    top: 70px;
-    z-index: 1000;
-}
-
-.search-container.compact form .row {
-    flex-wrap: nowrap;
-}
-
-.form-label {
-    font-size: 14px;
-    font-weight: 700;
-    color: #555;
-    margin-bottom: 8px;
-}
-
-.form-control, .form-select {
-    border-radius: 8px;
-    padding: 10px 15px;
-    border: 1px solid #dee2e2;
-}
-
-.form-control:focus, .form-select:focus {
-    box-shadow: none;
-    border-color: #1a237e;
-} 
-
-#provinceBtn {
-    border-top-right-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
-}
-
-.btn-primary-custom {
-    background-color: #1a237e;
-    color: #ffffff;
-    border: none;
-    padding: 10px;
-    font-weight: 600;
-    border-radius: 8px;
+.transition-all {
     transition: all 0.3s ease;
 }
 
-.btn-primary-custom:hover {
-    background-color: #283593;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+.form-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1A435A;
+    margin-bottom: 8px;
+    margin-left: 10px;
 }
 
+.input-group-text {
+    border-radius: 12px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 13px;
+    font-size: 1.05rem;
+    border: 1px solid #dee2e2;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none;
+    border-color: #1A435A;
+}
+
+
+#keywordInput {
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+}
+
+#provinceBtn {
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+}
+
+.btn-register,
+.btn-login {
+    font-size: 0.85rem;
+    border-radius: 20px;
+}
+
+.btn-register {
+    background: rgba(255, 255, 255, 0.75);
+    color: #1A435A;
+    border: 1px solid #4987A4 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    background: rgba(255, 255, 255, 0.75);
+    color: #1A435A;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26, 67, 90, 0.3);
+}
+
+.btn-login {
+    background: #4987A4;
+    color: #FFFFFF;
+    border: 1px solid rgba(26, 67, 90, 0.2) !important;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    background: #4987A4;
+    color: #FFFFFF;
+    border: 1px solid #4987A4 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26, 67, 90, 0.3);
+}
+
+
+.btn-search {
+    background-color: #1A435A;
+    color: #ffffff;
+    border: none;
+    padding: 11px 60px;
+    margin: 4px 0px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-search:hover {
+    color: #ffffff;
+    background-color: #1A435A;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26, 67, 90, 0.3);
+}
+
+
+section.container h5.text-center {
+    color: #4987a4;
+    font-size: 2.3rem;
+    font-family: 'Sarabun', sans-serif;
+    text-shadow: 0 5px 15px rgba(26, 67, 90, 0.3);
+}
+
+#categoryGrid{
+    margin-top: 70px;
+}
+
+.category-card {
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    color: #1A435A; /* ย้ายการปรับสีตัวหนังสือมาไว้ที่นี่ */
+}
+
+.category-card .category-icon-wrapper {
+    width: 60px;
+    height: 60px;
+}
+
+.category-card i {
+    color: #1A435A; /* ย้ายการตกแต่งไอคอน (สี) มาไว้ที่นี่ */
+}
+
+.category-card:hover {
+    background-color: #4987A4 !important;
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(60, 110, 134, 0.3) !important;
+    color: #ffffff !important; /* สีตัวหนังสือตอน hover */
+}
+
+.category-card:hover i {
+    color: #ffffff !important; /* สีไอคอนตอน hover */
+}
+
+.main-swiper {
+    width: 100%;
+    height: 100vh;
+}
+
+.swiper-slide {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+.swiper-slide::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.lawyer-section {
+    position: relative;
+    background-color: #f1f9fe !important;
+    z-index: 1;
+    overflow: hidden; 
+}
+
+.lawyer-section::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10%;
+    background: linear-gradient(135deg, rgba(26, 67, 90, 0.95), rgba(73, 135, 164, 0.9));
+    border-top-left-radius: 65px;
+    border-top-right-radius: 65px;
+    z-index: -1; 
+}
+
+/* Lawyer Cards */
+.lawyer-slide-item {
+    width: 250px !important; /* ปรับขนาดให้พอดีกับกรอบสีแดง */
+    max-width: 100%;
+    margin-top: 40px;
+}
+
+.lawyer-card-item {
+    transition: all 0.3s ease;
+}
+
+.lawyer-card-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.lawyer-card-img {
+    height: 180px; /* Reduced from 220px */
+    object-fit: cover;
+}
+
+.lawyer-card-body {
+    padding: 1.25rem;
+}
+
+.lawyer-card-title {
+    font-weight: 700;
+    color: #1A435A;
+    font-size: 1.rem !important; /* บังคับขนาดฟอนต์ให้พอดี ไม่งั้นจะโดน CSS ตัวอื่นทับ */
+    margin-bottom: 0.75rem !important;
+}
+
+.lawyer-card-info {
+    color: #6c757d;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    white-space: nowrap; /* ป้องกันไม่ให้ข้อความตกลงมาบรรทัดใหม่ */
+    overflow: hidden;
+    text-overflow: ellipsis; /* ใส่ ... ถ้ายาวเกินไป */
+}
+
+.lawyer-card-icon {
+    margin-right: 0.5rem;
+}
+
+.lawyer-icon-location { color: #1A435A; }
+.lawyer-icon-exp { color: #1A435A; }
+.lawyer-icon-fee { color: #1A435A; }
+.lawyer-icon-case { color: #1A435A; }
+
+.lawyer-card-specialty {
+    display: inline-block;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+}
+
+.lawyer-card-footer {
+    background-color: transparent;
+    border-top: none;
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    text-align: center;
+}
+
+.lawyer-card-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1A435A;
+    border: 1px solid #1A435A;
+    background: transparent;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.lawyer-card-btn:hover {
+    background-color: #1A435A;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(26, 67, 90, 0.3);
+}
+
+
+@media (max-width: 767.98px) {
+
+    /* Navbar text */
+    .navbar-brand span {
+        font-size: 1rem !important;
+    }
+
+    /* Hero Banner */
+    .title {
+        padding: 100px 0 100px;
+    }
+
+    .title h1 {
+        font-size: 1.8rem;
+    }
+
+    .title p.subtitle {
+        font-size: 0.95rem;
+    }
+
+    /* Search Container */
+    .search-container {
+        padding: 25px 20px;
+        margin-top: -50px;
+        border-radius: 20px;
+    }
+
+    .form-control,
+    .form-select {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary-custom {
+        padding: 10px;
+        font-size: 0.95rem;
+        width: 100%;
+    }
+
+    /* Category Grid */
+    #categoryGrid .col>a {
+        padding: 1rem 0.5rem !important;
+    }
+
+    #categoryGrid .col>a>div:first-child {
+        width: 45px !important;
+        height: 45px !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    #categoryGrid .col>a>div:first-child i {
+        font-size: 1.5rem !important;
+    }
+
+    #categoryGrid .col>a .small {
+        font-size: 0.8rem;
+    }
+
+    /* Swiper Slider */
+    .swiper-slide {
+        width: 280px !important;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        display: none !important;
+        /* Hide arrows on mobile, rely on swipe */
+    }
+}
