@@ -24,7 +24,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #0F1E36, #2563EB);
+    background: linear-gradient(90deg, #1A435A, #4987A4);
     opacity: 0;
     transition: opacity 0.25s ease;
 }
@@ -67,18 +67,18 @@
 }
 
 .specialty-badge {
-    background-color: rgba(37, 99, 235, 0.1);
-    color: var(--accent-blue, #2563EB);
+    background-color: #D3EBF9;
+    color: #4987A4;
     font-size: 0.78rem;
     font-weight: 500;
     padding: 5px 12px;
     border-radius: 20px;
-    border: 1px solid rgba(37, 99, 235, 0.2);
+    border: 1px solid rgba(73, 135, 164, 0.2);
     display: inline-block;
 }
 
 .btn-view-profile {
-    background-color: var(--accent-blue, #2563EB);
+    background-color: #4987A4;
     color: #ffffff;
     border-radius: 12px;
     font-weight: 600;
@@ -88,14 +88,14 @@
 }
 
 .btn-view-profile:hover {
-    background-color: #1d4ed8;
+    background-color: #5f98b1;
     color: #ffffff;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 12px rgba(73, 135, 164, 0.3);
 }
 
 .btn-contact {
-    border: 1.5px solid var(--accent-blue, #2563EB);
-    color: var(--accent-blue, #2563EB);
+    border: 1.5px solid #4987A4;
+    color: #4987A4;
     background-color: transparent;
     border-radius: 12px;
     font-weight: 600;
@@ -104,7 +104,7 @@
 }
 
 .btn-contact:hover {
-    background-color: var(--accent-blue, #2563EB);
+    background-color: #4987A4;
     color: #ffffff;
 }
 
@@ -121,4 +121,53 @@
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ---------------------------------
+   Lawyer Card Inner Elements
+   (Matched with search/lawyers page)
+--------------------------------- */
+.lawyer-name-color, .lawyer-icon-color {
+    color: #1A435A !important;
+}
+
+.lawyer-specialty-text {
+    max-width: 150px;
+    vertical-align: bottom;
+}
+
+.btn-save-lawyer-custom {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    z-index: 10;
+}
+
+/* ---------------------------------
+   Refactored from inline styles
+--------------------------------- */
+.sidebar-back-link {
+    padding: 20px 30px 30px 30px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.sidebar-back-link:hover {
+    opacity: 0.8;
+}
+
+.sidebar-avatar-edit-badge {
+    width: 32px;
+    height: 32px;
+    bottom: 0;
+    right: 0;
+}
+
+.favorite-sort-select {
+    min-width: 155px;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    color: #1A435A;
+    font-weight: 500;
 }

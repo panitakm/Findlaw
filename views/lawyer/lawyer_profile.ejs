@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FindLawyer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/css/lawyer_profile.css" />
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<body class="fade-in d-flex flex-column min-vh-100" style="overflow-x: hidden">
+  <%- include('../partials/navbar') %>
+
+      <div class="d-flex align-items-center gap-2" id="navRightSection"></div>
+    </div>
+  </nav>
+
+  <main class="slide-up delay-100" style="padding-top: 100px">
+    <div class="container pb-5 mt-4">
+      <div class="card border-0 mb-4 overflow-hidden glass-panel slide-up delay-200">
+        <div class="lawyer-header-container d-flex flex-column flex-md-row position-relative p-3 p-md-4">
+          <div class="position-absolute slide-up delay-100" style="top: 1.5rem; left: 1.5rem; z-index: 10;">
+            <button onclick="history.back()" class="btn p-0 border-0 shadow-none bg-transparent"
+              style="color: #4987A4; opacity: 0.6;">
+              <i class="fa-solid fa-chevron-left fs-4 fw-bold"></i>
+            </button>
+          </div>
+
+          <div class="d-flex flex-column align-items-start mx-auto mx-md-0 mb-4 mb-md-0 ms-md-4"
+            style="width: 100%; max-width: 250px; flex-shrink: 0; padding-left: 1rem;">
+            <div
+              class="lawyer-img-wrapper d-flex align-items-center justify-content-center bg-light text-muted position-relative mt-4 mt-md-0"
+              style="width: 250px; border-radius: 20px; height: 270px; overflow: hidden">
+              <i class="fa-solid fa-user position-absolute" style="font-size: 120px; color: #dee2e6; z-index: 1"></i>
+              <img id="profileLaw" class="position-absolute w-100 h-100" alt="Profile"
+                style="object-fit: cover; z-index: 2; display: none" />
+            </div>
+          </div>
+
+          <div
+            class="lawyer-info-wrapper ms-0 ms-md-4 ms-lg-5 w-100 d-flex flex-column justify-content-start mt-2 mt-md-0">
+            <div class="mb-2">
+              <div class="d-flex justify-content-between align-items-center mb-2 w-100">
+                <div class="license-container mb-0" id="licenseNum" style="display: inline-block;"></div>
+                <button id="btnSaveLawyerProfile"
+                  class="btn btn-light rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0"
+                  style="width: 40px; height: 40px; padding: 0;" title="ยังไม่บันทึก">
+                  <i class="fa-solid fa-bookmark text-secondary" id="saveLawyerIcon"
+                    style="font-size: 1.1rem; line-height: 1;"></i></button>
+              </div>
+              <div class="lawyer-name mb-0" id="lawyerName"></div>
+            </div>
+
+            <div class="pt-1">
+              <p class="text-muted fw-medium mb-2"><i class="fa-solid fa-baht-sign me-2"
+                  style="color: #4987A4 ; font-size: 1.2rem;"></i><span id="feeRate"></span></p>
+              <p class="text-muted fw-medium mb-2"><i class="fa-solid fa-location-dot me-2 text-danger"
+                  style="font-size: 1.2rem;"></i><span id="locationProv"></span></p>
+              <div class="d-flex align-items-center mt-2">
+                <div class="text-warning me-2" id="starRank">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                    class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+                <span class="fw-bold me-1" id="rankScore"></span>
+                <span class="text-muted small" id="sumReview"></span>
+              </div>
+
+              <div class="mt-4">
+                <div id="skillBox" class="d-flex flex-wrap gap-2 align-items-center"
+                  style="max-height: 95px; overflow: hidden; padding-bottom: 8px; padding-left: 4px;"></div>
+              </div>
+
+              <div class="modal fade" id="skillsModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header border-bottom-0">
+                      <h5 class="modal-title fw-bold">หมวดหมู่คดีทั้งหมด</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                      <div id="modalList" class="d-flex flex-wrap gap-2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row gx-4">
+        <div class="col-lg-4 d-flex flex-column gap-4 mb-4 mb-lg-0">
+          <section class="card border-0 shadow-sm p-4 pb-2">
+            <div class="header-title d-flex align-items-center">ช่องทางติดต่อ</div>
+            <ul class="list-unstyled contact-list mt-2">
+              <li>
+                <div class="contact-icon-box"><i class="fa-solid fa-map-pin"></i></div><span id="address" class="flex-grow-1" style="line-height: 1.5;"></span>
+              </li>
+              <li>
+                <div class="contact-icon-box"><i class="fa-solid fa-phone"></i></div><span id="contactPhone"></span>
+              </li>
+              <li>
+                <div class="contact-icon-box"><i class="fa-solid fa-at"></i></div><span id="contactEmail"></span>
+              </li>
+              <li>
+                <div class="contact-icon-box"><i class="fa-brands fa-line"></i></div><span id="contactLine"></span>
+              </li>
+              <li>
+                <div class="contact-icon-box"><i class="fa-brands fa-facebook"></i></div><span id="contactFacebook"></span>
+              </li>
+            </ul>
+          </section>
+
+          <section class="card border-0 shadow-sm p-4 pb-1">
+            <div class="header-title d-flex align-items-center">ตารางให้บริการ</div>
+            <div class="service-hours mx-2 my-3" id="serviceHours"></div>
+          </section>
+        </div>
+
+        <div class="col-lg-8 d-flex flex-column gap-4">
+          <section class="card border-0 shadow-sm p-4">
+            <div class="header-title mb-4 w-100">ประสบการณ์การทำงาน</div>
+            <div class="custom-timeline" id="workhistoryTimeline"></div>
+          </section>
+
+          <section class="card border-0 shadow-sm p-4">
+            <div class="header-title mb-4 w-100">ประวัติการศึกษา</div>
+            <div class="custom-timeline" id="educationTimeline"></div>
+          </section>
+
+          <section class="card border-0 shadow-sm p-4" id="achievementsSection">
+            <div class="header-title mb-4 w-100">ผลงานและการอบรม</div>
+            <div class="custom-timeline" id="achievementTimeline"></div>
+          </section>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <!-- Review Title and Write Button -->
+        <section class="d-flex justify-content-between align-items-center mb-4">
+          <h5 class="fw-bold mb-0 text-dark"><span id="reviewTitleCount">0 รีวิว</span></h5>
+          <div>
+            <button id="btnWriteReview" class="btn btn-primary rounded-pill px-3 py-1 shadow-sm"
+              onclick="Auth.requireLoginAction(() => { var m = new bootstrap.Modal(document.getElementById('writeReviewModal')); m.show(); })">
+              <i class="fa-solid fa-pen-to-square me-1" ></i>เขียนรีวิว
+            </button>
+          </div>
+        </section>
+
+        <!-- Review Summary Card -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-body p-4">
+            <div class="row align-items-center">
+              <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+                <div class="d-flex align-items-baseline justify-content-center justify-content-md-start mb-1">
+                  <div class="display-3 fw-bold text-dark" id="summaryAvgRating">0.0</div>
+                  <div class="text-muted ms-2 fs-4">/ 5</div>
+                </div>
+                <div class="text-warning fs-5 d-flex justify-content-center justify-content-md-start" id="summaryStarsHTML">
+                  <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="d-flex flex-column gap-2">
+                  <!-- 5 Stars -->
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted d-flex gap-1 align-items-center justify-content-end" style="width: 100px; flex-shrink: 0;"><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></span>
+                    <div class="progress flex-grow-1" style="height: 8px;">
+                      <div class="progress-bar bg-warning" id="bar5" role="progressbar" style="width: 0%"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                  <!-- 4 Stars -->
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted d-flex gap-1 align-items-center justify-content-end" style="width: 100px; flex-shrink: 0;"><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></span>
+                    <div class="progress flex-grow-1" style="height: 8px;">
+                      <div class="progress-bar bg-warning" id="bar4" role="progressbar" style="width: 0%"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                  <!-- 3 Stars -->
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted d-flex gap-1 align-items-center justify-content-end" style="width: 100px; flex-shrink: 0;"><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></span>
+                    <div class="progress flex-grow-1" style="height: 8px;">
+                      <div class="progress-bar bg-warning" id="bar3" role="progressbar" style="width: 0%"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                  <!-- 2 Stars -->
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted d-flex gap-1 align-items-center justify-content-end" style="width: 100px; flex-shrink: 0;"><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></span>
+                    <div class="progress flex-grow-1" style="height: 8px;">
+                      <div class="progress-bar bg-warning" id="bar2" role="progressbar" style="width: 0%"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                  <!-- 1 Star -->
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted d-flex gap-1 align-items-center justify-content-end" style="width: 100px; flex-shrink: 0;"><i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></span>
+                    <div class="progress flex-grow-1" style="height: 8px;">
+                      <div class="progress-bar bg-warning" id="bar1" role="progressbar" style="width: 0%"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="d-flex align-items-center justify-content-end mb-4 flex-wrap gap-3" id="reviewToggleContainer"
+          style="display: none;">
+          <div class="d-flex gap-3 align-items-center flex-wrap">
+            <div class="d-flex align-items-center gap-1">
+              <select id="reviewRatingSelect" class="form-select border-0 shadow-sm bg-white"
+                style="min-width: 130px; border-radius: 8px; cursor: pointer;">
+                <option value="">ดูทั้งหมด</option>
+                <option value="5">5 ดาว</option>
+                <option value="4">4 ดาว</option>
+                <option value="1-3">1–3 ดาว</option>
+              </select>
+            </div>
+            <div class="d-flex align-items-center gap-1">
+              <select id="reviewSortSelect" class="form-select border-0 shadow-sm bg-white"
+                style="min-width: 140px; border-radius: 8px; cursor: pointer;">
+                <option value="newest">รีวิวล่าสุด</option>
+                <option value="oldest">รีวิวเก่าที่สุด</option>
+                <option value="rating-high">คะแนนสูงสุด</option>
+                <option value="rating-low">คะแนนต่ำสุด</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column gap-3 pb-4 px-1" id="reviewBox">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="writeReviewModal" tabindex="-1" aria-labelledby="writeReviewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
+        <div class="modal-header border-bottom-0 pb-0 mt-2">
+          <h5 class="modal-title fw-bold fs-5" id="writeReviewModalLabel">รีวิวและความคิดเห็น</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-3 pb-4 px-4">
+          <form id="addReviewForm">
+            <div class="mb-4 text-center">
+              <div class="star-rating-interactive display-6 text-warning d-flex justify-content-center gap-2"
+                id="reviewStarRating" style="cursor: pointer">
+                <i class="fa-regular fa-star" data-rating="1"></i>
+                <i class="fa-regular fa-star" data-rating="2"></i>
+                <i class="fa-regular fa-star" data-rating="3"></i>
+                <i class="fa-regular fa-star" data-rating="4"></i>
+                <i class="fa-regular fa-star" data-rating="5"></i>
+              </div>
+              <input type="hidden" id="selectedRating" value="0" required />
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control bg-light" id="reviewComment" rows="4" placeholder="ข้อเสนอแนะ..."
+                style="resize: none; border-radius: 12px; border: 1px solid #dee2e6"></textarea>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-save px-4 rounded-pill fw-semibold shadow-sm">ส่ง</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg"
+        style="border-radius: 16px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px)">
+        <div class="modal-header border-bottom-0 pb-0 mt-2">
+          <h5 class="modal-title fw-bold fs-5" id="reportModalLabel">รายงานรีวิว</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-3 pb-4 px-4">
+          <form id="reportForm">
+            <input type="hidden" id="reportReviewId" value="" />
+            <input type="hidden" id="reportTarget" value="" />
+
+            <div class="mb-3">
+              <select class="form-select bg-light" id="reportReason" style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 15px;" required>
+                <option value="" selected disabled>กรุณาเลือกเหตุผลการรายงาน...</option>
+                <option value="เนื้อหาไม่เหมาะสม">เนื้อหาไม่เหมาะสม</option>
+                <option value="สแปมหรือโฆษณา">สแปมหรือโฆษณา</option>
+                <option value="คุกคามหรือใช้คำหยาบคาย">คุกคามหรือใช้คำหยาบคาย</option>
+                <option value="ข้อมูลเป็นเท็จหรือไม่ถูกต้อง">ข้อมูลเป็นเท็จหรือไม่ถูกต้อง</option>
+                <option value="อื่นๆ">อื่นๆ</option>
+              </select>
+            </div>
+
+            <div class="text-end mt-2">
+              <button type="submit" class="btn btn-save px-4 rounded-pill fw-semibold shadow-sm">ส่งรายงาน</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="mt-auto"
+    style="background: linear-gradient(135deg, rgba(26, 67, 90, 0.95), rgba(73, 135, 164, 0.9)); height: 50px; width: 100%;">
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script src="/js/lawyer_profile.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+
+</html>
+
+

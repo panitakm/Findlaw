@@ -1,0 +1,347 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+
+main {
+    font-family: 'Noto Sans Thai', sans-serif;
+    color: #1A435A !important;
+}
+
+.user-header-bar {
+    padding: 1rem 2rem;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+}
+
+.custom-table th {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-weight: 700;
+    color: #1A435A;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 1rem;
+    background-color: #ffffff !important;
+}
+
+.custom-table td {
+    color: #1A435A;
+    font-weight: 500;
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    background-color: transparent !important;
+}
+
+.btn-outline-admin {
+    background-color: #ffffff;
+    color: #4987A4;
+    font-weight: 500;
+    border: 1px solid #4987A4;
+    transition: all 0.2s ease;
+}
+.btn-outline-admin:hover, .btn-outline-admin:focus, .btn-outline-admin:active {
+    background-color: #4987A4 !important;
+    color: #ffffff !important;
+}
+
+.badge-status {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+    min-width: 95px;
+}
+
+.badge-active {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.badge-suspended {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.badge-pending {
+    background-color: #fef0c7;
+    color: #7a5e0b;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-edit { background-color: #eff6ff; color: #2563eb; }
+.btn-edit:hover { background-color: #dbeafe; transform: translateY(-2px); }
+
+.btn-delete { background-color: #fef2f2; color: #dc2626; }
+.btn-delete:hover { background-color: #fee2e2; transform: translateY(-2px); }
+
+.btn-approve { background-color: #ecfdf5; color: #059669; }
+.btn-approve:hover { background-color: #d1fae5; transform: translateY(-2px); }
+
+.dash-main-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1A435A;
+}
+
+.dash-topic-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1A435A;
+}
+
+
+.dash-info-label {
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.dash-list-title {
+    font-weight: 600;
+}
+
+
+.dash-value-text, .dash-value-link, .dash-value-link a {
+    font-size: 0.95rem;
+    color: #1A435A;
+    font-weight: 400; 
+    margin-bottom: 0;
+    text-decoration: none;
+}
+
+.profile-col {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .profile-col {
+        border-bottom: none;
+        border-right: 1px solid #dee2e6;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+}
+
+.btn-edit-profile {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4987A4;
+    border: 2px solid #4987A4;
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-edit-profile:hover {
+    background-color: #4987A4 !important;
+    color: white !important;
+}
+
+.category-badge {
+    background-color: #ddebf0;
+    color: #1A435A !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 12px 15px;
+    border: none;
+    transition: transform 0.2s;
+}
+.dash-main-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1A435A;
+}
+
+.dash-topic-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1A435A;
+}
+
+.dash-info-label {
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.dash-list-title {
+    font-weight: 600;
+}
+
+.dash-value-text, .dash-value-link, .dash-value-link a {
+    font-size: 0.95rem;
+    color: #1A435A;
+    font-weight: 400; 
+    margin-bottom: 0;
+    text-decoration: none;
+}
+
+.btn-edit-profile {
+    border: 1px solid #4987A4;
+    color: #4987A4;
+    background-color: white;
+}
+.btn-edit-profile:hover {
+    background-color: #4987A4 !important;
+    color: white !important;
+}
+
+.category-badge {
+    background-color: #ddebf0;
+    color: #1A435A !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 12px 15px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+/* Lawyer Detail Modal Styles */
+.detail-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1A435A;
+}
+
+.detail-label {
+    font-weight: 700;
+    font-size: 0.95em;
+    color: #1A435A;
+}
+
+.detail-value {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #1A435A;
+    margin-bottom: 0;
+}
+/* Custom Nav Tabs for Verification Section */
+.custom-nav-tabs {
+    border-bottom: none;
+    gap: 0.5rem;
+}
+
+.custom-nav-tabs .nav-item {
+    margin-bottom: -1px;
+}
+
+.custom-nav-tabs .nav-link {
+    border: none;
+    color: #6c757d;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px 12px 0 0;
+    transition: all 0.2s ease-in-out;
+    background-color: transparent;
+}
+
+.custom-nav-tabs .nav-link:hover {
+    color: #1A435A;
+}
+
+.custom-nav-tabs .nav-link.active {
+    color: #111;
+    font-weight: 700;
+    background-color: #fff;
+    border-bottom: 3px solid #111;
+}
+
+/* Custom Buttons and Inputs for Admin */
+.btn-primary-admin {
+    background-color: #4987A4;
+    color: white;
+    border: 1px solid #4987AA;
+    transition: all 0.2s ease;
+}
+
+.btn-primary-admin:hover, .btn-primary-admin:focus, .btn-primary-admin:active {
+    background-color: #1A435A !important;
+    border-color: #1A435A !important;
+    color: white !important;
+}
+
+.form-select-admin {
+    border: 1px solid #4987AA;
+    color: #1A435A;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.form-select-admin:focus {
+    border-color: #1A435A;
+    box-shadow: 0 0 0 0.25rem rgba(26, 67, 90, 0.25);
+}
+
+/* Custom Dropdown Item for Admin */
+.dropdown-item:active, .dropdown-item:focus {
+    background-color: #f8f9fa !important;
+    color: #1A435A !important;
+}
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #1A435A;
+}
+
+/* Softer Solid Buttons */
+.btn-soft-solid-danger {
+    background-color: #d15664;
+    color: white;
+    border: none;
+    transition: all 0.2s;
+}
+.btn-soft-solid-danger:hover {
+    background-color: #b84351;
+    color: white;
+}
+.btn-soft-solid-success {
+    background-color: #5cb98b;
+    color: white;
+    border: none;
+    transition: all 0.2s;
+}
+.btn-soft-solid-success:hover {
+    background-color: #4aa076;
+    color: white;
+}
+.btn-soft-solid-warning {
+    background-color: #e59345;
+    color: white;
+    border: none;
+    transition: all 0.2s;
+}
+.btn-soft-solid-warning:hover {
+    background-color: #c97e37;
+    color: white;
+}
+
+/* Custom Role Badges */
+.badge-role-lawyer {
+    background-color: #cffafe; /* cyan-100 */
+    color: #155e75; /* cyan-800 for contrast */
+}
+.badge-role-user {
+    background-color: #f3e8ff; /* purple-100 */
+    color: #6b21a8; /* purple-800 for contrast */
+}
+
+

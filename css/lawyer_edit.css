@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+
+.form-control-custom:disabled,
+.form-control-custom[readonly],
+.readonly-field {
+    background-color: #f1f3f5 !important;
+    color: #6c757d !important;
+}
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar-edit-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 38px;
+    height: 38px;
+    background-color: #1A435A;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #ffffff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.avatar-edit-badge:hover {
+    background-color: #4987A4;
+    transform: scale(1.1);
+}
+
+.card-header-custom {
+    font-family: inherit;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #1A435A !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+.form-label { 
+    margin: 0 0 5px 5px; 
+    font-family: inherit; 
+    font-weight: 600 !important; 
+    color: #1A435A !important; 
+    font-size: 1rem !important;
+}
+
+.form-control-custom {
+    background-color: #ffffff !important;
+    color: #1A435A !important;
+    border: 1.5px solid #E9ECEF;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.form-control-custom:focus {
+    background-color: #ffffff;
+    border-color: #1A435A;
+    box-shadow: 0 0 0 3px rgba(26, 67, 90, 0.12);
+}
+
+.btn-save-custom {
+    background-color: #4987A4;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 10px 0;
+    width: 160px;
+    border-radius: 12px;
+    border: none;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-save-custom:hover {
+    background-color: #3b718c;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+
+.btn-cancel {
+    padding: 10px 0;
+    width: 160px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #6c757d;
+    background-color: #FFFFFF;
+    border: 2px solid #DEE2E6;
+    transition: all 0.2s ease;
+    text-decoration: none; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-cancel:hover {
+    background-color: #E9ECEF;
+    color: #343a40;
+    border: 2px solid #DEE2E6;
+}
+
+.category-badge {
+    background-color: #ddebf0;
+    color: #1A435A;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.category-badge:hover {
+    transform: scale(1.05);
+}
+
+.tag-remove-icon {
+    color: #1A435A !important;
+    opacity: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tag-remove-icon:hover {
+    transform: scale(1.2);
+}
+
+.btn-add-tag {
+    margin-top: 10px;
+    color: #4987A4;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    line-height: 1;
+}
+
+.btn-add-tag i {
+    font-size: 1.1rem; 
+    line-height: 1;
+}
+
+.btn-add-tag:hover {
+    color: #3b718c;
+    transform: translateY(-1px);
+}
+
+
+select.form-control-custom, select.form-select {
+    cursor: pointer;
+}
+
+select.form-control-custom:has(option[value=""]:checked),
+select.form-select:has(option[value=""]:checked) {
+    color: #595c5f !important;
+}
+
+select.form-control-custom option,
+select.form-select option {
+    color: #212529;
+}
+
+.custom-card {
+    background-color: #ffffff;
+}
+
+.box-category {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #4987a4;
+}
+
+.btn-box-add {
+    background-color: #4987A4;
+    color: #ffffff;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    min-width: 100px;
+    border: none;
+    transition: all 0.2s ease;
+} 
+
+.btn-box-add:hover {
+    background-color: #3b718c;
+    color: #ffffff;
+}
+
+.btn-delete {
+    color: #ef4444;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.btn-delete:hover {
+    opacity: 1;
+}
+
+/* Override userProfile.css hiding the eye icon */
+.position-relative .toggle-password {
+    display: block !important;
+}
+

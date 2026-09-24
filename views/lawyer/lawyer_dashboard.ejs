@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="th" data-bs-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FindLawyer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/profile.css" />
+  <link rel="stylesheet" href="/css/lawyer_dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<body>
+  <div class="container-fluid p-0">
+    <div class="row g-0 min-vh-100">
+      <aside class="col-md-3 col-lg-2 p-0 d-md-block sidebar-curved position-sticky top-0"
+        style="height: 100vh; overflow-y: auto;">
+        <div class="d-flex flex-column h-100">
+          <a href="/" class="d-flex align-items-center gap-2 sidebar-back-link">
+            <i class="fa-solid fa-chevron-left fs-5"></i>
+            <span class="fs-6 fw-semibold">กลับหน้าหลัก</span>
+          </a>
+          <ul class="sidebar-nav-list mb-auto" style="margin-top: 30px;">
+            <li>
+              <a href="/lawyer_dashboard" class="nav-link active">
+                <span class="nav-icon-badge"><i class="fa-solid fa-chart-column"></i></span>
+                <span>ภาพรวมข้อมูล</span>
+              </a>
+            </li>
+            <li>
+              <a href="/lawyer_edit" class="nav-link">
+                <span class="nav-icon-badge"><i class="fa-solid fa-user-pen"></i></span>
+                <span>แก้ไขข้อมูลส่วนตัว</span>
+              </a>
+            </li>
+            <li>
+              <a href="/lawyer_reviews" class="nav-link">
+                <span class="nav-icon-badge"><i class="fa-solid fa-star"></i></span>
+                <span>ตรวจสอบรีวิว</span>
+              </a>
+            </li>
+          </ul>
+
+          <hr class="mt-auto mb-3 mx-4" style="border-top: 1px solid rgba(255, 255, 255, 0.2); opacity: 1;" />
+
+          <!-- Logout Button -->
+          <div class="d-flex justify-content-center pb-4">
+            <a class="d-flex align-items-center gap-2 sidebar-logout-link" id="logoutBtn" onclick="Auth.clearSession()">
+              <i class="fa-solid fa-right-from-bracket fa-rotate-180 fs-5"></i>
+              <span>ออกจากระบบ</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 p-0">
+        <!-- Dashboard Content -->
+        <div class="p-4 p-md-5 mx-auto" style="max-width: 1200px;">
+            <div style="margin-top: 50px; margin-bottom: 24px;">
+              <h2 class="dash-main-title mb-2" style="font-size: 1.8rem;">ภาพรวมข้อมูล</h2>
+              <hr style="border-top: 2px solid #cbd5e1; opacity: 1; margin-top: 0;">
+            </div>
+
+          <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 bg-white mb-5">
+            <div class="row g-4">
+              <!-- Profile Summary (Left side) -->
+              <div
+                class="col-md-4 col-lg-3 profile-col d-flex flex-column align-items-center justify-content-center text-center">
+                <div
+                  class="position-relative d-flex justify-content-center align-items-center bg-light rounded-circle mb-3 shadow-sm"
+                  style="width: 150px; height: 150px;">
+                  <i class="fa-solid fa-user position-absolute"
+                    style="font-size: 80px; color: #dee2e6; z-index: 1;"></i>
+                  <img id="dashProfileImg"
+                    class="position-absolute w-100 h-100 top-0 start-0 rounded-circle object-fit-cover" alt="Profile"
+                    style="z-index: 2; display: none;" />
+                </div>
+                <h3 class="fw-bold mb-1 mt-3" style="color: #1A435A; font-size: 1.4rem;" id="dashName">กำลังโหลด...</h3>
+                <p class="text-muted mb-2" style="font-size: 0.85rem;" id="dashLicense">เลขที่ใบอนุญาต: -</p>
+
+                <a href="/lawyer_edit" class="btn btn-edit-profile rounded-pill px-4 mt-3">
+                  <i class="fa-solid fa-pen-to-square me-2"></i>แก้ไขข้อมูล
+                </a>
+              </div>
+
+                <div class="col-md-8 col-lg-9">
+                  <div class="dash-main-title border-0 pb-0 mb-3 ms-2">
+                    ข้อมูลส่วนตัว
+                  </div>
+
+                <div class="row g-4 ms-2">
+                  <div class="col-sm-6">
+                    <p class="dash-topic-title mb-1">อีเมล</p>
+                    <p class="dash-value-text" id="dashEmail">-</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="dash-topic-title mb-1">เบอร์โทรศัพท์</p>
+                    <p class="dash-value-text" id="dashPhone">-</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="dash-topic-title mb-1">Line ID</p>
+                    <p class="dash-value-link" id="dashLine">-</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="dash-topic-title mb-1">Facebook URL</p>
+                    <p class="dash-value-link text-truncate" id="dashFacebook">-</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="dash-topic-title mb-1">ที่อยู่</p>
+                    <p class="dash-value-text" id="dashAddress">-</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="dash-topic-title mb-1">ใบอนุญาตทนายความ</p>
+                    <div id="dashLicenseFile" class="mt-2">-</div>
+                  </div>
+                  <div class="col-12 mt-4">
+                    <p class="dash-topic-title mb-2">หมวดหมู่คดี</p>
+                    <div class="d-flex flex-wrap gap-2 justify-content-start" id="dashCategories">
+                      <!-- Category badges injected by JS -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Info Row -->
+          <div class="row g-4 mb-5">
+            <!-- Left Column: ~60% -->
+            <div class="col-lg-7 d-flex flex-column gap-4">
+              <!-- Education -->
+              <div class="card border-0 shadow-sm rounded-4 p-md-4 bg-white">
+                <div class="dash-main-title border-0 pb-0 mb-3">
+                  ประวัติการศึกษา
+                </div>
+                <div id="dashEducations" style="color: #1A435A;">
+                  <p class="text-muted fst-italic mb-0 ms-3">ไม่ระบุ</p>
+                </div>
+              </div>
+
+              <!-- Work -->
+              <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 bg-white">
+                <div class="dash-main-title border-0 pb-0 mb-3">
+                  ประวัติการทำงาน
+                </div>
+                <div id="dashWorks" style="color: #1A435A;">
+                  <p class="text-muted fst-italic mb-0 ms-3">ไม่ระบุ</p>
+                </div>
+              </div>
+
+              <!-- Portfolios -->
+              <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 bg-white">
+                <div class="dash-main-title border-0 pb-0 mb-3">
+                  ผลงานและการอบรม
+                </div>
+                <div id="dashPortfolios" style="color: #1A435A;">
+                  <p class="text-muted fst-italic mb-0 ms-3">ไม่ระบุ</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: ~40% -->
+            <div class="col-lg-5">
+              <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 bg-white">
+                <div class="dash-main-title border-0 pb-0 mb-2">
+                  อัตราการให้บริการ (เริ่มต้น)
+                </div>
+                <div id="dashFeeRate" class="mb-4">
+                  <p class="text-muted fst-italic mb-0">ไม่ระบุ</p>
+                </div>
+
+                <div class="dash-main-title border-0 pb-0 mb-1">
+                  ตารางให้บริการ
+                </div>
+                <div id="dashSchedules" style="color: #1A435A;">
+                  <p class="text-muted fst-italic mb-0">ไม่ระบุ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/lawyer_dashboard.js"></script>
+</body>
+
+</html>

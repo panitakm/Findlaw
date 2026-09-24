@@ -1,0 +1,70 @@
+.dash-main-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1A435A;
+}
+
+.dash-topic-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1A435A;
+}
+
+
+.dash-info-label {
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.dash-list-title {
+    font-weight: 600;
+}
+
+
+.dash-value-text, .dash-value-link, .dash-value-link a {
+    font-size: 0.95rem;
+    color: #1A435A;
+    font-weight: 400; 
+    margin-bottom: 0;
+    text-decoration: none;
+}
+
+.profile-col {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .profile-col {
+        border-bottom: none;
+        border-right: 1px solid #dee2e6;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+}
+
+.btn-edit-profile {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4987A4;
+    border: 2px solid #4987A4;
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-edit-profile:hover {
+    background-color: #4987A4 !important;
+    color: white !important;
+}
+
+.category-badge {
+    background-color: #ddebf0;
+    color: #1A435A !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 12px 15px;
+    border: none;
+    transition: transform 0.2s;
+}

@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
+
+/* ===== Typography & Body ===== */
+body {
+    font-family: 'Noto Sans Thai', sans-serif;
+    background-color: #f1f9fe;
+    color: #1A435A;
+    overflow-x: hidden;
+}
+
+/* ===== Form Elements ===== */
+.form-select {
+    background-color: #FFFFFF;
+    min-width: 145px;
+    border-radius: 8px;
+    border: none;
+    color: #1A435A;
+    font-weight: 500;
+}
+
+/* ===== Review Card Base ===== */
+.review-card {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+
+.review-divider {
+    border-color: #aebed0;
+    border-width: 1.8px;
+    margin: 16px 0;
+}
+
+/* ===== Avatar Circle (initials fallback) ===== */
+.review-avatar-circle {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    background: #2d6a9f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.review-avatar-circle-sm {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 0.95rem;
+}
+
+.btn-pill-filter {
+    background: #e2e8f0;
+    color: #1A435A;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: 999px;
+    padding: 5px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-pill-filter:hover {
+    background: #cbd5e1;
+    color: #1e293b;
+}
+
+.btn-pill-filter.active {
+    background: #4987A4;
+    color: #fff;
+}
+
+.review-stars {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.review-comment-text { 
+    font-size: 1.1rem;
+    color: #1A435A;
+    margin-top: 25px;
+    font-weight: 400;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.review-lawyer-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-left: 10px;
+    padding: 3px 12px;
+    border-radius: 100px;
+    background: hsl(199, 38%, 60%);
+    color: #FFFFFF;
+    border: none;
+    letter-spacing: 0.2px;
+}
+
+.review-lawyer-name {
+    color: #1A435A;
+    font-size: 1.05rem;
+    font-weight: 200;
+    transition: color 0.15s ease;
+}
+
+.review-lawyer-name:hover {
+    color: #1A435A;
+    text-decoration: underline !important;
+}
+
+.review-date {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+.review-reply-box {
+    background: hsl(199, 38%, 95%);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    margin-top: 30px;
+    border: none;
+    position: relative;
+}
+
+.review-reply-box .reply-name {
+    font-size: 1rem;
+    color: #1A435A;
+}
+
+.review-reply-box .reply-date {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.review-reply-text {
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.review-reply-icon {
+    color: #1A435A;
+    font-size: 1.1rem;
+}
+
+.text-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.review-text-container {
+    position: relative;
+}
+
+.read-more-btn {
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+    background: linear-gradient(90deg, transparent, #fff 20%, #fff);
+    padding-left: 30px;
+    z-index: 10;
+}
+
+.read-more-btn:hover {
+    text-decoration: underline !important;
+}
+
+.review-text-container.expanded .read-more-btn {
+    position: relative;
+    display: block !important;
+    text-align: right;
+    background: none;
+    padding-left: 0;
+}
+
+.review-reply-box .read-more-btn {
+    background: linear-gradient(90deg, transparent, hsl(199, 38%, 95%) 20%, hsl(199, 38%, 95%));
+}
+
+.review-delete-btn {
+    color: #ef4444;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.review-delete-btn:hover {
+    opacity: 1;
+}
+
+.star-rating-interactive {
+    display: flex;
+    gap: 8px;
+    font-size: 1.6rem;
+    color: #ffc107;
+    cursor: pointer;
+}
+
+.star-rating-interactive i {
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.star-rating-interactive i:hover {
+    transform: scale(1.2);
+}
+
+.custom-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1080;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

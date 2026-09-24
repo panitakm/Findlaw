@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="th" data-bs-theme="light" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/profile.css" />
+  <link rel="stylesheet" href="/css/admin_dashboard.css" />
+  <script src="/js/auth.js"></script>
+  <script>Auth.guardPage(["admin"]);</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<body class="fade-in" style="overflow: hidden;">
+  <div class="container-fluid p-0">
+    <div class="row g-0 min-vh-100">
+      <aside class="col-md-3 col-lg-2 p-0 d-md-block sidebar-curved position-sticky top-0"
+        style="height: 100vh; overflow-y: auto">
+        <div class="d-flex flex-column h-100">
+          <a href="/" class="d-flex align-items-center gap-2 sidebar-back-link">
+            <i class="fa-solid fa-chevron-left fs-5"></i>
+            <span class="fs-6 fw-semibold">กลับหน้าหลัก</span>
+          </a>
+          <ul class="sidebar-nav-list mb-auto" id="adminSidebarNav" style="margin-top: 30px">
+            <li>
+              <a href="#" class="nav-link active" data-target="manageUsersSection">
+                <span class="nav-icon-badge"><i class="fa-solid fa-users"></i></span>
+                <span>จัดการผู้ใช้งาน</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-target="verifyLawyersSection">
+                <span class="nav-icon-badge"><i class="fa-solid fa-user-clock"></i></span>
+                <span>ตรวจสอบทนายความ</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-target="manageReviewsSection">
+                <span class="nav-icon-badge"><i class="fa-solid fa-comment-dots"></i></span>
+                <span>จัดการรีวิว</span>
+              </a>
+            </li>
+          </ul>
+
+          <hr class="mt-auto mb-2" style="border-top: 1px solid rgba(255, 255, 255, 0.2); opacity: 1;" />
+
+          <!-- Theme Toggle Switch in Sidebar -->
+          <div class="px-2 pe-3 mb-3"></div>
+
+          <!-- Logout Button -->
+          <div class="d-flex justify-content-center pb-4">
+            <a class="d-flex align-items-center gap-2 sidebar-logout-link" id="logoutBtn" onclick="Auth.clearSession()">
+              <i class="fa-solid fa-right-from-bracket fa-rotate-180 fs-5"></i>
+              <span>ออกจากระบบ</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 p-0" style="height: 100vh; overflow-y: auto;">
+        <!-- Header Bar -->
+        <div class="user-header-bar d-flex justify-content-between align-items-center bg-white shadow-sm"
+          style="z-index: 10">
+          <div class="d-none d-md-block">
+            <h4 class="mb-0 fw-bold" id="pageTitleHeader" style="color: #1A435A;">การจัดการผู้ใช้งาน</h4>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 ms-auto">
+            <div class="d-none d-md-block text-end">
+              <div class="fw-bold" style="font-size: 0.95rem; color: #1A435A;">ผู้ดูแลระบบ</div>
+              <div class="small" style="color: #1A435A;">Admin</div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center rounded-circle" id="adminProfileIcon"
+              style="width: 44px; height: 44px; color: white; font-weight: bold; font-size: 1.1rem; letter-spacing: 1px;">
+              AD
+            </div>
+            <script>
+              (function () {
+                let storedColor = localStorage.getItem('adminProfileColor');
+                if (!storedColor) {
+                  const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#ff9800', '#ff5722'];
+                  storedColor = colors[Math.floor(Math.random() * colors.length)];
+                  localStorage.setItem('adminProfileColor', storedColor);
+                }
+                document.getElementById('adminProfileIcon').style.backgroundColor = storedColor;
+              })();
+            </script>
+          </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <div class="p-4 p-md-5 slide-up delay-100">
+          <div id="manageUsersSection" class="admin-section">
+            <div class="glass-card p-0 mb-5 overflow-hidden">
+              <div class="border-bottom px-4 pt-3 d-flex justify-content-between align-items-center flex-wrap gap-3" style="background-color: #f4f7f6 !important;">
+                <ul class="nav nav-tabs custom-nav-tabs border-bottom-0" id="userTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="users-all-tab" data-bs-toggle="tab" data-bs-target="#users-all-pane" type="button" role="tab">ผู้ใช้ทั้งหมด</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-suspended-tab" data-bs-toggle="tab" data-bs-target="#users-suspended-pane" type="button" role="tab">ระงับบัญชี</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-deleted-tab" data-bs-toggle="tab" data-bs-target="#users-deleted-pane" type="button" role="tab">ลบบัญชี</button>
+                  </li>
+                </ul>
+
+                <div class="d-flex gap-3 align-items-center mb-2">
+                  <!-- ปุ่มตัวกรองแบบ Dropdown (Bootstrap) -->
+                  <div class="dropdown">
+                    <input type="hidden" id="roleFilter" value="all">
+                    <button class="btn btn-sm bg-white shadow-sm rounded-pill dropdown-toggle px-3 py-1 d-flex justify-content-between align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #1A435A; border: 1px solid #4987AA; font-weight: 500; min-width: 120px;">
+                      <span id="roleFilterText">ทั้งหมด</span>
+                    </button>
+                    <ul class="dropdown-menu shadow-sm border-0" style="border-radius: 12px; font-weight: 500; min-width: 120px;">
+                      <li><a class="dropdown-item py-1" href="#" onclick="document.getElementById('roleFilter').value='all'; document.getElementById('roleFilterText').textContent='ทั้งหมด'; filterUsers(); return false;">ทั้งหมด</a></li>
+                      <li><a class="dropdown-item py-1" href="#" onclick="document.getElementById('roleFilter').value='lawyer'; document.getElementById('roleFilterText').textContent='Lawyer'; filterUsers(); return false;">Lawyer</a></li>
+                      <li><a class="dropdown-item py-1" href="#" onclick="document.getElementById('roleFilter').value='user'; document.getElementById('roleFilterText').textContent='User'; filterUsers(); return false;">User</a></li>
+                      <li><a class="dropdown-item py-1" href="#" onclick="document.getElementById('roleFilter').value='admin'; document.getElementById('roleFilterText').textContent='Admin'; filterUsers(); return false;">Admin</a></li>
+                    </ul>
+                  </div>
+
+                  <button class="btn btn-sm btn-primary-admin rounded-pill px-3 py-1 shadow-sm text-nowrap" onclick="openUserModal()">
+                    <i class="fa-solid fa-user-plus me-2"></i>เพิ่มผู้ใช้ใหม่
+                  </button>
+                </div>
+              </div>
+
+              <div class="tab-content p-4" id="userTabsContent">
+                <!-- Tab: บัญชีผู้ใช้ทั้งหมด -->
+                <div class="tab-pane fade show active" id="users-all-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3">
+                    <table class="table table-hover align-middle custom-table">
+                      <thead class="text-muted">
+                        <tr>
+                          <th style="width: 25%">ชื่อ-นามสกุล</th>
+                          <th style="width: 25%">อีเมล</th>
+                          <th class="text-center" style="width: 15%">บทบาท</th>
+                          <th class="text-center" style="width: 15%">สถานะ</th>
+                          <th class="text-center" style="width: 20%">จัดการ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="userTableBody">
+                        <!-- User data will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Tab: ระงับบัญชี -->
+                <div class="tab-pane fade" id="users-suspended-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3">
+                    <table class="table table-hover align-middle custom-table">
+                      <thead class="text-muted">
+                        <tr>
+                          <th style="width: 25%">ชื่อ-นามสกุล</th>
+                          <th style="width: 25%">อีเมล</th>
+                          <th class="text-center" style="width: 15%">บทบาท</th>
+                          <th class="text-center" style="width: 15%">สถานะ</th>
+                          <th class="text-center" style="width: 20%">จัดการ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="suspendedUserTableBody">
+                        <!-- Suspended User data will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Tab: ลบบัญชี -->
+                <div class="tab-pane fade" id="users-deleted-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3">
+                    <table class="table table-hover align-middle custom-table">
+                      <thead class="text-muted">
+                        <tr>
+                          <th style="width: 25%">ชื่อ-นามสกุล</th>
+                          <th style="width: 25%">อีเมล</th>
+                          <th class="text-center" style="width: 15%">บทบาท</th>
+                          <th class="text-center" style="width: 15%">สถานะ</th>
+                          <th class="text-center" style="width: 20%">จัดการ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="deletedUserTableBody">
+                        <!-- Deleted User data will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ส่วนตรวจสอบใบอนุญาตทนายความ (Lawyer Verification) -->
+          <div id="verifyLawyersSection" class="admin-section d-none">
+
+
+            <!-- กล่องรายการคำร้องทนายความ (Nav Tabs) -->
+            <div class="glass-card p-0 mb-5 overflow-hidden">
+              <div class="border-bottom px-4 pt-3" style="background-color: #f4f7f6 !important;">
+                <ul class="nav nav-tabs custom-nav-tabs border-bottom-0" id="verifyTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-pane"
+                      type="button" role="tab">รอตรวจสอบ</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-pane"
+                      type="button" role="tab">รอแก้ไข</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved-pane"
+                      type="button" role="tab">อนุมัติแล้ว</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content p-4" id="verifyTabsContent">
+                <!-- Tab: รอตรวจสอบ -->
+                <div class="tab-pane fade show active" id="pending-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3">
+                    <table class="table table-hover align-middle custom-table">
+                      <thead class="text-muted">
+                        <tr>
+                          <th style="width: 20%">วันที่</th>
+                          <th style="width: 25%">ชื่อ-นามสกุล</th>
+                          <th style="width: 25%">เลขที่ใบอนุญาต</th>
+                          <th class="text-center" style="width: 30%">รายละเอียด</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lawyerVerifyTableBody">
+                        <!-- Lawyer verification data will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Tab: รอแก้ไข -->
+                <div class="tab-pane fade" id="edit-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3">
+                    <table class="table table-hover align-middle custom-table">
+                      <thead class="text-muted">
+                        <tr>
+                          <th style="width: 20%">วันที่</th>
+                          <th style="width: 25%">ชื่อ-นามสกุล</th>
+                          <th style="width: 25%">เลขที่ใบอนุญาต</th>
+                          <th class="text-center" style="width: 30%">รายละเอียด</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lawyerPendingEditTableBody">
+                        <!-- Lawyer pending edit data will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Tab: อนุมัติแล้ว -->
+                <div class="tab-pane fade" id="approved-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3">
+                    <table class="table table-hover align-middle custom-table">
+                      <thead class="text-muted">
+                        <tr>
+                          <th style="width: 20%">วันที่</th>
+                          <th style="width: 25%">ชื่อ-นามสกุล</th>
+                          <th style="width: 25%">เลขที่ใบอนุญาต</th>
+                          <th class="text-center" style="width: 30%">รายละเอียด</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lawyerHistoryTableBody">
+                        <!-- Lawyer history data will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div id="manageReviewsSection" class="admin-section d-none">
+
+            <!-- รีวิวที่ถูกรายงาน (Nav Tabs) -->
+            <div class="glass-card p-0 mb-5 overflow-hidden">
+              <div class="border-bottom px-4 pt-3" style="background-color: #f4f7f6 !important;">
+                <ul class="nav nav-tabs custom-nav-tabs border-bottom-0" id="reviewTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="reported-tab" data-bs-toggle="tab"
+                      data-bs-target="#reported-pane" type="button" role="tab">รอตรวจสอบ</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="deleted-review-tab" data-bs-toggle="tab"
+                      data-bs-target="#deleted-review-pane" type="button" role="tab">ถูกลบ</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content p-4" id="reviewTabsContent">
+
+                <!-- Tab: รอตรวจสอบ -->
+                <div class="tab-pane fade show active" id="reported-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3 rounded-4" style="max-height: 550px; overflow-y: auto">
+                    <table class="table table-hover align-middle custom-table mb-0" style="table-layout: fixed">
+                      <thead style="color: #1A435A;">
+                        <tr>
+                          <th style="width: 25%">ผู้เขียนรีวิว</th>
+                          <th style="width: 30%">ข้อความรีวิว</th>
+                          <th style="width: 25%">ข้อมูลการรายงาน</th>
+                          <th class="text-center" style="width: 10%">สถานะ</th>
+                          <th class="text-center" style="width: 10%">จัดการ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="reviewTableBody">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Tab: ถูกระงับ/ลบ -->
+                <div class="tab-pane fade" id="deleted-review-pane" role="tabpanel" tabindex="0">
+                  <div class="table-responsive glass-panel p-3 rounded-4" style="max-height: 550px; overflow-y: auto">
+                    <table class="table table-hover align-middle custom-table mb-0" style="table-layout: fixed">
+                      <thead style="color: #1A435A;">
+                        <tr>
+                          <th style="width: 25%">ผู้เขียนรีวิว</th>
+                          <th style="width: 30%">ข้อความรีวิว</th>
+                          <th style="width: 25%">ข้อมูลการรายงาน</th>
+                          <th class="text-center" style="width: 20%">สถานะ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="deletedReviewTableBody">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal สำหรับเพิ่ม/แก้ไขผู้ใช้ -->
+  <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title fw-bold" id="userModalTitle">แก้ไขข้อมูลผู้ใช้</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="userForm">
+            <input type="hidden" id="userId" />
+            <div class="mb-3">
+              <label class="form-label">ชื่อ-นามสกุล</label>
+              <input type="text" class="form-control" id="userNameInput" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">อีเมล</label>
+              <input type="email" class="form-control" id="userEmailInput" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">บทบาท</label>
+              <select class="form-select" id="userRoleInput">
+                <option value="user">User</option>
+                <option value="lawyer">Lawyer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">สถานะบัญชี</label>
+              <select class="form-select" id="userStatusInput">
+                <option value="pending">รอตรวจสอบ</option>
+                <option value="active">ใช้งาน</option>
+                <option value="suspended">ระงับการใช้งาน</option>
+              </select>
+            </div>
+            <div class="text-end mt-4">
+              <button type="button" class="btn btn-light rounded-pill px-4 me-2" data-bs-dismiss="modal">ยกเลิก</button>
+              <button type="submit" class="btn btn-primary rounded-pill px-4">บันทึกข้อมูล</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal สำหรับระบุเหตุผลการปฏิเสธทนายความ -->
+  <div class="modal fade" id="rejectLawyerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
+        <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold" style="color: #1A435A">ปฏิเสธคำร้องขอ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="rejectLawyerForm">
+          <div class="modal-body px-4 pt-3 pb-1">
+            <input type="hidden" id="rejectLawyerId" />
+            <textarea class="form-control" id="rejectReason" rows="3"
+              placeholder="เช่น รูปถ่ายใบอนุญาตไม่ชัดเจน, ไม่พบข้อมูลในสภาทนายความ..." required
+              style="resize: none; border-radius: 12px"></textarea>
+          </div>
+          <div class="modal-footer border-top-0 px-4 pb-4 pt-2">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal"
+              style="font-weight: 500;">ยกเลิก</button>
+            <button type="submit" class="btn btn-soft-solid-danger rounded-pill px-3 shadow-sm"
+              style="font-weight: 500;">ยืนยันการปฏิเสธ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal สำหรับระงับการใช้งานผู้ใช้ -->
+  <div class="modal fade" id="suspendUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px)">
+        <div class="modal-header border-bottom-0 pb-0 mt-2">
+          <h5 class="modal-title fw-bold fs-5 text-dark" id="suspendModalLabel">ระงับการใช้งาน</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-3 pb-4 px-4">
+          <form id="suspendUserForm">
+            <input type="hidden" id="suspendUserId" value="" />
+            <div class="mb-3">
+              <textarea class="form-control bg-light" id="suspendReason" rows="4" placeholder="กรอกเหตุผลที่นี่..." style="resize: none; border-radius: 12px; border: 1px solid #dee2e6" required></textarea>
+            </div>
+            <div class="text-end mt-2">
+              <button type="submit" class="btn text-white px-3 rounded-pill fw-semibold shadow-sm" style="background-color: #4987A4;">ยืนยัน</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal สำหรับดูไฟล์แนบใบอนุญาต -->
+  <div class="modal fade" id="viewFileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title fw-bold" id="viewFileModalTitle"><i
+              class="fa-solid fa-file-lines me-2 text-primary"></i>เอกสารแนบ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-0 bg-light text-center" style="
+              min-height: 400px;
+              max-height: 80vh;
+              overflow: auto;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            ">
+          <div id="fileViewerContainer" class="w-100" style="display: none; height: 70vh">
+            <!-- iFrame or img will be inserted here -->
+          </div>
+          <div class="p-5 text-muted" id="fileViewerPlaceholder">
+            <i class="fa-regular fa-file-pdf display-1 text-danger opacity-50 mb-3 d-block"></i>
+            <h5 id="displayFileName">ชื่อไฟล์</h5>
+            <p class="mb-0">กำลังโหลด...</p>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal สำหรับระบรายละเอียดทนายความทั้งหมด -->
+  <div class="modal fade" id="lawyerDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 650px;">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title fw-bold" style="color: #1A435A;">รายละเอียดคำร้อง</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body bg-light p-3 p-md-4">
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h5 class="detail-section-title mb-4">ข้อมูลส่วนตัว</h5>
+
+            <div class="row gx-4 mb-4">
+              <div
+                class="col-12 col-md-auto d-flex justify-content-center justify-content-md-start mb-4 mb-md-0 align-self-start">
+                <div class="position-relative bg-light rounded-4 shadow-sm"
+                  style="width: 180px; height: 200px; overflow: hidden; flex-shrink: 0;">
+                  <i class="fa-solid fa-user position-absolute"
+                    style="font-size: 80px; color: #dee2e6; z-index: 1; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+                  <img id="detailProfileImg" class="position-absolute w-100 h-100 top-0 start-0 object-fit-cover"
+                    alt="Profile" style="z-index: 2; display: none;" />
+                </div>
+              </div>
+
+              <div class="col-12 col-md">
+                <div class="row g-4">
+                  <div class="col-12">
+                    <p class="detail-label mb-1">ชื่อ-นามสกุล</p>
+                    <p class="detail-value mb-0">
+                      <span id="detailFirstName">-</span> <span id="detailLastName"></span>
+                    </p>
+                  </div>
+                  <div class="col-12 mt-3">
+                    <p class="detail-label mb-1">อีเมล</p>
+                    <p class="detail-value mb-0" id="detailEmail">-</p>
+                  </div>
+                  <div class="col-6 mt-3">
+                    <p class="detail-label mb-1">เลขที่ใบอนุญาต</p>
+                    <p class="detail-value mb-0" id="detailLicenseNumber">-</p>
+                  </div>
+                  <div class="col-6 mt-3">
+                    <p class="detail-label mb-1">ใบอนุญาตทนายความ</p>
+                    <div id="detailLicenseFile" class="detail-value text-truncate mb-0">-</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-4 mb-2 px-2">
+              <div class="col-12">
+                <p class="detail-label mb-1">ที่อยู่</p>
+                <p class="detail-value mb-0" id="detailAddress">-</p>
+              </div>
+              <div class="col-12 col-sm-4">
+                <p class="detail-label mb-1">เบอร์โทรศัพท์</p>
+                <p class="detail-value mb-0" id="detailPhone">-</p>
+              </div>
+              <div class="col-12 col-sm-4">
+                <p class="detail-label mb-1">Line ID</p>
+                <p class="detail-value mb-0" id="detailLine">-</p>
+              </div>
+              <div class="col-12 col-sm-4">
+                <p class="detail-label mb-1">Facebook URL</p>
+                <p class="detail-value text-truncate mb-0" id="detailFacebook">-</p>
+              </div>
+            </div>
+
+            <div class="mt-3 mb-2 px-2">
+              <p class="detail-label mb-2">หมวดหมู่คดี</p>
+              <div class="d-flex flex-wrap gap-2 justify-content-start" id="detailSpecialties">
+                <span class="text-muted small">- ไม่มีข้อมูล -</span>
+              </div>
+            </div>
+
+            <div class="col-12 mt-3">
+              <p class="detail-label">อัตราการให้บริการ</p>
+              <p class="detail-value px-3"><span id="detailFeeRate">-</span></p>
+            </div>
+
+            <div class="mt-3 mb-2 px-2">
+              <p class="detail-label mb-2">ตารางให้บริการ</p>
+              <div id="detailSchedules" class="w-90 detail-value" style="font-size: 0.9rem;">
+                <p class="text-muted fst-italic mb-0">- ไม่มีข้อมูล -</p>
+              </div>
+            </div>
+
+            <h5 class="detail-section-title mt-4 mb-3">ประวัติการศึกษา</h5>
+            <div class="px-4 detail-value">
+              <div id="detailEducations">
+                <p class="text-muted fst-italic mb-0">- ไม่มีข้อมูล -</p>
+              </div>
+            </div>
+
+            <h5 class="detail-section-title mt-4 mb-3">ประวัติการทำงาน</h5>
+            <div class="px-4 detail-value">
+              <div id="detailWorks">
+                <p class="text-muted fst-italic mb-0">- ไม่มีข้อมูล -</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 bg-white justify-content-end gap-2 border-0" style="padding: 1.5rem;"
+          id="lawyerDetailModalFooter">
+          <input type="hidden" id="detailLawyerId" />
+          <button type="button" class="btn btn-soft-solid-danger rounded-pill px-4 fw-semibold"
+            id="btnDetailReject">ปฏิเสธ</button>
+          <button type="button" class="btn btn-soft-solid-success rounded-pill px-4 fw-semibold"
+            id="btnDetailApprove">อนุมัติ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script src="/js/admin_dashboard.js"></script>
+</body>
+
+</html>

@@ -12,25 +12,40 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)){
+if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
+
 app.use(cors());
-app.use(express.json({ limit: '50mb' })); 
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use('/uploads', express.static('uploads'));
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
 app.use(express.static(path.join(__dirname, '..')));
 
-// ==========================================
-// Middleware: ตรวจสอบสิทธิ์ (Authentication & Authorization)
-// ==========================================
+// Web Page Routes
+app.get('/sign_in', (req, res) => { res.render('sign_in'); });
+app.get('/sign_up', (req, res) => { res.render('sign_up'); });
+app.get('/lawyers', (req, res) => { res.render('lawyers'); });
+app.get('/lawyer_profile', (req, res) => { res.render('lawyer/lawyer_profile'); });
+app.get('/admin_dashboard', (req, res) => { res.render('admin/admin_dashboard'); });
+app.get('/lawyer_dashboard', (req, res) => { res.render('lawyer/lawyer_dashboard'); });
+app.get('/lawyer_edit', (req, res) => { res.render('lawyer/lawyer_edit'); });
+app.get('/lawyer_reviews', (req, res) => { res.render('lawyer/lawyer_reviews'); });
+app.get('/lawyer_signup', (req, res) => { res.render('lawyer/lawyer_signup'); });
+app.get('/favorites', (req, res) => { res.render('user/favorites'); });
+app.get('/user_reviews', (req, res) => { res.render('user/user_reviews'); });
+app.get('/profile', (req, res) => { res.render('user/profile'); });
+
+
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    
+
     if (token == null) return res.status(401).json({ error: "กรุณาเข้าสู่ระบบก่อนใช้งาน" });
-    
+
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.status(403).json({ error: "เซสชันหมดอายุหรือไม่ถูกต้อง" });
         req.user = user;
@@ -48,7 +63,7 @@ const authenticateAdmin = (req, res, next) => {
 };
 
 app.get('/', (req, res) => {
-    res.redirect('/search.html');
+    res.render('index');
 });
 
 
@@ -59,8 +74,8 @@ const saveFileFromBase64 = (base64String, filePrefix) => {
         throw new Error("รูปแบบไฟล์ Base64 ไม่ถูกต้อง");
     }
 
-    const mimeType = matches[1]; 
-    const fileData = matches[2]; 
+    const mimeType = matches[1];
+    const fileData = matches[2];
 
     // เช็คประเภทไฟล์ให้ตรงตามที่เราอนุญาต
     let ext = '';
@@ -71,16 +86,16 @@ const saveFileFromBase64 = (base64String, filePrefix) => {
     } else if (mimeType === 'application/pdf') {
         ext = 'pdf';
     } else {
-        throw new Error("ระบบรองรับเฉพาะไฟล์ .png, .jpeg และ .pdf เท่านั้นครับ"); 
+        throw new Error("ระบบรองรับเฉพาะไฟล์ .png, .jpeg และ .pdf เท่านั้นครับ");
     }
 
     // สร้างชื่อไฟล์และบันทึกลงเซิร์ฟเวอร์
     const fileName = `${filePrefix}_${Date.now()}.${ext}`;
     const filePath = path.join(__dirname, 'uploads', fileName);
-    
+
     fs.writeFileSync(filePath, fileData, 'base64');
-    
-    return `/uploads/${fileName}`; 
+
+    return `/uploads/${fileName}`;
 };
 
 const db = mysql.createConnection({
@@ -100,12 +115,12 @@ db.connect((err) => {
 
 app.post('/user/register', async (req, res) => {
     // คนทั่วไปรับข้อมูลแค่นี้ ไม่ต้องมีใบอนุญาตทนาย
-    const { inputFirsname, 
-        inputLastname, 
-        inputEmail, 
-        inputPhone, 
+    const { inputFirsname,
+        inputLastname,
+        inputEmail,
+        inputPhone,
         inputPassword,
-        profilePic 
+        profilePic
     } = req.body;
 
     try {
@@ -134,7 +149,7 @@ app.post('/user/register', async (req, res) => {
             INSERT INTO users (first_name, last_name, email, password, image_path, role) 
             VALUES (?, ?, ?, ?, ?, 'user')
         `;
-        
+
         await db.promise().query(sqlInsertUser, [inputFirsname, inputLastname, inputEmail, hashedPassword, finalProfilePic]);
 
         res.status(201).json({ message: "สมัครสมาชิกผู้ใช้ทั่วไปสำเร็จเรียบร้อยแล้ว!" });
@@ -150,7 +165,7 @@ app.get('/users/:id/edit', async (req, res) => {
     try {
         const userId = req.params.id;
         const [users] = await db.promise().query(
-            "SELECT id, first_name, last_name, email, phone, image_path FROM users WHERE id = ? AND role = 'user'", 
+            "SELECT id, first_name, last_name, email, phone, image_path FROM users WHERE id = ? AND role = 'user'",
             [userId]
         );
 
@@ -184,11 +199,15 @@ app.put('/users/update/:id', async (req, res) => {
 
         // ถ้ามีการกรอกรหัสผ่านใหม่ ให้ตรวจสอบและอัปเดตด้วย
         if (new_password && old_password) {
+            if (new_password === old_password) {
+                return res.status(400).json({ error: 'รหัสผ่านไม่ถูกต้อง กรุณากรอกใหม่อีกครั้ง' });
+            }
+
             const [users] = await db.promise().query('SELECT password FROM users WHERE id = ?', [userId]);
             const match = await bcrypt.compare(old_password, users[0].password);
-            
+
             if (!match) {
-                return res.status(400).json({ error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง' });
+                return res.status(400).json({ error: 'รหัสผ่านไม่ถูกต้อง กรุณากรอกใหม่อีกครั้ง' });
             }
 
             const hashedNewPassword = await bcrypt.hash(new_password, saltRounds);
@@ -205,13 +224,13 @@ app.put('/users/update/:id', async (req, res) => {
 
 app.post('/lawyer/register', async (req, res) => {
     // รับข้อมูลจากหน้าบ้าน 
-    const { 
-        inputFirsname, 
-        inputLastname, 
-        inputEmail, 
-        inputPhone, 
-        inputPassword, 
-        inputLicNum, 
+    const {
+        inputFirsname,
+        inputLastname,
+        inputEmail,
+        inputPhone,
+        inputPassword,
+        inputLicNum,
         inputProvince,
         inputHouseNo,
         inputMoo,
@@ -267,42 +286,42 @@ app.post('/lawyer/register', async (req, res) => {
             dbImgePath = saveFileFromBase64(profilePic, 'profile');
             dbLicFilePath = saveFileFromBase64(LicFile, 'license');
         } catch (uploadError) {
-            return res.status(400).json({error: uploadError.message});
+            return res.status(400).json({ error: uploadError.message });
         }
 
         const connection = db.promise();
-        await connection.query('BEGIN'); 
+        await connection.query('BEGIN');
 
         try {
             // ดึงชื่อของจังหวัด อำเภอ และตำบลจาก database เพื่อจัดฟอร์แมตที่อยู่
             const [[prov]] = await connection.query('SELECT name_th as name FROM provinces WHERE id = ?', [inputProvince]);
             const [[dist]] = await connection.query('SELECT name_th FROM districts WHERE id = ?', [inputDistrict]);
             const [[subDist]] = await connection.query('SELECT name_th FROM sub_districts WHERE id = ?', [inputSubDistrict]);
-            
+
             const pName = prov ? prov.name : '';
             const dName = dist ? dist.name_th : '';
             const sdName = subDist ? subDist.name_th : '';
-            
-            let formattedAddress = `บ้านเลขที่ ${inputHouseNo}`;
+
+            let formattedAddress = `${inputHouseNo}`;
             if (inputMoo) formattedAddress += ` หมู่ ${inputMoo}`;
             if (inputSoi) formattedAddress += ` ซอย ${inputSoi}`;
             if (inputRoad) formattedAddress += ` ถนน ${inputRoad}`;
-            formattedAddress += ` ตำบล/แขวง ${sdName} อำเภอ/เขต ${dName} จังหวัด ${pName} ${inputZipcode}`;
+            formattedAddress += ` ${sdName} ${dName} ${pName} ${inputZipcode}`;
 
             // 4.1 Insert ลงตาราง users ก่อน
             const [userResult] = await connection.query(
                 `INSERT INTO users (first_name, last_name, email, phone, password, image_path, role) 
                 VALUES (?, ?, ?, ?, ?, ?, 'lawyer')`,
-                [inputFirsname,inputLastname, inputEmail, inputPhone, hashedPassword, dbImgePath || null]
+                [inputFirsname, inputLastname, inputEmail, inputPhone, hashedPassword, dbImgePath || null]
             );
-            
+
             const newUserId = userResult.insertId; // ดึง ID ที่เพิ่งสร้างใหม่
 
             // 4.2 Insert ข้อมูลเฉพาะของทนายลงตาราง lawyers
             await connection.query(
-                `INSERT INTO lawyers (id, license_number, province_id, office_address, license_file, line_id, facebook_url, fee_rate) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [newUserId, inputLicNum, inputProvince, formattedAddress, dbLicFilePath, inputLineId || null, inputFacebook || null, inputFeeRate || null]
+                `INSERT INTO lawyers (id, license_number, province_id, office_address, house_no, moo, soi, road, subdistrict_id, district_id, zipcode, license_file, line_id, facebook_url, fee_rate) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [newUserId, inputLicNum, inputProvince, formattedAddress, inputHouseNo || null, inputMoo || null, inputSoi || null, inputRoad || null, inputSubDistrict || null, inputDistrict || null, inputZipcode || null, dbLicFilePath, inputLineId || null, inputFacebook || null, inputFeeRate || null]
             );
 
             // 4.3 Insert หมวดหมู่คดี (Categories)
@@ -389,22 +408,22 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
         }
 
+        // ตรวจสอบสถานะบัญชี
+        if (user.status === 'suspended') {
+            return res.status(403).json({ error: "บัญชีของคุณถูกระงับการใช้งาน" });
+        }
+        if (user.status === 'deleted') {
+            return res.status(403).json({ error: "บัญชีของคุณถูกลบออกจากระบบ" });
+        }
+
         // 3. สร้าง JWT Token (เก็บ id และ role ไว้ในบัตรผ่านนี้)
         const token = jwt.sign(
-            { id: user.id, role: user.role }, 
-            process.env.JWT_SECRET, 
+            { id: user.id, role: user.role },
+            process.env.JWT_SECRET,
             { expiresIn: '1d' } // บัตรมีอายุ 1 วัน
         );
 
-        // 4. บันทึก Log การ Login ลงตารางที่เราสร้างไว้ (ใส่ try-catch กันพังถ้ายังไม่สร้างตาราง)
-        try {
-            await db.promise().query(
-                'INSERT INTO user_activity_logs (user_id, activity_type, ip_address) VALUES (?, ?, ?)',
-                [user.id, 'LOGIN', ip]
-            );
-        } catch (logErr) {
-            console.error("Log Activity Error (Ignored):", logErr);
-        }
+
 
         // 5. ส่งผลลัพธ์กลับไป
         res.json({
@@ -476,9 +495,9 @@ app.get('/lawyers/:id/edit', async (req, res) => {
             `SELECT u.first_name, u.last_name, CONCAT(u.first_name, ' ', u.last_name) AS full_name,
                 u.email, u.phone, u.image_path, 
                 l.license_number, l.license_file, l.line_id, l.facebook_url, 
-                l.province_id, l.office_address, l.fee_rate
+                l.province_id, l.office_address, l.house_no, l.moo, l.soi, l.road, l.subdistrict_id, l.district_id, l.zipcode, l.fee_rate, l.status, l.reject_reason
             FROM users u JOIN lawyers l ON u.id = l.id 
-            WHERE u.id = ?`, [req.params.id]);
+            WHERE u.id = ? AND IFNULL(u.status, '') != 'deleted'`, [req.params.id]);
 
         const [schedules] = await db.promise().query(
             `SELECT day_of_week, time_start, time_end, is_open 
@@ -502,13 +521,20 @@ app.get('/lawyers/:id/edit', async (req, res) => {
             FROM lawyer_works
             WHERE lawyer_id = ?`, [req.params.id]);
 
+        const [achievements] = await db.promise().query(
+            `SELECT title, organization, year 
+            FROM lawyer_portfolios
+            WHERE lawyer_id = ?`, [req.params.id]);
 
-        res.json({ 
-            profile: profile[0], 
-            schedules, 
+
+        res.json({
+            profile: profile[0],
+            schedules,
             specialties,
-            educations, 
-            works });
+            educations,
+            works,
+            achievements
+        });
 
     } catch (err) {
         console.error("Database Error: ", err);
@@ -539,8 +565,8 @@ app.put('/lawyer/lawyer/save-profile/:id', async (req, res) => {
         );
 
         await db.promise().query(
-            `UPDATE lawyers SET license_number = ?, line_id = ?, facebook_url = ?, province_id = ?, office_address = ?, fee_rate = ?, license_file = ? 
-            WHERE id = ?`, [data.license_number, data.line_id, data.facebook_url, data.province_id || null, data.office_address, data.fee_rate || null, finalLicensePath, id]
+            `UPDATE lawyers SET license_number = ?, line_id = ?, facebook_url = ?, province_id = ?, office_address = ?, house_no = ?, moo = ?, soi = ?, road = ?, subdistrict_id = ?, district_id = ?, zipcode = ?, fee_rate = ?, license_file = ?, status = IF(status = 'rejected', 'pending', status) 
+            WHERE id = ?`, [data.license_number, data.line_id, data.facebook_url, data.province_id || null, data.office_address, data.house_no || null, data.moo || null, data.soi || null, data.road || null, data.subdistrict_id || null, data.district_id || null, data.zipcode || null, data.fee_rate || null, finalLicensePath, id]
         );
 
 
@@ -584,6 +610,12 @@ app.put('/lawyer/lawyer/save-profile/:id', async (req, res) => {
             await db.promise().query(`INSERT INTO lawyer_works (lawyer_id, company_name, job_position, year_start, year_end) VALUES ?`, [workValues]);
         }
 
+        await db.promise().query(`DELETE FROM lawyer_portfolios WHERE lawyer_id = ?`, [id]);
+        if (data.achievements && data.achievements.length > 0) {
+            const achValues = data.achievements.map(a => [id, a.title, a.organization, a.year]);
+            await db.promise().query(`INSERT INTO lawyer_portfolios (lawyer_id, title, organization, year) VALUES ?`, [achValues]);
+        }
+
         res.json({ message: 'บันทึกข้อมูลเรียบร้อยแล้ว' });
 
     } catch (error) {
@@ -606,7 +638,7 @@ app.get('/lawyer/search/provinces', async (req, res) => {
 app.get('/users/:id', async (req, res) => {
     try {
         const [users] = await db.promise().query(
-            'SELECT id, first_name, last_name, email, phone, image_path, created_at FROM users WHERE id = ?',
+            'SELECT id, first_name, last_name, email, phone, image_path, created_at FROM users WHERE id = ? AND IFNULL(status, "") != "deleted"',
             [req.params.id]
         );
         if (users.length === 0) return res.status(404).json({ error: 'ไม่พบผู้ใช้งาน' });
@@ -617,43 +649,7 @@ app.get('/users/:id', async (req, res) => {
     }
 });
 
-// 2. API สำหรับอัปเดตข้อมูล User เมื่อกดบันทึก
-app.put('/users/update/:id', async (req, res) => {
-    const userId = req.params.id;
-    const { first_name, last_name, email, phone, old_password, new_password, image_path } = req.body;
 
-    try {
-        let finalImagePath = image_path;
-        if (finalImagePath && finalImagePath.startsWith('data:')) {
-            finalImagePath = saveFileFromBase64(finalImagePath, 'user_profile');
-        }
-
-        // อัปเดตข้อมูลพื้นฐาน
-        await db.promise().query(
-            `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, image_path = COALESCE(?, image_path) WHERE id = ?`,
-            [first_name, last_name, email, phone, finalImagePath, userId]
-        );
-
-        // ถ้ามีการกรอกรหัสผ่านใหม่ ให้ตรวจสอบและอัปเดตด้วย
-        if (new_password && old_password) {
-            const [users] = await db.promise().query('SELECT password FROM users WHERE id = ?', [userId]);
-            const match = await bcrypt.compare(old_password, users[0].password);
-            
-            if (!match) {
-                return res.status(400).json({ error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง' });
-            }
-
-            const hashedNewPassword = await bcrypt.hash(new_password, saltRounds);
-            await db.promise().query('UPDATE users SET password = ? WHERE id = ?', [hashedNewPassword, userId]);
-        }
-
-        res.json({ message: 'บันทึกข้อมูลส่วนตัวเรียบร้อยแล้ว!' });
-
-    } catch (err) {
-        console.error("Update User Error: ", err);
-        res.status(500).json({ error: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });
-    }
-});
 
 // 2. ค้นหาทนายความ
 app.get('/lawyer/search', async (req, res) => {
@@ -676,14 +672,16 @@ app.get('/lawyer/search', async (req, res) => {
             p.name_th AS province_name,
             IFNULL(exp.total_exp, 0) AS total_experience,
             l.fee_rate,
-            GROUP_CONCAT(DISTINCT lc.name SEPARATOR ', ') AS specialties
+            GROUP_CONCAT(DISTINCT lc.name SEPARATOR ', ') AS specialties,
+            (SELECT IFNULL(AVG(rating), 0) FROM reviews r WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported')) as rating,
+            (SELECT COUNT(*) FROM reviews r WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported')) as review_count
         FROM users u
         JOIN lawyers l ON u.id = l.id
         LEFT JOIN provinces p ON l.province_id = p.id
         LEFT JOIN LawyerExperience exp ON u.id = exp.lawyer_id
         LEFT JOIN lawyer_specialties ls ON l.id = ls.lawyer_id
         LEFT JOIN lawyer_categories lc ON ls.specialty_id = lc.id
-        WHERE u.role = 'lawyer'
+        WHERE u.role = 'lawyer' AND l.status = 'approved' AND IFNULL(u.status, '') != 'deleted'
     `;
 
     // 2. เงื่อนไขกรองพื้นที่ให้บริการ
@@ -741,7 +739,7 @@ app.get('/lawyer/search', async (req, res) => {
 app.get('/admin/dashboard/overview', authenticateAdmin, async (req, res) => {
     try {
         const stats = {};
-        
+
         // Count pending lawyers
         const [pendingLawyers] = await db.promise().query("SELECT COUNT(*) as count FROM lawyers WHERE status = 'pending'");
         stats.pendingLawyers = pendingLawyers[0].count;
@@ -825,7 +823,7 @@ app.put('/admin/users/:id', authenticateAdmin, async (req, res) => {
 app.delete('/admin/users/:id', authenticateAdmin, async (req, res) => {
     const userId = req.params.id;
     try {
-        await db.promise().query('DELETE FROM users WHERE id=?', [userId]);
+        await db.promise().query("UPDATE users SET status = 'deleted' WHERE id=?", [userId]);
         res.json({ success: true, message: 'User deleted' });
     } catch (error) {
         console.error(error);
@@ -833,17 +831,42 @@ app.delete('/admin/users/:id', authenticateAdmin, async (req, res) => {
     }
 });
 
+app.put('/admin/users/:id/suspend', authenticateAdmin, async (req, res) => {
+    const userId = req.params.id;
+    const { reason } = req.body;
+    try {
+        await db.promise().query("UPDATE users SET status = 'suspended', suspend_reason = ? WHERE id=?", [reason || null, userId]);
+        res.json({ success: true, message: 'User suspended' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+
+app.put('/admin/users/:id/restore', authenticateAdmin, async (req, res) => {
+    const userId = req.params.id;
+    try {
+        await db.promise().query("UPDATE users SET status = 'active' WHERE id=?", [userId]);
+        res.json({ success: true, message: 'User restored' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+
 // 2. Lawyer Verification
 app.get('/admin/lawyers/pending', authenticateAdmin, async (req, res) => {
     try {
         const sql = `
-            SELECT l.id, l.license_number as license, l.license_file as file, 
+            SELECT l.id, l.license_number as license, l.license_file as file, l.reject_reason as rejectReason,
                    CONCAT(u.first_name, ' ', u.last_name) as name, 
-                   DATE_FORMAT(u.created_at, '%d %b %Y') as date,
-                   DATE_FORMAT(u.created_at, '%H:%i') as time
+                   u.created_at as created_at
             FROM lawyers l 
             JOIN users u ON l.id = u.id 
             WHERE l.status = 'pending'
+            ORDER BY u.created_at DESC
         `;
         const [rows] = await db.promise().query(sql);
         res.json(rows);
@@ -858,11 +881,11 @@ app.get('/admin/lawyers/history', authenticateAdmin, async (req, res) => {
         const sql = `
             SELECT l.id, l.license_number as license, l.license_file as file, l.status, l.reject_reason as rejectReason,
                    CONCAT(u.first_name, ' ', u.last_name) as name, 
-                   DATE_FORMAT(u.created_at, '%d %b %Y') as date 
+                   l.updated_at as created_at 
             FROM lawyers l 
             JOIN users u ON l.id = u.id 
             WHERE l.status IN ('approved', 'rejected')
-            ORDER BY u.created_at DESC
+            ORDER BY l.updated_at DESC
         `;
         const [rows] = await db.promise().query(sql);
         res.json(rows);
@@ -921,11 +944,14 @@ app.get('/admin/reviews/reported', authenticateAdmin, async (req, res) => {
         const sql = `
             SELECT r.id, r.rating, r.comment as text, r.flag_reason as flagReason, r.reply,
                    CONCAT(c.first_name, ' ', c.last_name) as reviewer,
-                   CONCAT(l.first_name, ' ', l.last_name) as lawyer
+                   CONCAT(l.first_name, ' ', l.last_name) as lawyer,
+                   CONCAT(rpt.first_name, ' ', rpt.last_name) as reporter
             FROM reviews r
             JOIN users c ON r.client_id = c.id
             JOIN users l ON r.lawyer_id = l.id
+            LEFT JOIN users rpt ON r.reporter_id = rpt.id
             WHERE r.status = 'reported'
+            ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql);
         res.json(rows);
@@ -940,11 +966,14 @@ app.get('/admin/reviews/history', authenticateAdmin, async (req, res) => {
         const sql = `
             SELECT r.id, r.rating, r.comment as text, r.status, r.reply, r.flag_reason as flagReason,
                    CONCAT(c.first_name, ' ', c.last_name) as reviewer,
-                   CONCAT(l.first_name, ' ', l.last_name) as lawyer
+                   CONCAT(l.first_name, ' ', l.last_name) as lawyer,
+                   CONCAT(rpt.first_name, ' ', rpt.last_name) as reporter
             FROM reviews r
             JOIN users c ON r.client_id = c.id
             JOIN users l ON r.lawyer_id = l.id
+            LEFT JOIN users rpt ON r.reporter_id = rpt.id
             WHERE r.status IN ('published', 'hidden') AND (r.flag_reason IS NOT NULL OR r.is_hidden = 1)
+            ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql);
         res.json(rows);
@@ -1001,7 +1030,6 @@ app.delete('/admin/reviews/:id', authenticateAdmin, async (req, res) => {
                 FOREIGN KEY (lawyer_id) REFERENCES users(id) ON DELETE CASCADE
             )
         `);
-        console.log("saved_lawyers table verified");
     } catch (err) {
         console.error("Error creating saved_lawyers table:", err);
     }
@@ -1028,13 +1056,13 @@ app.get('/users/:id/favorites', async (req, res) => {
                        FROM lawyer_works
                        GROUP BY lawyer_id
                    ) w WHERE w.lawyer_id = l.id) as experience,
-                   (SELECT IFNULL(AVG(rating), 0) FROM reviews r WHERE r.lawyer_id = l.id) as rating,
-                   (SELECT COUNT(*) FROM reviews r WHERE r.lawyer_id = l.id) as reviews_count,
+                   (SELECT IFNULL(AVG(rating), 0) FROM reviews r WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported')) as rating,
+                   (SELECT COUNT(*) FROM reviews r WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported')) as review_count,
                    s.created_at
             FROM saved_lawyers s
             JOIN users l ON s.lawyer_id = l.id
             JOIN lawyers lw ON s.lawyer_id = lw.id
-            WHERE s.user_id = ?
+            WHERE s.user_id = ? AND IFNULL(l.status, '') != 'deleted'
         `;
         const [rows] = await db.promise().query(sql, [userId]);
         res.json(rows);
@@ -1049,7 +1077,7 @@ app.post('/users/favorites', async (req, res) => {
     try {
         const { user_id, lawyer_id } = req.body;
         if (!user_id || !lawyer_id) return res.status(400).json({ error: 'Missing parameters' });
-        
+
         await db.promise().query(
             'INSERT IGNORE INTO saved_lawyers (user_id, lawyer_id) VALUES (?, ?)',
             [user_id, lawyer_id]
@@ -1066,7 +1094,7 @@ app.delete('/users/favorites', async (req, res) => {
     try {
         const { user_id, lawyer_id } = req.body; // or req.query depending on client
         if (!user_id || !lawyer_id) return res.status(400).json({ error: 'Missing parameters' });
-        
+
         await db.promise().query(
             'DELETE FROM saved_lawyers WHERE user_id = ? AND lawyer_id = ?',
             [user_id, lawyer_id]
@@ -1087,7 +1115,7 @@ app.get('/users/:id/reviews', async (req, res) => {
                    l.id as lawyer_id, l.first_name as lawyer_first, l.last_name as lawyer_last, l.image_path as lawyer_image
             FROM reviews r
             JOIN users l ON r.lawyer_id = l.id
-            WHERE r.client_id = ?
+            WHERE r.client_id = ? AND IFNULL(l.status, '') != 'deleted'
             ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql, [userId]);
@@ -1103,11 +1131,11 @@ app.get('/lawyers/:id/reviews', async (req, res) => {
     try {
         const lawyerId = req.params.id;
         const sql = `
-            SELECT r.id, r.rating, r.comment, r.created_at, r.reply, r.replied_at,
-                   c.first_name as user_first, c.last_name as user_last, c.image_path as user_image
-            FROM reviews r
-            JOIN users c ON r.client_id = c.id
-            WHERE r.lawyer_id = ? AND r.status IN ('published')
+              SELECT r.id, r.rating, r.comment, r.status, r.created_at, r.reply, r.replied_at,
+                     c.first_name as user_first, c.last_name as user_last, c.image_path as user_image
+              FROM reviews r
+              JOIN users c ON r.client_id = c.id
+              WHERE r.lawyer_id = ? AND r.status IN ('published', 'reported') AND IFNULL(c.status, '') != 'deleted'
             ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql, [lawyerId]);
@@ -1123,11 +1151,11 @@ app.post('/lawyers/:id/reviews', async (req, res) => {
     try {
         const lawyerId = req.params.id;
         const { client_id, rating, comment } = req.body;
-        
+
         if (!client_id || !rating) {
             return res.status(400).json({ error: 'Missing parameters' });
         }
-        
+
         await db.promise().query(
             'INSERT INTO reviews (lawyer_id, client_id, rating, comment, status) VALUES (?, ?, ?, ?, "published")',
             [lawyerId, client_id, rating, comment || null]
@@ -1163,11 +1191,11 @@ app.put('/lawyers/:lawyerId/reviews/:id/reply', authenticateToken, async (req, r
         const lawyerId = req.params.lawyerId;
         const reviewId = req.params.id;
         const { reply } = req.body;
-        
+
         if (req.user.id != lawyerId) {
             return res.status(403).json({ error: 'Unauthorized' });
         }
-        
+
         await db.promise().query(
             'UPDATE reviews SET reply = ?, replied_at = NOW() WHERE id = ? AND lawyer_id = ?',
             [reply, reviewId, lawyerId]
@@ -1184,16 +1212,16 @@ app.post('/reviews/:id/report', authenticateToken, async (req, res) => {
     try {
         const reviewId = req.params.id;
         const { target, flagReason } = req.body;
-        
+
         let prefix = '[รีพอร์ตรีวิว] ';
         if (target === 'reply') {
             prefix = '[รีพอร์ตการตอบกลับ] ';
         }
         const fullReason = prefix + flagReason;
-        
+
         await db.promise().query(
-            'UPDATE reviews SET status = "reported", is_hidden = 0, flag_reason = ? WHERE id = ?',
-            [fullReason, reviewId]
+            'UPDATE reviews SET status = "reported", is_hidden = 0, flag_reason = ?, reporter_id = ? WHERE id = ?',
+            [fullReason, req.user.id, reviewId]
         );
         res.json({ success: true, message: 'Report submitted successfully' });
     } catch (err) {
@@ -1237,5 +1265,8 @@ app.get('/lawyer/zipcode', async (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`server run at http://localhost:${process.env.PORT}`)
+    console.log(`Server is running at: http://localhost:${process.env.PORT}/`);
 })
+
+
+

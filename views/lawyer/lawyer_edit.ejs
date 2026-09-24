@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FindLawyer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="/css/lawyer_edit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<body data-bs-theme="light">
+  <div class="container-fluid p-0">
+    <div class="row g-0 min-vh-100">
+      <aside class="col-md-3 col-lg-2 p-0 d-md-block sidebar-curved position-sticky top-0" style="height: 100vh; overflow-y: auto;">
+        <div class="d-flex flex-column h-100">
+
+          <a href="/" class="d-flex align-items-center gap-2" style="padding: 20px 30px 30px 30px; color: #ffffff; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+            <i class="fa-solid fa-chevron-left fs-5"></i>
+            <span class="fs-6 fw-semibold">กลับหน้าหลัก</span>
+          </a>
+
+          <ul class="sidebar-nav-list mb-auto" style="margin-top: 30px;">
+            <li>
+              <a href="/lawyer_dashboard" class="nav-link">
+                <span class="nav-icon-badge"><i class="fa-solid fa-chart-column"></i></span>
+                <span>ภาพรวมข้อมูล</span>
+              </a>
+            </li>
+            <li>
+              <a href="/lawyer_edit" class="nav-link active">
+                <span class="nav-icon-badge"><i class="fa-solid fa-user-pen"></i></span>
+                <span>แก้ไขข้อมูลส่วนตัว</span>
+              </a>
+            </li>
+            <li>
+              <a href="/lawyer_reviews" class="nav-link">
+                <span class="nav-icon-badge"><i class="fa-solid fa-star"></i></span>
+                <span>ตรวจสอบรีวิว</span>
+              </a>
+            </li>
+          </ul>
+
+            <hr class="mt-auto mb-3 mx-4" style="border-top: 1px solid rgba(255, 255, 255, 0.2); opacity: 1;" />
+            <div class="d-flex justify-content-center pb-4">
+              <a class="text-danger d-flex align-items-center gap-2 text-decoration-none" id="logoutBtn" onclick="Auth.clearSession()" style="cursor: pointer; font-weight: 600; font-size: 1.05rem; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                <i class="fa-solid fa-right-from-bracket fa-rotate-180 fs-5"></i>
+                <span>ออกจากระบบ</span>
+              </a>
+            </div>
+        </div>
+      </aside>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 p-0" style="min-height: 100vh;">
+        <div class="p-4 p-md-5 mx-auto" style="max-width: 1000px;">
+          <div style="margin-top: 50px; margin-bottom: 24px;">
+            <h2 class="fw-bold mb-2">แก้ไขข้อมูลส่วนตัว</h2>
+            <hr style="border-top: 2px solid #cbd5e1; opacity: 1; margin-top: 0;">
+          </div>
+
+          <form id="editLawyerForm">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
+              <div class="card-header-custom border-0 pb-0 mb-4 fw-bold" style="font-size: 1.1rem; color: #1A435A;">
+                <i class="fa-solid fa-address-card me-2"></i> ข้อมูลส่วนตัว
+              </div>
+              
+              <div class="d-flex justify-content-center mb-5">
+                <div class="avatar-wrapper position-relative">
+                  <div class="position-relative d-flex justify-content-center align-items-center bg-light rounded-circle shadow-sm" style="width: 120px; height: 120px;">
+                    <i class="fa-solid fa-user position-absolute" style="font-size: 60px; color: #dee2e6; z-index: 1;"></i>
+                    <img id="showPic" class="position-absolute w-100 h-100 top-0 start-0 rounded-circle object-fit-cover" alt="Profile" style="z-index: 2; display: none;" />
+                  </div>
+                  <label for="uploadNewpic" class="avatar-edit-badge" title="เปลี่ยนรูปโปรไฟล์" style="width: 32px; height: 32px; bottom: 0; right: 0;">
+                    <i class="fa-solid fa-camera fs-6"></i>
+                  </label>
+                  <input type="file" id="uploadNewpic" accept="image/jpeg, image/png, image/jpg" class="d-none" onchange="previewImage()">
+                </div>
+              </div>
+
+              <div class="row g-4">
+                <div class="form-input col-md-6">
+                  <label for="inputName" class="form-label">ชื่อ</label>
+                  <input type="text" class="form-control form-control-custom" id="inputName" value="">
+                </div>
+                <div class="form-input col-md-6">
+                  <label for="inputLastname" class="form-label">นามสกุล</label>
+                  <input type="text" class="form-control form-control-custom" id="inputLastname" value="">
+                </div>
+                <div class="form-input col-md-6">
+                  <label for="inputEmail" class="form-label">อีเมล</label>
+                  <input type="email" class="form-control form-control-custom" id="inputEmail" value="" readonly>
+                </div>
+                <div class="form-input col-md-6">
+                  <label for="inputPhone" class="form-label">เบอร์โทรศัพท์</label>
+                  <input type="text" class="form-control form-control-custom" id="inputPhone" value="">
+                </div>
+                <div class="form-input col-md-6">
+                  <label for="line" class="form-label">Line ID</label>
+                  <input type="text" class="form-control form-control-custom" id="line" value="">
+                </div>
+                <div class="form-input col-md-6">
+                  <label for="facebook" class="form-label">Facebook URL</label>
+                  <input type="url" class="form-control form-control-custom" id="facebook" value="">
+                </div>
+
+                <div class="form-input col-md-6 mt-4">
+                  <label for="inputLicNum" class="form-label">เลขที่ใบอนุญาตทนายความ</label>
+                  <input type="text" class="form-control form-control-custom" id="inputLicNum" readonly>
+                </div>
+
+                <div class="form-input col-md-6 mt-4" id="licenseFileSection">
+                  <label class="form-label">ใบอนุญาตทนายความ</label>
+                  <div class="p-3 border rounded shadow-sm bg-light">
+                    <span class="text-muted">กำลังโหลดข้อมูล...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
+              <div class="card-header-custom mb-4">
+                <i class="fa-solid fa-location-dot me-2"></i> ข้อมูลการบริการ
+              </div>
+              <div class="row g-4">
+                <div class="form-input col-md-4">
+                  <label class="form-label">รหัสไปรษณีย์ <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-custom" id="inputZipcode" pattern="[0-9]{5}" required />
+                  <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์ 5 หลัก</div>
+                </div>
+
+                <div class="form-input col-md-4">
+                  <label class="form-label">จังหวัด <span class="text-danger">*</span></label>
+                  <select class="form-select form-control-custom" id="inputProvince" required>
+                    <option value="">- เลือกจังหวัด -</option>
+                  </select>
+                  <div class="invalid-feedback">กรุณาเลือกจังหวัด</div>
+                </div>
+
+                <div class="form-input col-md-4">
+                  <label class="form-label">อำเภอ/เขต <span class="text-danger">*</span></label>
+                  <select class="form-select form-control-custom" id="inputDistrict" required disabled>
+                    <option value="">- เลือกอำเภอ/เขต -</option>
+                  </select>
+                  <div class="invalid-feedback">กรุณาเลือกอำเภอ/เขต</div>
+                </div>
+
+                <div class="form-input col-md-4">
+                  <label class="form-label">ตำบล/แขวง <span class="text-danger">*</span></label>
+                  <select class="form-select form-control-custom" id="inputSubDistrict" required disabled>
+                    <option value="">- เลือกตำบล/แขวง -</option>
+                  </select>
+                  <div class="invalid-feedback">กรุณาเลือกตำบล/แขวง</div>
+                </div>
+
+                <div class="form-input col-md-4">
+                  <label class="form-label">ถนน (ถ้ามี)</label>
+                  <input type="text" class="form-control form-control-custom" id="inputRoad" />
+                </div>
+
+                <div class="form-input col-md-4">
+                  <label class="form-label">ซอย/ตรอก (ถ้ามี)</label>
+                  <input type="text" class="form-control form-control-custom" id="inputSoi" />
+                </div>
+
+                <div class="form-input col-md-6">
+                  <label class="form-label">หมู่ที่ (ถ้ามี)</label>
+                  <input type="text" class="form-control form-control-custom" id="inputMoo" />
+                </div>
+
+                <div class="form-input col-md-6">
+                  <label class="form-label">เลขที่ <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-custom" id="inputHouseNo" required />
+                  <div class="invalid-feedback">กรุณากรอกบ้านเลขที่</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
+              <div class="card-header-custom border-0 pb-3 mb-4 border-bottom">
+                <i class="fa-solid fa-tags me-2"></i> หมวดหมู่คดีและค่าบริการ
+              </div>
+              
+              <div class="mb-4">
+                <label class="form-label">หมวดหมู่คดี</label>
+                <div id="categoryContainer" class="d-flex flex-wrap gap-2 p-3 border bg-white" style="min-height: 70px; border-radius: 10px;">
+                  <div class="text-center text-muted w-100 my-auto" id="noSpecialtyText">กำลังโหลดข้อมูล...</div>
+                </div>
+                <div class="border-top border-1 pt-3 mt-3">
+                  <button type="button" class="btn btn-link text-decoration-none btn-add-tag" data-bs-toggle="modal" data-bs-target="#addSpecialty">
+                    <i class="fa-solid fa-circle-plus"></i>เพิ่มหมวดหมู่คดี
+                  </button>
+                </div>
+                <input type="hidden" id="selectedCategories" required />
+                <div class="invalid-feedback" id="categoryFeedback">กรุณาเลือกหมวดหมู่คดีอย่างน้อย 1 หมวดหมู่</div>
+              </div>
+
+              <div class="form-input col-md-12">
+                <label class="form-label">ค่าบริการ (บาท)</label>
+                <select class="form-select form-control-custom w-50" id="inputFeeRate" name="fee_rate">
+                  <option value="" selected disabled>กรุณาเลือกค่าบริการ</option>
+                  <option value="0-1000">0 - 1,000</option>
+                  <option value="1001-3000">1,000 - 3,000</option>
+                  <option value="3001-5000">3,000 - 5,000</option>
+                  <option value="5000+">5,000 ขึ้นไป</option>
+                </select>
+              </div>
+            </div>
+
+
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 ">
+              <div class="card-header-custom mb-4 border-bottom pb-3">
+                <i class="fa-solid fa-graduation-cap me-2"></i> ประวัติการศึกษา
+              </div>
+              <div id="educationContainer" class="border-0">
+                <div class="text-center text-muted py-4 bg-white border rounded" id="noEduText">ยังไม่มีประวัติการศึกษา</div>
+              </div>
+              <div class="border-top border-1 pt-3 mt-3">
+                <button type="button" class="btn btn-link text-decoration-none btn-add-tag" onclick="addEducationRow()">
+                  <i class="fa-solid fa-circle-plus"></i>เพิ่ม
+                </button>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
+              <div class="card-header-custom mb-4 border-bottom pb-3">
+                <i class="fa-solid fa-briefcase me-2"></i> ประวัติการทำงาน
+              </div>
+              <div id="workContainer" class="border-0">
+                <div class="text-center text-muted py-4 mb-2 bg-white border rounded" id="noWorkText">ยังไม่มีประวัติการทำงาน</div>
+              </div>
+              <div class="border-top border-1 pt-3 mt-3">
+                <button type="button" class="btn btn-link text-decoration-none btn-add-tag" onclick="addWorkRow()">
+                  <i class="fa-solid fa-circle-plus"></i>เพิ่ม
+                </button>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
+              <div class="card-header-custom mb-4 border-bottom pb-3">
+                <i class="fa-solid fa-trophy me-2"></i> ผลงานและการอบรม (ถ้ามี)
+              </div>
+              <div id="achievementContainer" class="border-0">
+                <div class="text-center text-muted py-4 mb-2 bg-white border rounded" id="noAchievementText">ยังไม่มีประวัติผลงานและการอบรม</div>
+              </div>
+              <div class="border-top border-1 pt-3 mt-3">
+                <button type="button" class="btn btn-link text-decoration-none btn-add-tag" onclick="addAchievementRow()">
+                  <i class="fa-solid fa-circle-plus"></i>เพิ่ม
+                </button>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
+              <div class="card-header-custom mb-4">
+                <i class="fa-solid fa-clock me-2"></i> ตารางเวลาให้บริการ
+              </div>
+              <div id="scheduleContainer" class="mt-3"></div>
+            </div>
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
+              <div class="card-header-custom border-0 pb-0 mb-4 fw-bold" style="font-size: 1.1rem; color: #1A435A;">
+                <i class="fa-solid fa-lock me-2"></i> ความปลอดภัย
+              </div>
+              <div id="passwordFieldsSection">
+                <div class="row g-4">
+                  <div class="col-md-12">
+                    <label for="oldPassword" class="form-label fw-semibold" style="color: #1A435A; font-size: 1rem;">รหัสผ่านปัจจุบัน</label>
+                    <div class="position-relative">
+                      <input type="password" class="form-control form-control-custom pe-5" id="oldPassword" placeholder="กรอกรหัสผ่านปัจจุบัน" />
+                      <span class="toggle-password position-absolute end-0 top-50 translate-middle-y me-3" onclick="togglePassword('oldPassword', this)" style="cursor: pointer; z-index: 10; color: #6c757d;">
+                        <i class="fa-solid fa-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="newPassword" class="form-label fw-semibold" style="color: #1A435A; font-size: 1rem;">รหัสผ่านใหม่</label>
+                    <div class="position-relative">
+                      <input type="password" class="form-control form-control-custom pe-5" id="newPassword" placeholder="กรอกรหัสผ่านใหม่" />
+                      <span class="toggle-password position-absolute end-0 top-50 translate-middle-y me-3" onclick="togglePassword('newPassword', this)" style="cursor: pointer; z-index: 10; color: #6c757d;">
+                        <i class="fa-solid fa-eye"></i>
+                      </span>
+                    </div>
+                    <div id="passwordHintWrapper" style="display: block;">
+                      <div class="progress mt-3" style="height: 6px; background-color: #e9ecef; border-radius: 4px">
+                        <div id="passwordStrengthBar" class="progress-bar" role="progressbar" style="width: 0%; transition: width 0.3s ease"></div>
+                      </div>
+                      <small id="passwordFeedback" class="text-muted d-block mt-2 fw-medium" style="font-size: 0.65rem;">* รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วย [A-Z], [a-z], [0-9], ! @ # $ % ^ & * ( ) _ - + = { } [ ] : ; " ' < > , . ? / \ | ~ </small>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="confirmNewpassword" class="form-label fw-semibold" style="color: #1A435A; font-size: 1rem;">ยืนยันรหัสผ่านใหม่</label>
+                    <div class="position-relative">
+                      <input type="password" class="form-control form-control-custom pe-5" id="confirmNewpassword" placeholder="ยืนยันรหัสผ่านใหม่อีกครั้ง" />
+                      <span class="toggle-password position-absolute end-0 top-50 translate-middle-y me-3" onclick="togglePassword('confirmNewpassword', this)" style="cursor: pointer; z-index: 10; color: #6c757d;">
+                        <i class="fa-solid fa-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 mt-4">
+              <a href="/lawyer_dashboard" class="btn btn-cancel">ยกเลิก</a>
+              <button type="button" class="btn btn-save-custom" onclick="saveAllData()">บันทึกการเปลี่ยนแปลง</button>
+            </div>
+          </form>
+        </div>
+      </main>
+
+      <div class="modal fade" id="addSpecialty" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content custom-card border-0 shadow-lg" style="border-radius: 12px">
+            <div class="modal-header border-bottom-0">
+              <h5 class="box-category"><i class="fa-solid fa-tags me-2"></i>เลือกหมวดหมู่คดี</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-0">
+              <select class="form-select mb-3" id="selectSpecialty" onchange="toggleCustomInput()">
+                <option value="">- กำลังโหลดข้อมูล -</option>
+              </select>
+              <div id="newSpecialtyContainer" class="d-none mt-3">
+                <input type="text" class="form-control" id="inputNewSpecialty" placeholder="พิมพ์ชื่อหมวดหมู่ใหม่ เช่น คดีไซเบอร์">
+              </div>
+            </div>
+            <div class="modal-footer border-top-0">
+              <button type="button" class="btn btn-box-add rounded-pill" onclick="addSpecialty()">เพิ่ม</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+      <script src="/js/auth.js"></script>
+      <script src="/js/lawyerFunctions.js"></script>
+      <script src="/js/lawyer_edit.js"></script>
+</body>
+
+</html>

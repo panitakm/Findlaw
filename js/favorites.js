@@ -9,14 +9,14 @@ async function initFavoritesPage() {
     const authUser = typeof Auth !== 'undefined' ? Auth.getUser() : null;
     if (authUser) {
         if (authUser.role !== 'user') {
-            alert("หน้านี้สำหรับผู้ใช้งานทั่วไปเท่านั้น");
-            window.location.href = '/index.html';
+            await window.showBSAlert('ปฏิเสธการเข้าถึง', 'หน้านี้สำหรับผู้ใช้งานทั่วไปเท่านั้น', 'error');
+            window.location.href = '/';
             return;
         }
         userId = authUser.id;
     } else {
-        alert("กรุณาเข้าสู่ระบบก่อน");
-        window.location.href = '/login.html';
+        await window.showBSAlert('ปฏิเสธการเข้าถึง', 'กรุณาเข้าสู่ระบบก่อน', 'error');
+        window.location.href = '/sign_in';
         return;
     }
 
@@ -27,7 +27,7 @@ async function initFavoritesPage() {
 
 async function fetchSavedLawyers() {
     try {
-        const res = await fetch(`http://localhost:3000/users/${userId}/favorites`);
+        const res = await fetch(`/users/${userId}/favorites`);
         if (res.ok) {
             savedLawyers = await res.json();
         } else {
@@ -58,13 +58,12 @@ function renderLawyersList(lawyers) {
             <div class="col-12 text-center py-5">
                 <div class="card border-0 shadow-sm rounded-4 p-5 mx-auto" style="max-width: 500px;">
                     <div class="text-muted mb-3">
-                        <i class="fa-solid fa-bookmark text-secondary" style="font-size: 4rem;"></i>
+                        <i class="fa-solid fa-bookmark text-secondary" style="font-size: 3rem;"></i>
                     </div>
-                    <h4 class="fw-bold mb-2" style="color: #0A3D73;">ไม่มีทนายความที่บันทึกไว้</h4>
-                    <p class="text-muted small mb-4">คุณยังไม่มีรายการทนายความในรายการโปรด หรือไม่พบทนายความที่ตรงตามเงื่อนไขการค้นหา</p>
+                    <h4 class="fw-bold mb-4" style="color: #1A435A;">ไม่มีทนายความที่บันทึกไว้</h4>
                     <div>
-                        <a href="/search.html" class="btn btn-primary rounded-pill px-4 py-2" style="background-color: #0A3D73;">
-                            <i class="fa-solid fa-magnifying-glass me-2"></i>ค้นหาทนายความ
+                        <a href='/' class="btn btn-primary rounded-pill px-4 py-2 border-0 shadow-lg" style="background-color: #4987A4; font-size: 1.1rem; border: none; font-weight: 500;">
+                            <i class="fa-solid fa-magnifying-glass me-2 text-white"></i><span class="text-white">ค้นหาทนายความ</span>
                         </a>
                     </div>
                 </div>
@@ -73,68 +72,53 @@ function renderLawyersList(lawyers) {
         return;
     }
 
-    container.innerHTML = lawyers.map(lawyer => `
-        <div class="col-md-6 col-xl-4 lawyer-item" id="lawyer-card-${lawyer.id}">
-            <div class="card lawyer-card h-100 p-4 border-0 shadow-sm rounded-4 position-relative">
-                
-                <!-- Bookmark Icon (Top Right) -->
-                <button type="button" class="bookmark-btn border-0 position-absolute bg-danger bg-opacity-10 rounded d-flex align-items-center justify-content-center" style="top: 24px; right: 24px; width: 42px; height: 42px;" title="ยกเลิกการบันทึก" onclick="confirmRemoveLawyer(${lawyer.id}, '${lawyer.full_name}')">
-                    <i class="fa-solid fa-bookmark fs-5 text-danger opacity-75 hover-opacity-100"></i>
-                </button>
+    container.innerHTML = lawyers.map(lawyer => {
+        const imgHTML = lawyer.image_path 
+            ? `<img src="${lawyer.image_path}" class="card-img-top rounded-top-4" style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; object-fit: cover; object-position: top; display: block; flex-shrink: 0;">`
+            : `<div class="d-flex justify-content-center align-items-center bg-light rounded-top-4" style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; display: block; flex-shrink: 0;"><i class="fa-solid fa-user" style="font-size: 80px; color: #dee2e6;"></i></div>`;
+        const expText = lawyer.experience > 0 ? `${lawyer.experience} ปี` : 'น้อยกว่า 1 ปี';
+        
+        let feeRate = 'ไม่ระบุ';
+        if (lawyer.fee_rate) {
+            const fee = parseInt(lawyer.fee_rate, 10);
+            if (fee <= 1000) feeRate = '0 - 1,000 บาท';
+            else if (fee <= 3000) feeRate = '1,000 - 3,000 บาท';
+            else if (fee <= 5000) feeRate = '3,000 - 5,000 บาท';
+            else feeRate = 'เริ่มต้น 5,000 บาท';
+        }
 
-                <!-- Avatar, Name, License (Top Left) -->
-                <div class="d-flex align-items-center gap-4 mb-4 pe-5">
-                    <img src="${lawyer.image_path || '/css/pic/person-circle.svg'}" alt="${lawyer.full_name}" class="rounded-circle shadow-sm flex-shrink-0" style="object-fit: cover; width: 85px; height: 85px; border: 3px solid #fff;">
-                    <div>
-                        <h5 class="fw-bold mb-1 text-dark" style="font-size: 1.2rem;">${lawyer.full_name || 'ไม่ได้ระบุ'}</h5>
-                        <span class="text-muted small">เลขที่ใบอนุญาต : ${lawyer.license_number || 'ไม่ได้ระบุ'}</span>
+        const specialties = (() => {
+            const specs = lawyer.specialties ? (Array.isArray(lawyer.specialties) ? lawyer.specialties : lawyer.specialties.split(',')) : [];
+            if (specs.length === 0) return 'ไม่ระบุ';
+            return specs.join(' ');
+        })();
+
+        return `
+        <div class="col-md-6 col-lg-4 lawyer-item" id="lawyer-card-${lawyer.id}">
+            <a href="/lawyer_profile?id=${lawyer.id}" class="text-decoration-none text-dark d-block h-100">
+                <div class="card h-100 shadow-sm border-0 position-relative rounded-4 hover-scale pb-3" style="min-height: 380px;">
+                    <button type="button" class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm btn-save-lawyer-custom d-flex align-items-center justify-content-center" data-lawyer-id="${lawyer.id}" title="ยกเลิกการบันทึก" onclick="event.preventDefault(); window.confirmRemoveLawyer(${lawyer.id}, '${lawyer.full_name}')" style="z-index: 10;">
+                        <i class="fa-solid fa-bookmark text-danger"></i>
+                    </button>
+                    ${imgHTML}
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold lawyer-name-color mb-1" style="font-size: 1.25rem;">${lawyer.full_name || 'ไม่ระบุ'}</h4>
+                        <div class="mb-3 d-flex align-items-center gap-2">
+                            <div class="text-warning" style="font-size: 0.9rem;">
+                                ${getStarRatingHTML(parseFloat(lawyer.rating) || 0)}
+                            </div>
+                            <span class="text-muted small fw-semibold">${(parseFloat(lawyer.rating) || 0).toFixed(1)} (${lawyer.review_count || 0} รีวิว)</span>
+                        </div>
+                        <p class="card-text text-muted mb-1"><i class="fa-solid fa-location-dot lawyer-icon-color fa-fw me-2"></i>จ.${lawyer.province_name || lawyer.address || 'ไม่ระบุ'}</p>
+                        <p class="card-text text-muted mb-1"><i class="fa-solid fa-briefcase lawyer-icon-color fa-fw me-2"></i>ประสบการณ์: ${expText}</p>
+                        <p class="card-text text-muted mb-1"><i class="fa-solid fa-baht-sign lawyer-icon-color fa-fw me-2"></i>ค่าบริการ: ${feeRate}</p>
+                        <p class="card-text text-muted mb-1"><i class="fa-solid fa-scale-balanced lawyer-icon-color fa-fw me-2"></i><span class="text-truncate d-inline-block lawyer-specialty-text" style="max-width: 85%; vertical-align: bottom;">${specialties}</span></p>
                     </div>
                 </div>
-
-                <!-- Address & Experience -->
-                <div class="mb-3 text-muted small">
-                    <div class="d-flex align-items-start mb-3">
-                        <i class="fa-solid fa-location-dot text-danger me-2 mt-1"></i>
-                        <div><span class="fw-medium text-dark">ที่อยู่ </span>${lawyer.address || 'ไม่ได้ระบุ'}</div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <i class="fa-solid fa-briefcase text-primary me-2"></i>
-                        <div><span class="fw-medium text-dark">ประสบการณ์ทำงาน </span>${lawyer.experience || 0} ปี</div>
-                    </div>
-                </div>
-
-                <!-- Rating -->
-                <div class="d-flex align-items-center mb-4">
-                    <div class="text-warning me-2 fs-6">
-                        ${getStarRatingHTML(Number(lawyer.rating || 0))}
-                    </div>
-                    <span class="fw-bold text-dark me-1">${Number(lawyer.rating || 0).toFixed(1)}</span>
-                    <span class="text-muted small">(${lawyer.reviews_count || 0} รีวิว)</span>
-                </div>
-
-                <!-- Specialties -->
-                <div class="mb-3 flex-grow-1">
-                    <div class="d-flex flex-nowrap align-items-center gap-2 overflow-hidden">
-                        ${(() => {
-                            const specs = lawyer.specialties ? (Array.isArray(lawyer.specialties) ? lawyer.specialties : lawyer.specialties.split(',')) : [];
-                            if (specs.length === 0) return '<span class="text-muted small">ไม่ได้ระบุ</span>';
-                            if (specs.length <= 3) {
-                                return specs.map(spec => `<span class="badge bg-primary bg-opacity-10 text-primary fw-medium rounded-pill px-3 py-2 text-truncate" style="max-width: 100%; min-width: 0;">${spec}</span>`).join('');
-                            }
-                            return specs.slice(0, 3).map(spec => `<span class="badge bg-primary bg-opacity-10 text-primary fw-medium rounded-pill px-3 py-2 text-truncate" style="max-width: 100%; min-width: 0;">${spec}</span>`).join('') + ` <a href="/lawyerProfile.html?id=${lawyer.id}" class="text-primary small fw-medium ms-1 text-decoration-none border-bottom border-primary flex-shrink-0">ดูทั้งหมด</a>`;
-                        })()}
-                    </div>
-                </div>
-
-                <!-- View Profile Button -->
-                <div class="mt-auto">
-                    <a href="/lawyerProfile.html?id=${lawyer.id}" class="btn btn-outline-primary w-100 text-center text-decoration-none py-2 rounded-pill fw-bold">
-                        <i class="fa-solid fa-user-tie me-1"></i> ดูโปรไฟล์
-                    </a>
-                </div>
-            </div>
+            </a>
         </div>
-    `).join('');
+        `;
+    }).join('');
 
 }
 
@@ -151,7 +135,7 @@ function getStarRatingHTML(rating) {
     }
     const remaining = 5 - Math.ceil(rating);
     for (let i = 0; i < remaining; i++) {
-        stars += '<i class="fa-regular fa-star"></i>';
+        stars += '<i class="fa-regular fa-star text-muted opacity-25"></i>';
     }
     return stars;
 }
@@ -184,6 +168,10 @@ function setupSearchAndFilter() {
             filtered.sort((a, b) => b.experience - a.experience);
         } else if (sort === 'name') {
             filtered.sort((a, b) => a.full_name.localeCompare(b.full_name, 'th'));
+        } else if (sort === 'fee_asc') {
+            filtered.sort((a, b) => (parseInt(a.fee_rate) || 0) - (parseInt(b.fee_rate) || 0));
+        } else if (sort === 'fee_desc') {
+            filtered.sort((a, b) => (parseInt(b.fee_rate) || 0) - (parseInt(a.fee_rate) || 0));
         }
 
         renderLawyersList(filtered);
@@ -196,10 +184,18 @@ function setupSearchAndFilter() {
 
 // Global modal triggers
 window.confirmRemoveLawyer = async function(id, name) {
-    if (confirm(`คุณต้องการลบ "${name}" ออกจากรายการทนายความที่บันทึกไว้ใช่หรือไม่?`)) {
+    const confirmed = await window.showBSConfirm(
+        'ยืนยันการลบ',
+        `ต้องการลบ "${name}" ออกจากรายการหรือไม่ ?`,
+        'ลบ',
+        'ยกเลิก',
+        'btn-danger'
+    );
+    
+    if (confirmed) {
         try {
             // Call API to delete from database
-            const res = await fetch('http://localhost:3000/users/favorites', {
+            const res = await fetch('/users/favorites', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_id: userId, lawyer_id: id })
@@ -219,11 +215,11 @@ window.confirmRemoveLawyer = async function(id, name) {
                     window.location.reload();
                 }, 500);
             } else {
-                alert("เกิดข้อผิดพลาดในการลบข้อมูล");
+                window.showBSAlert('ข้อผิดพลาด', 'เกิดข้อผิดพลาดในการลบข้อมูล', 'error');
             }
         } catch (err) {
             console.error(err);
-            alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+            window.showBSAlert('ข้อผิดพลาด', 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', 'error');
         }
     }
 };

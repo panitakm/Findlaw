@@ -119,7 +119,7 @@
 
     const loadProvinces = async () => {
         try {
-            const res = await fetch('http://localhost:3000/lawyer/search/provinces');
+            const res = await fetch('/lawyer/search/provinces');
             provincesData = await res.json();
             
             if (elements.sidebarProvinceList) {
@@ -158,7 +158,7 @@
     let allCategories = [];
     const loadCategories = async () => {
         try {
-            const res = await fetch('http://localhost:3000/lawyer/categories');
+            const res = await fetch('/lawyer/categories');
             const data = await res.json();
             
             // กรองคดีซ้ำ
@@ -285,39 +285,47 @@
         }
 
         lawyers.forEach(lawyer => {
-            const imgSrc = lawyer.image_path || '/css/pic/person-circle.svg';
+            const imgHTML = lawyer.image_path 
+                ? `<img src="${lawyer.image_path}" class="card-img-top rounded-top-4 lawyer-card-img">`
+                : `<div class="d-flex justify-content-center align-items-center bg-light rounded-top-4 lawyer-card-img"><i class="fa-solid fa-user" style="font-size: 80px; color: #dee2e6;"></i></div>`;
             const expText = lawyer.total_experience > 0 ? `${lawyer.total_experience} ปี` : 'น้อยกว่า 1 ปี';
             let feeRate = 'ไม่ระบุ';
             if (lawyer.fee_rate) {
                 const fee = parseInt(lawyer.fee_rate, 10);
-                if (fee <= 1000) feeRate = '0 - 1,000';
-                else if (fee <= 3000) feeRate = '1,000 - 3,000';
-                else if (fee <= 5000) feeRate = '3,000 - 5,000';
-                else feeRate = 'เริ่มต้น 5,000';
+                if (fee <= 1000) feeRate = '0 - 1,000 บาท';
+                else if (fee <= 3000) feeRate = '1,000 - 3,000 บาท';
+                else if (fee <= 5000) feeRate = '3,000 - 5,000 บาท';
+                else feeRate = 'เริ่มต้น 5,000 บาท';
             }
-            const specialties = lawyer.specialties || 'ไม่ระบุ';
+            const specialties = lawyer.specialties ? (Array.isArray(lawyer.specialties) ? lawyer.specialties.join(' ') : lawyer.specialties.split(',').join(' ')) : 'ไม่ระบุ';
             const isSaved = savedLawyers.includes(lawyer.id);
             const heartClass = isSaved ? 'text-danger' : 'text-secondary';
             const heartTitle = isSaved ? 'บันทึกแล้ว' : 'ยังไม่บันทึก';
 
             const saveBtnHtml = (!currentUser || currentUser.role === 'user') ? `
                 <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm btn-save-lawyer btn-save-lawyer-custom d-flex align-items-center justify-content-center" data-lawyer-id="${lawyer.id}" title="${heartTitle}">
-                    <i class="fa-solid fa-heart ${heartClass}"></i>
+                    <i class="fa-solid fa-bookmark ${heartClass}"></i>
                 </button>
             ` : '';
 
             elements.searchResults.innerHTML += `
                 <div class="col-md-6 col-lg-4">
-                    <a href="lawyerProfile.html?id=${lawyer.id}" class="text-decoration-none text-dark d-block h-100">
+                    <a href="/lawyer_profile?id=${lawyer.id}" class="text-decoration-none text-dark d-block h-100">
                         <div class="card h-100 shadow-sm border-0 position-relative rounded-4 hover-scale pb-3" style="min-height: 380px;">
                             ${saveBtnHtml}
-                            <img src="${imgSrc}" class="card-img-top rounded-top-4 lawyer-card-img">
+                            ${imgHTML}
                             <div class="card-body">
-                                <h5 class="card-title fw-bold lawyer-name-color">${lawyer.full_name}</h5>
-                                <p class="card-text text-muted mb-1"><i class="fa-solid fa-location-dot lawyer-icon-color me-2"></i>จ.${lawyer.province_name || 'ไม่ระบุ'}</p>
-                                <p class="card-text text-muted mb-1"><i class="fa-solid fa-briefcase lawyer-icon-color me-2"></i>ประสบการณ์: ${expText}</p>
-                                <p class="card-text text-muted mb-1"><i class="fa-solid fa-coins lawyer-icon-color me-2"></i>อัตราให้บริการ: ${feeRate}</p>
-                                <p class="card-text text-muted"><i class="fa-solid fa-tags lawyer-icon-color me-2"></i>คดี: <span class="text-truncate d-inline-block lawyer-specialty-text">${specialties}</span></p>
+                                <h4 class="card-title fw-bold lawyer-name-color mb-1" style="font-size: 1.25rem;">${lawyer.full_name}</h4>
+                                <div class="mb-3 d-flex align-items-center gap-2">
+                                    <div class="text-warning" style="font-size: 0.9rem;">
+                                        ${getStarRatingHTML(parseFloat(lawyer.rating) || 0)}
+                                    </div>
+                                    <span class="text-muted small fw-semibold">${(parseFloat(lawyer.rating) || 0).toFixed(1)} (${lawyer.review_count || 0} รีวิว)</span>
+                                </div>
+                                <p class="card-text text-muted mb-1"><i class="fa-solid fa-location-dot lawyer-icon-color fa-fw me-2"></i>จ.${lawyer.province_name || 'ไม่ระบุ'}</p>
+                                <p class="card-text text-muted mb-1"><i class="fa-solid fa-briefcase lawyer-icon-color fa-fw me-2"></i>ประสบการณ์: ${expText}</p>
+                                <p class="card-text text-muted mb-1"><i class="fa-solid fa-baht-sign lawyer-icon-color fa-fw me-2"></i>ค่าบริการ: ${feeRate}</p>
+                                <p class="card-text text-muted mb-1"><i class="fa-solid fa-scale-balanced lawyer-icon-color fa-fw me-2"></i><span class="text-truncate d-inline-block lawyer-specialty-text">${specialties}</span></p>
                             </div>
                         </div>
                     </a>
@@ -340,7 +348,7 @@
             if(state.price) params.append('price', state.price);
             if(state.category) params.append('category', state.category);
 
-            const url = `http://localhost:3000/lawyer/search?${params.toString()}`;
+            const url = `/lawyer/search?${params.toString()}`;
             const response = await fetch(url);
             const data = await response.json();
             
@@ -353,7 +361,7 @@
 
     async function fetchSavedLawyers(userId) {
         try {
-            const res = await fetch(`http://localhost:3000/users/${userId}/favorites`);
+            const res = await fetch(`/users/${userId}/favorites`);
             if (res.ok) {
                 const data = await res.json();
                 savedLawyers = data.map(lawyer => lawyer.id);
@@ -368,8 +376,8 @@
         e.stopPropagation();
 
         if (!currentUser) {
-            alert("กรุณาเข้าสู่ระบบก่อนทำการบันทึก");
-            window.location.href = '/login.html';
+            await window.showBSAlert('แจ้งเตือน', 'กรุณาเข้าสู่ระบบก่อนทำการบันทึก', 'warning');
+            window.location.href = '/sign_in';
             return;
         }
         
@@ -379,7 +387,7 @@
         
         try {
             const method = isCurrentlySaved ? 'DELETE' : 'POST';
-            const res = await fetch('http://localhost:3000/users/favorites', {
+            const res = await fetch('/users/favorites', {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_id: currentUser.id, lawyer_id: lawyerId })
@@ -400,7 +408,7 @@
             }
         } catch (err) {
             console.error("Error toggling favorite:", err);
-            alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+            await window.showBSAlert('เกิดข้อผิดพลาด', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
         }
     }
 
@@ -451,3 +459,21 @@
     document.addEventListener('DOMContentLoaded', init);
 
 })();
+
+function getStarRatingHTML(rating) {
+    let stars = '';
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 !== 0;
+
+    for (let i = 0; i < fullStars; i++) {
+        stars += '<i class="fa-solid fa-star"></i>';
+    }
+    if (hasHalf) {
+        stars += '<i class="fa-solid fa-star-half-stroke"></i>';
+    }
+    const remaining = 5 - Math.ceil(rating);
+    for (let i = 0; i < remaining; i++) {
+        stars += '<i class="fa-regular fa-star text-muted opacity-25"></i>';
+    }
+    return stars;
+}

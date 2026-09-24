@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FindLawyer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/lawyer_signup.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<body class="d-flex justify-content-center align-items-center min-vh-100 position-relative" style="overflow-x: hidden">
+  <main class="w-100 py-5">
+    <div class="container" style="max-width: 650px;">
+      <div class="header text-center">สมัครทนายความ</div>
+      <div class="stepper-wrapper position-relative mt-3 mb-4">
+        <div class="progress position-absolute translate-middle-y"
+          style="height: 4px; top: 1.5rem; left: 0; width: 100%; z-index: 1">
+          <div class="progress-bar" id="wizardProgress" role="progressbar"
+            style="width: 10%; background-color: #4987a4;" aria-valuenow="33.33" aria-valuemin="0" aria-valuemax="100">
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between position-relative px-3 px-md-5" style="z-index: 2">
+          <div class="d-flex flex-column align-items-center" style="width: 50px">
+            <button type="button" class="btn btn-primary rounded-circle step-btn mb-2" data-step="1">1</button>
+            <span class="text-muted small fw-medium text-center" style="white-space: nowrap">ข้อมูลส่วนตัว</span>
+          </div>
+          <div class="d-flex flex-column align-items-center" style="width: 120px">
+            <button type="button" class="btn btn-light border rounded-circle step-btn mb-2" data-step="2">2</button>
+            <span class="text-muted small fw-medium text-center" style="white-space: nowrap">รายละเอียดบริการ</span>
+          </div>
+          <div class="d-flex flex-column align-items-center" style="width: 50px">
+            <button type="button" class="btn btn-light border rounded-circle step-btn mb-2" data-step="3">3</button>
+            <span class="text-muted small fw-medium text-center" style="white-space: nowrap">ประวัติการทำงาน</span>
+          </div>
+        </div>
+      </div>
+
+      <form id="wizardForm" class="needs-validation" novalidate>
+        <div class="step-content mt-5 active" id="step1">
+          <div class="d-flex flex-column justify-content-center align-items-center mb-4">
+            <div
+              class="position-relative d-flex justify-content-center align-items-center bg-light rounded-circle shadow-sm border border-2"
+              style="width: 100px; height: 100px; border-color: #c1d1d9 !important;">
+              <i class="fa-solid fa-user position-absolute" id="profileIcon"
+                style="font-size: 60px; color: #dee2e6; z-index: 1"></i>
+              <img id="previewProfile"
+                class="position-absolute w-100 h-100 top-0 start-0 rounded-circle object-fit-cover" alt="Profile"
+                style="z-index: 2; display: none" />
+              <label for="inputPic"
+                class="position-absolute text-white rounded-circle cursor-pointer shadow d-flex justify-content-center align-items-center"
+                style="background-color: #4987a4; width: 36px; height: 36px; cursor: pointer; z-index: 10; bottom: 0; right: 0; border: 3px solid #ffffff;">
+                <i class="fa-solid fa-camera"></i>
+              </label>
+              <input type="file" id="inputPic" name="profilePic" accept="image/jpeg, image/png, image/webp"
+                class="d-none" onchange="previewImage('inputPic', 'previewProfile')" required />
+            </div>
+            <div class="invalid-feedback text-center mt-3 mb-4" id="picFeedback"
+              style="display: none; font-size: 14px; font-weight: 500;">กรุณาเพิ่มรูปประจำตัว</div>
+          </div>
+
+          <div class="row g-2">
+            <div class="form-input col-md-6">
+              <label class="form-label px-2">ชื่อ <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="inputFirsname" required />
+              <div class="invalid-feedback">กรุณากรอกชื่อ</div>
+            </div>
+            <div class="form-input col-md-6">
+              <label class="form-label px-2">นามสกุล <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="inputLastname" required />
+              <div class="invalid-feedback">กรุณากรอกนามสกุล</div>
+            </div>
+            <div class="form-input col-md-12">
+              <label class="form-label px-2">อีเมล <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" id="inputEmail" placeholder="example@gmail.com" required />
+              <div class="invalid-feedback">กรุณากรอกอีเมล</div>
+            </div>
+            <div class="form-input col-md-6">
+              <label class="form-label">เลขที่ใบอนุญาตทนายความ <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="inputLicNum" required />
+              <div class="invalid-feedback">กรุณากรอกเลขที่ใบอนุญาต</div>
+            </div>
+            <div class="form-input col-md-6">
+              <label class="form-label">ใบอนุญาตทนายความ <span class="text-danger">*</span></label>
+              <input type="file" class="form-control" id="LicFile" accept=".pdf, image/jpeg, image/png, image/webp"
+                required />
+              <div class="invalid-feedback">กรุณาเพิ่มไฟล์</div>
+            </div>
+            <div class="form-input col-md-6">
+              <label class="form-label px-2">สร้างรหัสผ่าน <span class="text-danger">*</span></label>
+              <div class="position-relative">
+                <input type="password" class="form-control password-input" id="inputPassword" required
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}"
+                  title="รหัสผ่านต้องประกอบไปด้วย A-Z, a-z, 0-9 อย่างน้อย 8 ตัว" />
+                <i class="fa-solid fa-eye position-absolute text-secondary d-none toggle-password-icon"
+                  id="togglePassword" style="cursor: pointer; z-index: 10"></i>
+                <div class="invalid-feedback" id="passwordFeedback"></div>
+              </div>
+              <div class="progress mt-2" style="height: 6px; background-color: #e9ecef; border-radius: 4px">
+                <div id="passwordStrengthBar" class="progress-bar" role="progressbar"
+                  style="width: 0%; transition: width 0.3s ease"></div>
+              </div>
+              <small class="text-muted d-block mt-2 fw-medium" style="font-size: 0.55rem;">* รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วย [A-Z], [a-z], [0-9], ! @ # $ % ^ & * ( ) _ - + = { } [ ] : ; " ' &lt; &gt; , . ? / \ | ~ </small>
+            </div>
+            <div class="form-input col-md-6">
+              <label class="form-label px-2 fw-semibold">ยืนยันรหัสผ่าน <span class="text-danger">*</span></label>
+              <div class="position-relative">
+                <input type="password" class="form-control password-input" id="inputConfirmPassword" required />
+                <i class="fa-solid fa-eye position-absolute text-secondary d-none toggle-password-icon"
+                  id="toggleConfirmPassword" style="cursor: pointer; z-index: 10"></i>
+              </div>
+              <div class="invalid-feedback" id="confirmPassFeedback">รหัสผ่านไม่ตรงกัน</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-content d-none mt-5" id="step2">
+          <div class="row g-3">
+            <div class="form-input col-md-4">
+              <label class="form-label">รหัสไปรษณีย์ <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="inputZipcode" pattern="[0-9]{5}" required />
+              <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์ 5 หลัก</div>
+            </div>
+
+            <div class="form-input col-md-4">
+              <label class="form-label">จังหวัด <span class="text-danger">*</span></label>
+              <select class="form-select" id="inputProvince" required>
+                <option value="">- เลือกจังหวัด -</option>
+              </select>
+              <div class="invalid-feedback">กรุณาเลือกจังหวัด</div>
+            </div>
+
+            <div class="form-input col-md-4">
+              <label class="form-label">อำเภอ/เขต <span class="text-danger">*</span></label>
+              <select class="form-select" id="inputDistrict" required disabled>
+                <option value="">- เลือกอำเภอ/เขต -</option>
+              </select>
+              <div class="invalid-feedback">กรุณาเลือกอำเภอ/เขต</div>
+            </div>
+
+            <div class="form-input col-md-4">
+              <label class="form-label">ตำบล/แขวง <span class="text-danger">*</span></label>
+              <select class="form-select" id="inputSubDistrict" required disabled>
+                <option value="">- เลือกตำบล/แขวง -</option>
+              </select>
+              <div class="invalid-feedback">กรุณาเลือกตำบล/แขวง</div>
+            </div>
+
+            <div class="form-input col-md-4">
+              <label class="form-label">ถนน (ถ้ามี)</label>
+              <input type="text" class="form-control" id="inputRoad" />
+            </div>
+
+            <div class="form-input col-md-4">
+              <label class="form-label">ซอย/ตรอก (ถ้ามี)</label>
+              <input type="text" class="form-control" id="inputSoi" />
+            </div>
+
+            <div class="form-input col-md-6">
+              <label class="form-label">หมู่ที่ (ถ้ามี)</label>
+              <input type="text" class="form-control" id="inputMoo" />
+            </div>
+
+            <div class="form-input col-md-6">
+              <label class="form-label">เลขที่ <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="inputHouseNo" required />
+              <div class="invalid-feedback">กรุณากรอกบ้านเลขที่</div>
+            </div>
+
+            <div class="form-input col-md-12">
+              <label class="form-label">เบอร์โทรศัพท์ <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control" id="inputPhone" pattern="[0-9]{10}" maxlength="10" required />
+              <div class="invalid-feedback">กรุณากรอกเบอร์โทรศัพท์ 10 หลัก</div>
+            </div>
+
+            <div class="form-input col-md-6">
+              <label class="form-label">Line ID (หากมี)</label>
+              <input type="text" class="form-control" id="inputLineId" />
+            </div>
+
+            <div class="form-input col-md-6">
+              <label class="form-label">Facebook URL (หากมี)</label>
+              <input type="url" class="form-control" id="inputFacebook" />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">หมวดหมู่คดี <span class="text-danger">*</span></label>
+            <div id="categoryContainer" class="d-flex flex-wrap gap-2 p-3 border"
+              style="min-height: 70px; border-radius: 10px;">
+            </div>
+            <div class="border-top border-1 pt-3 mt-3 mb-4">
+              <button type="button" class="btn btn-link text-decoration-none btn-add-tag" data-bs-toggle="modal" data-bs-target="#addSpecialtyModal">
+                <i class="fa-solid fa-circle-plus"></i>เพิ่มหมวดหมู่คดี
+              </button>
+              <input type="hidden" id="selectedCategories" required />
+              <div class="invalid-feedback" id="categoryFeedback">กรุณเลือกหมวดหมู่คดีย่างน้อย 1 หมวดหมู่</div>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">ค่าบริการ (บาท) <span class="text-danger">*</span></label>
+              <select class="form-select w-50" id="inputFeeRate" name="fee_rate">
+                <option value="" selected disabled>กรุณาเลือกค่าบริการ</option>
+                <option value="0-1000">0 - 1,000</option>
+                <option value="1001-3000">1,000 - 3,000</option>
+                <option value="3001-5000">3,000 - 5,000</option>
+                <option value="5000+">5,000 ขึ้นไป</option>
+              </select>
+            </div>
+
+            <div class="mt-4">
+              <label class="form-label">เวลาทำการ <span class="text-danger">*</span></label>
+              <div class="mt-3" id="scheduleContainer"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-content d-none mt-5" id="step3">
+            <div class="mb-5">
+              <div class="mb-2">
+                <label class="form-label mb-0">ประวัติการศึกษา</label>
+              </div>
+              <div id="educationContainer" class="border-0">
+                <div class="text-center text-muted py-4 bg-white border rounded" id="noEduText">ยังไม่มีประวัติการศึกษา
+                </div>
+              </div>
+              <div class="border-top border-1 pt-3 mt-3">
+                <button type="button" class="btn btn-link text-decoration-none btn-add-tag" onclick="addEducationRow()">
+                  <i class="fa-solid fa-circle-plus"></i>เพิ่ม
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="mb-2">
+                <label class="form-label mb-0">ประสบการณ์ทำงาน</label>
+              </div>
+              <div id="workContainer" class="border-0">
+                <div class="text-center text-muted py-4 bg-white border rounded" id="noWorkText">ยังไม่มีประวัติการทำงาน
+                </div>
+              </div>
+              <div class="border-top border-1 pt-3 mt-3">
+                <button type="button" class="btn btn-link text-decoration-none btn-add-tag" onclick="addWorkRow()">
+                  <i class="fa-solid fa-circle-plus"></i>เพิ่ม
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+            <a href="/lawyers" class="btn btn-link text-decoration-none px-0" id="btnCancel"><i
+                class="fa-solid fa-chevron-left"></i> กลับหน้าหลัก</a>
+            <div>
+              <button type="button" class="btn rounded-pill d-none me-2" id="btnPrev"
+                style="background-color: #ffffff; border: 2px solid #DEE2E6; color: #6c757d">ย้อนกลับ</button>
+              <button type="button" class="btn rounded-pill" id="btnNext">ถัดไป</button>
+              <button type="submit" class="btn rounded-pill d-none" id="btnSubmit">
+                <span class="spinner-border spinner-border-sm d-none" id="submitSpinner" role="status"
+                  aria-hidden="true"></span>
+                <span id="submitText">สมัครสมาชิก</span>
+              </button>
+            </div>
+          </div>
+      </form>
+    </div>
+  </main>
+
+  <div class="modal fade" id="addSpecialtyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-card border-0 shadow-lg" style="border-radius: 12px">
+        <div class="modal-header border-bottom-0">
+          <h5 class="box-category">เลือกหมวดหมู่คดี</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body pt-0">
+          <select class="form-select mb-3" id="selectSpecialty" onchange="toggleCustomInput()">
+            <option value="">กำลังโหลดข้อมูล...</option>
+          </select>
+          <div id="newSpecialtyContainer" class="d-none mt-3">
+            <input type="text" class="form-control" id="inputNewSpecialty"
+              placeholder="พิมพ์ชื่อหมวดหมู่ใหม่ เช่น คดีไซเบอร์" />
+          </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-box-add rounded-pill" onclick="addSpecialty()">เพิ่ม</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/lawyerFunctions.js"></script>
+  <script src="/js/lawyer_signup.js"></script>
+</body>
+
+</html>
