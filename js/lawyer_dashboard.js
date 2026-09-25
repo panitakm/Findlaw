@@ -67,9 +67,9 @@ window.onload = async () => {
             return;
         }
 
-        if (p.status === 'approved' && sessionStorage.getItem('lawyerApprovedNotified') !== 'true') {
+        if (p.status === 'approved' && localStorage.getItem('lawyerApprovedNotified_' + lawyerId) !== 'true') {
             window.showBSAlert('ยินดีด้วย!', 'บัญชีของคุณได้รับการอนุมัติแล้ว', 'success');
-            sessionStorage.setItem('lawyerApprovedNotified', 'true');
+            localStorage.setItem('lawyerApprovedNotified_' + lawyerId, 'true');
         }
 
         document.getElementById('dashName').textContent = (p.full_name || '-');

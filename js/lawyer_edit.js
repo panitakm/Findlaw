@@ -94,15 +94,15 @@ window.onload = async () => {
         }
         document.getElementById('licenseFileSection').innerHTML = `
             <label class="form-label">ใบอนุญาตทนายความ</label>
-            <div class="form-control form-control-custom readonly-field bg-light d-flex align-items-center text-muted">
+            <div class="form-control form-control-custom readonly-field d-flex align-items-center text-muted" style="background-color: #e9ecef !important; pointer-events: none;">
                 <i class="fa-regular fa-file-pdf text-danger me-2"></i>
-                <span>${fileNameText}</span>
+                <span class="text-truncate">${fileNameText}</span>
             </div>
         `;
     } else {
         document.getElementById('licenseFileSection').innerHTML = `
             <label class="form-label">ใบอนุญาตทนายความ</label>
-            <div class="form-control form-control-custom readonly-field bg-light d-flex align-items-center text-muted">
+            <div class="form-control form-control-custom readonly-field d-flex align-items-center text-muted" style="background-color: #e9ecef !important; pointer-events: none;">
                 <i class="fa-solid fa-file-circle-xmark me-2"></i>
                 <span>ยังไม่มีไฟล์ใบอนุญาต</span>
             </div>
