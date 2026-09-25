@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../config/db');
-const { saveFileFromBase64 } = require('../utils/fileUtils');
+const { uploadBase64ToCloudinary } = require('../utils/cloudinaryUtils');
 const saltRounds = 10;
 
 router.post('/lawyer/register', async (req, res) => {
@@ -36,6 +36,17 @@ router.post('/lawyer/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(inputPassword, saltRounds);
         let dbImgePath = profilePic || null;
         let dbLicFilePath = LicFile || null;
+
+        try {
+            if (profilePic && profilePic.startsWith('data:')) {
+                dbImgePath = await uploadBase64ToCloudinary(profilePic, 'profile');
+            }
+            if (LicFile && LicFile.startsWith('data:')) {
+                dbLicFilePath = await uploadBase64ToCloudinary(LicFile, 'license');
+            }
+        } catch (uploadError) {
+            return res.status(400).json({ error: uploadError.message });
+        }
 
         const connection = db.promise();
         await connection.query('BEGIN');
@@ -219,6 +230,17 @@ router.put('/lawyer/lawyer/save-profile/:id', async (req, res) => {
     try {
         let finalImagePath = data.image_path || null;
         let finalLicensePath = data.license_file || null;
+
+        try {
+            if (finalImagePath && finalImagePath.startsWith('data:')) {
+                finalImagePath = await uploadBase64ToCloudinary(finalImagePath, 'profile');
+            }
+            if (finalLicensePath && finalLicensePath.startsWith('data:')) {
+                finalLicensePath = await uploadBase64ToCloudinary(finalLicensePath, 'license');
+            }
+        } catch (uploadError) {
+            return res.status(400).json({ error: 'Image upload failed' });
+        }
 
         await db.promise().query(
             `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, image_path = ? 

@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
-const { saveFileFromBase64 } = require('../utils/fileUtils');
+const { uploadBase64ToCloudinary } = require('../utils/cloudinaryUtils');
 const { authenticateToken } = require('../middleware/auth');
 const saltRounds = 10;
 
@@ -22,11 +22,10 @@ router.post('/user/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(inputPassword, saltRounds);
 
-        // let finalProfilePic = profilePic;
-        // if (finalProfilePic && finalProfilePic.startsWith('data:')) {
-        //     finalProfilePic = await saveFileFromBase64(finalProfilePic, 'user_profile');
-        // }
-        let finalProfilePic = profilePic; // รับ Base64 สตริงยาวๆ มาเก็บไว้
+        let finalProfilePic = profilePic || null;
+        if (finalProfilePic && finalProfilePic.startsWith('data:')) {
+            finalProfilePic = await uploadBase64ToCloudinary(finalProfilePic, 'user_profile');
+        }
 
         const sqlInsertUser = `
             INSERT INTO users (first_name, last_name, email, password, image_path, role) 
@@ -68,6 +67,9 @@ router.put('/users/update/:id', async (req, res) => {
 
     try {
         let finalImagePath = image_path || null;
+        if (finalImagePath && finalImagePath.startsWith('data:')) {
+            finalImagePath = await uploadBase64ToCloudinary(finalImagePath, 'user_profile');
+        }
 
         await db.promise().query(
             `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, image_path = COALESCE(?, image_path) WHERE id = ?`,
