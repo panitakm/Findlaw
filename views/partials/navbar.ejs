@@ -6,7 +6,7 @@
             
             <nav class="header-nav d-none d-lg-block position-absolute start-50 translate-middle-x">
                 <ul class="nav nav-pills gap-1 align-items-center mb-0">
-                    <li class="nav-item"><a href="/" class="nav-link fw-semibold text-dark px-3 py-2" style="border-radius: 20px; background: rgba(0,0,0,0.05); font-size: 0.95rem;">หน้าแรก</a></li>
+                    <li class="nav-item"><a href="/" class="nav-link fw-semibold text-muted px-3 py-2" style="border-radius: 20px; font-size: 0.95rem;">หน้าแรก</a></li>
                     <li class="nav-item"><a href="/lawyers" class="nav-link fw-semibold text-muted px-3 py-2" style="border-radius: 20px; font-size: 0.95rem;">ทนายความทั้งหมด</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold text-muted px-3 py-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 20px; font-size: 0.95rem;">
@@ -25,3 +25,24 @@
             
         </div>
     </nav>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.header-nav .nav-item > a.nav-link');
+            
+            navLinks.forEach(link => {
+                // Check if the link href matches the current path exactly (or starts with for dropdowns if needed)
+                const linkPath = link.getAttribute('href');
+                if (linkPath === currentPath) {
+                    link.classList.remove('text-muted');
+                    link.classList.add('text-dark');
+                    link.style.background = 'rgba(0,0,0,0.05)';
+                } else if (linkPath !== '#') {
+                    // Reset others
+                    link.classList.remove('text-dark');
+                    link.classList.add('text-muted');
+                    link.style.background = 'transparent';
+                }
+            });
+        });
+    </script>
