@@ -67,6 +67,18 @@ router.get('/admin/users', authenticateAdmin, async (req, res) => {
     }
 });
 
+router.put('/admin/profile/color', authenticateAdmin, async (req, res) => {
+    const { color } = req.body;
+    try {
+        if (!color) return res.status(400).json({ error: 'Color is required' });
+        await db.promise().query('UPDATE users SET image_path = ? WHERE id = ?', [color, req.user.userId]);
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 router.post('/admin/users', authenticateAdmin, async (req, res) => {
     const { first_name, last_name, email, role, status, password } = req.body;
     try {
