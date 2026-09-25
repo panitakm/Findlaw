@@ -363,90 +363,9 @@ section.container h5.text-center {
     box-shadow: 0 4px 10px rgba(26, 67, 90, 0.3);
 }
 
-
-@media (max-width: 767.98px) {
-
-    /* Navbar text */
-    .navbar-brand span {
-        font-size: 1rem !important;
-    }
-
-    /* Hero Banner */
-    .title {
-        padding: 100px 0 100px;
-    }
-
-    .title h1 {
-        font-size: 1.8rem;
-    }
-
-    .title p.subtitle {
-        font-size: 0.95rem;
-    }
-
-    /* Search Container */
-    .search-container {
-        padding: 25px 20px;
-        margin-top: -50px;
-        border-radius: 20px;
-    }
-
-    .form-control,
-    .form-select {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-    }
-
-    .btn-primary-custom {
-        padding: 10px;
-        font-size: 0.95rem;
-        width: 100%;
-    }
-
-    /* Category Grid */
-    #categoryGrid .col>a {
-        padding: 1rem 0.5rem !important;
-    }
-
-    #categoryGrid .col>a>div:first-child {
-        width: 45px !important;
-        height: 45px !important;
-        margin-bottom: 0.5rem !important;
-    }
-
-    #categoryGrid .col>a>div:first-child i {
-        font-size: 1.5rem !important;
-    }
-
-    #categoryGrid .col>a .small {
-        font-size: 0.8rem;
-    }
-
-    /* Swiper Slider */
-    .swiper-slide {
-        width: 280px !important;
-    }
-
-    .swiper-button-next,
-    .swiper-button-prev {
-        display: none !important;
-        /* Hide arrows on mobile, rely on swipe */
-    }
-}
-@media (max-width: 768px) {
-    .search-container {
-        padding: 15px;
-        margin-top: -15px;
-    }
-    .form-select,
-    .dropdown-menu,
-    #provinceBtn {
-        min-width: 0 !important;
-        width: 100% !important;
-    }
-}
-
-/* รั้วกั้นสำหรับ Tablet */
+/* ============================================= */
+/* Responsive: Tablet (max-width: 992px)         */
+/* ============================================= */
 @media (max-width: 992px) {
     .search-container {
         padding: 20px !important;
@@ -454,31 +373,231 @@ section.container h5.text-center {
     }
 }
 
-/* รั้วกั้นสำหรับ Mobile (เพิ่มเติม) */
+/* ============================================= */
+/* Responsive: Tablet Small (max-width: 768px)   */
+/* ============================================= */
 @media (max-width: 768px) {
+    /* Navbar */
+    .navbar-brand span {
+        font-size: 1rem !important;
+    }
+
+    /* Container */
     .container {
-        padding-left: 20px !important;
-        padding-right: 20px !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
         width: 100% !important;
         max-width: 100% !important;
     }
+
+    /* Hero Banner */
     .title {
-        padding: 60px 0 30px !important;
+        padding: 80px 0 60px !important;
+        border-bottom-left-radius: 40px !important;
+        border-bottom-right-radius: 40px !important;
+    }
+    .title h1 {
+        font-size: 1.5rem !important;
+        min-height: 2rem !important;
+    }
+    .title p.subtitle {
+        font-size: 0.85rem !important;
+        padding: 0 1rem;
+    }
+
+    /* Search Container */
+    .search-container {
+        padding: 18px 16px !important;
+        margin-top: -20px !important;
+        border-radius: 16px !important;
+        width: 100% !important;
+    }
+    .form-label {
+        font-size: 0.85rem !important;
+        margin-bottom: 4px !important;
+        margin-left: 6px !important;
+    }
+    .form-control, .form-select {
+        padding: 8px 10px !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+    }
+    .input-group-text {
+        padding: 6px 10px !important;
+        font-size: 0.85rem !important;
+    }
+    .btn-search {
+        padding: 10px 30px !important;
+        font-size: 0.9rem !important;
+        width: 100% !important;
+        border-radius: 10px !important;
+    }
+    .form-select, .dropdown-menu, #provinceBtn {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Category Grid */
+    section.container h5.text-center {
+        font-size: 1.5rem !important;
+    }
+    #categoryGrid {
+        margin-top: 30px !important;
+    }
+    #categoryGrid .col>a {
+        padding: 0.8rem 0.4rem !important;
+        border-radius: 12px !important;
+    }
+    #categoryGrid .col>a>div:first-child {
+        width: 40px !important;
+        height: 40px !important;
+        margin-bottom: 0.4rem !important;
+    }
+    #categoryGrid .col>a>div:first-child i {
+        font-size: 1.2rem !important;
+    }
+    #categoryGrid .col>a .small {
+        font-size: 0.72rem !important;
+    }
+
+    /* Swiper / Lawyer Cards */
+    .swiper-button-next,
+    .swiper-button-prev {
+        display: none !important;
+    }
+    .lawyer-slide-item {
+        width: 220px !important;
+        margin-top: 20px !important;
+    }
+    .lawyer-card-img {
+        height: 150px !important;
+    }
+    .lawyer-card-body {
+        padding: 0.8rem !important;
+    }
+    .lawyer-card-title {
+        font-size: 0.9rem !important;
+    }
+    .lawyer-card-info {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    .lawyer-card-btn {
+        font-size: 0.8rem !important;
+        padding: 0.3rem 0.8rem !important;
+    }
+
+    /* Lawyer Section */
+    .lawyer-section::before {
+        border-top-left-radius: 35px !important;
+        border-top-right-radius: 35px !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    .container {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+    .title {
+        padding: 65px 0 45px !important;
+        border-bottom-left-radius: 30px !important;
+        border-bottom-right-radius: 30px !important;
+    }
+    .title::before {
+        width: 300px !important;
+        height: 300px !important;
+    }
+    .title::after {
+        width: 250px !important;
+        height: 250px !important;
     }
     .title h1 {
         font-size: 1.2rem !important;
+        min-height: 1.6rem !important;
+        letter-spacing: 0 !important;
     }
     .title p.subtitle {
-        font-size: 0.8rem !important;
+        font-size: 0.75rem !important;
+        margin-top: 8px !important;
     }
     .search-container {
-        padding: 12px !important;
+        padding: 14px 12px !important;
         margin-top: -15px !important;
-        border-radius: 12px !important;
-        width: 100% !important;
+        border-radius: 14px !important;
     }
-    .form-control, .form-select, .btn, .input-group-text {
+    .form-label {
+        font-size: 0.78rem !important;
+        margin-bottom: 3px !important;
+        margin-left: 4px !important;
+    }
+    .form-control, .form-select {
+        padding: 7px 8px !important;
+        font-size: 0.8rem !important;
+    }
+    .input-group-text {
+        padding: 5px 8px !important;
+        font-size: 0.8rem !important;
+    }
+    .btn-search {
+        padding: 8px 20px !important;
         font-size: 0.85rem !important;
-        padding: 8px 10px !important;
+    }
+
+    /* Category Section */
+    section.container h5.text-center {
+        font-size: 1.2rem !important;
+    }
+    #categoryGrid {
+        margin-top: 20px !important;
+    }
+    #categoryGrid .col>a {
+        padding: 0.6rem 0.3rem !important;
+    }
+    #categoryGrid .col>a>div:first-child {
+        width: 35px !important;
+        height: 35px !important;
+        margin-bottom: 0.3rem !important;
+    }
+    #categoryGrid .col>a>div:first-child i {
+        font-size: 1rem !important;
+    }
+    #categoryGrid .col>a .small {
+        font-size: 0.65rem !important;
+    }
+
+    /* Lawyer Cards */
+    .lawyer-slide-item {
+        width: 180px !important;
+        margin-top: 15px !important;
+    }
+    .lawyer-card-img {
+        height: 120px !important;
+    }
+    .lawyer-card-body {
+        padding: 0.6rem !important;
+    }
+    .lawyer-card-title {
+        font-size: 0.82rem !important;
+        margin-bottom: 0.4rem !important;
+    }
+    .lawyer-card-info {
+        font-size: 0.7rem !important;
+    }
+    .lawyer-card-btn {
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.6rem !important;
+    }
+    .lawyer-card-footer {
+        padding: 0 0.6rem 0.6rem !important;
+    }
+
+    /* Navbar buttons */
+    .btn-register, .btn-login {
+        font-size: 0.75rem !important;
+        padding: 4px 10px !important;
     }
 }

@@ -155,27 +155,129 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
 }
 
-/* รั้วกั้นสำหรับ Mobile/Tablet */
-@media (max-width: 1024px) {
+/* ============================================= */
+/* Responsive: Tablet (max-width: 768px)         */
+/* ============================================= */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem 0;
+    }
     .container {
         padding: 1.5rem !important;
         margin: 0 auto !important;
-        max-width: 450px !important;
+        max-width: 420px !important;
         width: calc(100% - 2rem) !important;
-        border-radius: 20px !important;
-    }
-    .fs-3 {
-        font-size: 1.5rem !important;
+        border-radius: 18px !important;
     }
     .header {
-        font-size: 1.4rem !important;
+        font-size: 1.5rem !important;
+        margin-top: 8px !important;
+        margin-bottom: 8px !important;
     }
-    .form-control, .btn {
-        font-size: 0.85rem !important;
-        height: auto !important;
-        padding: 8px 12px !important;
+    .form-control {
+        font-size: 0.88rem !important;
+        height: 38px !important;
+        border-radius: 8px !important;
+    }
+    .btn {
+        font-size: 0.95rem !important;
+        padding: 10px 24px !important;
     }
     .form-input {
         margin-bottom: 10px !important;
+        font-size: 13px !important;
+    }
+    .link {
+        font-size: 11px !important;
+    }
+    .link p {
+        white-space: normal !important;
+        text-align: center !important;
+        line-height: 1.8 !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    body {
+        padding: 0.5rem 0;
+        align-items: flex-start !important;
+        padding-top: 1rem;
+    }
+    .container {
+        padding: 1.2rem 1rem !important;
+        margin: 0 auto !important;
+        max-width: calc(100% - 1.5rem) !important;
+        width: calc(100% - 1.5rem) !important;
+        border-radius: 16px !important;
+    }
+    .header {
+        font-size: 1.3rem !important;
+        margin-top: 6px !important;
+        margin-bottom: 6px !important;
+    }
+    /* Profile upload circle */
+    .col-12 .position-relative.d-flex.rounded-circle {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    .col-12 .position-relative.d-flex.rounded-circle #profileIcon {
+        font-size: 45px !important;
+    }
+    .col-12 .position-relative.d-flex.rounded-circle label {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.7rem !important;
+    }
+    .form-input {
+        margin-bottom: 8px !important;
+        font-size: 12px !important;
+    }
+    .form-label {
+        font-size: 12px !important;
+        padding: 0 4px !important;
+    }
+    .form-control {
+        font-size: 0.82rem !important;
+        height: 34px !important;
+        padding: 6px 10px !important;
+        border-radius: 8px !important;
+    }
+    .btn {
+        font-size: 0.88rem !important;
+        padding: 8px 16px !important;
+        border-radius: 40px !important;
+    }
+    .invalid-feedback {
+        font-size: 0.72rem !important;
+        margin-left: 5px !important;
+    }
+    .link {
+        font-size: 10.5px !important;
+    }
+    .link a {
+        margin-left: 3px !important;
+        margin-right: 3px !important;
+    }
+    .link p {
+        white-space: normal !important;
+        text-align: center !important;
+        line-height: 1.7 !important;
+        font-size: 10.5px !important;
+    }
+    /* Password hint text */
+    .text-muted.d-block.mt-2.fw-medium {
+        font-size: 0.48rem !important;
+        line-height: 1.4 !important;
+    }
+    .progress {
+        height: 4px !important;
+    }
+    .toggle-password-icon {
+        top: 16px !important;
+        right: 12px !important;
+        font-size: 0.85rem !important;
     }
 }

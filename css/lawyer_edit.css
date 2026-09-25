@@ -223,3 +223,93 @@ select.form-select option {
     display: block !important;
 }
 
+/* ============================================= */
+/* Responsive: Tablet (max-width: 768px)         */
+/* ============================================= */
+@media (max-width: 768px) {
+    .card-header-custom {
+        font-size: 0.95rem !important;
+    }
+    .form-label {
+        font-size: 0.85rem !important;
+    }
+    .form-control-custom {
+        padding: 8px 12px !important;
+        font-size: 0.88rem !important;
+    }
+    .btn-save-custom, .btn-cancel {
+        width: 130px !important;
+        font-size: 0.85rem !important;
+        padding: 8px 0 !important;
+    }
+    .category-badge {
+        font-size: 0.82rem !important;
+        padding: 6px 12px !important;
+    }
+    .box-category {
+        font-size: 1.05rem !important;
+    }
+    .btn-box-add {
+        padding: 6px 10px !important;
+        font-size: 0.82rem !important;
+        min-width: 85px !important;
+    }
+    .btn-add-tag {
+        font-size: 0.85rem !important;
+    }
+    .avatar-edit-badge {
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    .card-header-custom {
+        font-size: 0.88rem !important;
+    }
+    .form-label {
+        font-size: 0.8rem !important;
+        margin: 0 0 3px 3px !important;
+    }
+    .form-control-custom {
+        padding: 7px 10px !important;
+        font-size: 0.82rem !important;
+        border-radius: 8px !important;
+    }
+    .btn-save-custom, .btn-cancel {
+        width: 110px !important;
+        font-size: 0.8rem !important;
+        padding: 7px 0 !important;
+        border-radius: 10px !important;
+    }
+    .category-badge {
+        font-size: 0.75rem !important;
+        padding: 5px 10px !important;
+        border-radius: 16px !important;
+    }
+    .box-category {
+        font-size: 0.95rem !important;
+    }
+    .btn-box-add {
+        padding: 5px 8px !important;
+        font-size: 0.78rem !important;
+        min-width: 70px !important;
+    }
+    .btn-add-tag {
+        font-size: 0.8rem !important;
+    }
+    .tag-remove-icon {
+        font-size: 0.8rem !important;
+    }
+    .avatar-edit-badge {
+        width: 28px !important;
+        height: 28px !important;
+        border-width: 2px !important;
+    }
+    .btn-delete {
+        font-size: 1rem !important;
+    }
+}

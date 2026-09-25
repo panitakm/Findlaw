@@ -108,7 +108,6 @@ main {
     color: #1A435A;
 }
 
-
 .dash-info-label {
     color: #6c757d;
     margin-bottom: 0.25rem;
@@ -118,7 +117,6 @@ main {
 .dash-list-title {
     font-weight: 600;
 }
-
 
 .dash-value-text, .dash-value-link, .dash-value-link a {
     font-size: 0.95rem;
@@ -152,55 +150,6 @@ main {
     transition: all 0.2s ease;
 }
 
-.btn-edit-profile:hover {
-    background-color: #4987A4 !important;
-    color: white !important;
-}
-
-.category-badge {
-    background-color: #ddebf0;
-    color: #1A435A !important;
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 12px 15px;
-    border: none;
-    transition: transform 0.2s;
-}
-.dash-main-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #1A435A;
-}
-
-.dash-topic-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1A435A;
-}
-
-.dash-info-label {
-    color: #6c757d;
-    margin-bottom: 0.25rem;
-    font-weight: 600;
-}
-
-.dash-list-title {
-    font-weight: 600;
-}
-
-.dash-value-text, .dash-value-link, .dash-value-link a {
-    font-size: 0.95rem;
-    color: #1A435A;
-    font-weight: 400; 
-    margin-bottom: 0;
-    text-decoration: none;
-}
-
-.btn-edit-profile {
-    border: 1px solid #4987A4;
-    color: #4987A4;
-    background-color: white;
-}
 .btn-edit-profile:hover {
     background-color: #4987A4 !important;
     color: white !important;
@@ -344,7 +293,9 @@ main {
     color: #6b21a8; /* purple-800 for contrast */
 }
 
-/* รั้วกั้นสำหรับ Tablet (iPad) และ Mobile */
+/* ============================================= */
+/* Responsive: Tablet (max-width: 992px)         */
+/* ============================================= */
 @media (max-width: 992px) {
     /* 1. เคลียร์ระยะขอบเนื้อหาหลักบนแท็บเล็ต ให้ตารางขยายเต็ม 100% */
     main.col-md-9, main.col-lg-10 {
@@ -415,5 +366,140 @@ main {
     }
     .position-relative[style*="width: 180px"] i {
         font-size: 50px !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Tablet Small (max-width: 768px)   */
+/* ============================================= */
+@media (max-width: 768px) {
+    .user-header-bar {
+        padding: 0.8rem 1rem !important;
+    }
+    .glass-card {
+        border-radius: 12px !important;
+        padding: 0.8rem !important;
+    }
+    .custom-table th, .custom-table td {
+        padding: 0.6rem !important;
+        font-size: 0.82rem !important;
+    }
+    .badge-status {
+        font-size: 0.72rem !important;
+        min-width: 70px !important;
+        padding: 3px 6px !important;
+    }
+    .btn-action {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 8px !important;
+    }
+    .dash-main-title {
+        font-size: 1rem !important;
+    }
+    .dash-topic-title {
+        font-size: 0.88rem !important;
+    }
+    .dash-info-label {
+        font-size: 0.82rem !important;
+    }
+    .dash-value-text, .dash-value-link, .dash-value-link a {
+        font-size: 0.85rem !important;
+    }
+    .btn-edit-profile {
+        font-size: 0.82rem !important;
+        padding: 6px 12px !important;
+    }
+    .category-badge {
+        font-size: 0.78rem !important;
+        padding: 8px 10px !important;
+    }
+    .detail-section-title {
+        font-size: 1rem !important;
+    }
+    .detail-label {
+        font-size: 0.85rem !important;
+    }
+    .detail-value {
+        font-size: 0.82rem !important;
+    }
+    .custom-nav-tabs .nav-link {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.85rem !important;
+    }
+    .btn-primary-admin, .btn-outline-admin {
+        font-size: 0.82rem !important;
+        padding: 6px 12px !important;
+    }
+    .form-select-admin {
+        font-size: 0.85rem !important;
+    }
+    .btn-soft-solid-danger, .btn-soft-solid-success, .btn-soft-solid-warning {
+        font-size: 0.82rem !important;
+        padding: 6px 12px !important;
+    }
+    .modal-dialog {
+        margin: 0.5rem !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    .user-header-bar {
+        padding: 0.6rem 0.8rem !important;
+    }
+    .glass-card {
+        border-radius: 10px !important;
+        padding: 0.6rem !important;
+    }
+    .custom-table th, .custom-table td {
+        padding: 0.5rem !important;
+        font-size: 0.78rem !important;
+    }
+    .custom-table {
+        min-width: 650px !important;
+    }
+    .badge-status {
+        font-size: 0.68rem !important;
+        min-width: 60px !important;
+    }
+    .btn-action {
+        width: 26px !important;
+        height: 26px !important;
+        border-radius: 6px !important;
+        font-size: 0.75rem !important;
+    }
+    .dash-main-title {
+        font-size: 0.92rem !important;
+    }
+    .dash-topic-title {
+        font-size: 0.82rem !important;
+    }
+    .detail-section-title {
+        font-size: 0.92rem !important;
+    }
+    .detail-label {
+        font-size: 0.8rem !important;
+    }
+    .detail-value {
+        font-size: 0.78rem !important;
+    }
+    .custom-nav-tabs .nav-link {
+        padding: 0.4rem 0.75rem !important;
+        font-size: 0.78rem !important;
+    }
+    .btn-primary-admin, .btn-outline-admin {
+        font-size: 0.78rem !important;
+        padding: 5px 10px !important;
+    }
+    .btn-soft-solid-danger, .btn-soft-solid-success, .btn-soft-solid-warning {
+        font-size: 0.78rem !important;
+        padding: 5px 10px !important;
+    }
+    .badge-role-lawyer, .badge-role-user {
+        font-size: 0.7rem !important;
+        padding: 2px 6px !important;
     }
 }

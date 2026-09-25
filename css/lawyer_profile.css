@@ -254,3 +254,213 @@ body {
     padding-left: 0;
 }
 
+/* ============================================= */
+/* Responsive: Tablet (max-width: 768px)         */
+/* ============================================= */
+@media (max-width: 768px) {
+    /* Header card layout */
+    .lawyer-header-container {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center;
+        padding: 1.2rem !important;
+    }
+    /* Lawyer image */
+    .lawyer-img-wrapper {
+        width: 180px !important;
+        height: 200px !important;
+        border-radius: 16px !important;
+        margin: 0 auto !important;
+    }
+    .lawyer-info-wrapper {
+        margin-left: 0 !important;
+        align-items: center !important;
+        text-align: center;
+    }
+    .lawyer-name {
+        font-size: 1.6rem !important;
+        text-align: center;
+    }
+    .license-container {
+        font-size: 0.75rem !important;
+        padding: 4px 10px !important;
+    }
+    /* Badge expertise tags */
+    .badge-expertise {
+        padding: 8px 10px !important;
+        font-size: 0.78rem !important;
+    }
+    /* Review summary */
+    .display-3 {
+        font-size: 2.5rem !important;
+    }
+    /* Cards */
+    .card {
+        border-radius: 14px !important;
+        box-shadow: 0 4px 16px rgba(26, 67, 90, 0.06) !important;
+    }
+    .card .p-4 {
+        padding: 1rem !important;
+    }
+    /* Header title */
+    .header-title {
+        font-size: 1rem !important;
+        padding-bottom: 10px !important;
+    }
+    /* Timeline */
+    .custom-timeline {
+        padding-left: 35px !important;
+    }
+    .custom-timeline::after {
+        left: 18px !important;
+    }
+    .timeline-item::before {
+        left: -21px !important;
+        width: 10px !important;
+        height: 10px !important;
+    }
+    .timeline-title {
+        font-size: 0.92rem !important;
+    }
+    .timeline-date {
+        font-size: 11px !important;
+    }
+    /* Contact list */
+    .contact-list li {
+        font-size: 13px !important;
+        padding: 10px 0 !important;
+    }
+    .contact-icon-box {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        margin-right: 10px !important;
+    }
+    .contact-icon-box i {
+        font-size: 14px !important;
+    }
+    /* Review section */
+    .review-title {
+        font-size: 1.1rem !important;
+    }
+    /* Star rating bars */
+    .d-flex.align-items-center.gap-2 span[style*="width: 100px"] {
+        width: 70px !important;
+    }
+    .d-flex.align-items-center.gap-2 span i {
+        font-size: 0.65rem !important;
+    }
+    /* Review filter */
+    .form-select {
+        min-width: 110px !important;
+        font-size: 0.85rem !important;
+    }
+    /* Modal */
+    .modal-dialog {
+        margin: 0.5rem !important;
+    }
+    /* Back button */
+    .btn-back {
+        width: 34px !important;
+        height: 34px !important;
+    }
+    /* Footer */
+    footer {
+        height: 40px !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    main {
+        padding-top: 75px !important;
+    }
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    .lawyer-header-container {
+        padding: 0.8rem !important;
+    }
+    .lawyer-img-wrapper {
+        width: 150px !important;
+        height: 170px !important;
+    }
+    .lawyer-name {
+        font-size: 1.3rem !important;
+    }
+    .badge-expertise {
+        padding: 6px 8px !important;
+        font-size: 0.72rem !important;
+    }
+    .card {
+        border-radius: 12px !important;
+    }
+    .header-title {
+        font-size: 0.9rem !important;
+        gap: 6px !important;
+    }
+    .custom-timeline {
+        padding-left: 28px !important;
+    }
+    .custom-timeline::after {
+        left: 14px !important;
+        width: 2px !important;
+    }
+    .timeline-item::before {
+        left: -17px !important;
+        width: 8px !important;
+        height: 8px !important;
+    }
+    .timeline-title {
+        font-size: 0.85rem !important;
+    }
+    .timeline-date {
+        font-size: 10px !important;
+    }
+    .contact-list li {
+        font-size: 12px !important;
+        padding: 8px 0 !important;
+    }
+    .contact-icon-box {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        margin-right: 8px !important;
+        border-radius: 8px !important;
+    }
+    .contact-icon-box i {
+        font-size: 12px !important;
+    }
+    /* Review summary */
+    .display-3 {
+        font-size: 2rem !important;
+    }
+    .d-flex.align-items-center.gap-2 span[style*="width: 100px"] {
+        width: 55px !important;
+    }
+    .d-flex.align-items-center.gap-2 span i {
+        font-size: 0.55rem !important;
+    }
+    .form-select {
+        min-width: 95px !important;
+        font-size: 0.8rem !important;
+    }
+    .review-title {
+        font-size: 0.95rem !important;
+    }
+    /* Buttons */
+    .btn-register, .btn-login {
+        font-size: 0.75rem !important;
+        padding: 4px 10px !important;
+    }
+    #btnWriteReview {
+        font-size: 0.8rem !important;
+        padding: 4px 12px !important;
+    }
+    footer {
+        height: 35px !important;
+    }
+}

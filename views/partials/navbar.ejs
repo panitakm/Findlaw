@@ -22,26 +22,79 @@
 
             <div class="d-flex align-items-center gap-2" id="navRightSection">
             </div>
+
+            <!-- Mobile Hamburger Menu -->
+            <button class="btn d-lg-none border-0 p-1 ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavOffcanvas" aria-controls="mobileNavOffcanvas" style="background: transparent; box-shadow: none;">
+                <i class="fa-solid fa-bars fs-5" style="color: #1A435A;"></i>
+            </button>
             
         </div>
     </nav>
+
+    <!-- Mobile Offcanvas Navigation -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileNavOffcanvas" aria-labelledby="mobileNavLabel" style="max-width: 280px;">
+        <div class="offcanvas-header border-bottom pb-3">
+            <h5 class="offcanvas-title fw-bold" id="mobileNavLabel" style="color: #1A435A;">FindLawyer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body pt-3">
+            <ul class="nav flex-column gap-1" id="mobileNavLinks">
+                <li class="nav-item">
+                    <a href="/" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                        <i class="fa-solid fa-house me-2" style="color: #4987A4;"></i>หน้าแรก
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lawyers" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                        <i class="fa-solid fa-scale-balanced me-2" style="color: #4987A4;"></i>ทนายความทั้งหมด
+                    </a>
+                </li>
+                <li><hr class="my-2" style="border-color: #e2e8f0;"></li>
+                <li class="nav-item">
+                    <a href="/sign_up" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                        <i class="fa-solid fa-user-plus me-2" style="color: #4987A4;"></i>สมัครใช้งาน
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/sign_in" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                        <i class="fa-solid fa-right-to-bracket me-2" style="color: #4987A4;"></i>เข้าสู่ระบบ
+                    </a>
+                </li>
+                <li><hr class="my-2" style="border-color: #e2e8f0;"></li>
+                <li class="px-3 py-1 text-muted small fw-semibold" style="font-size: 0.78rem;">สำหรับทนายความ</li>
+                <li class="nav-item">
+                    <a href="/lawyer_signup" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                        <i class="fa-solid fa-briefcase me-2" style="color: #4987A4;"></i>สมัครทนายความ
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const currentPath = window.location.pathname;
+            // Desktop nav active state
             const navLinks = document.querySelectorAll('.header-nav .nav-item > a.nav-link');
-            
             navLinks.forEach(link => {
-                // Check if the link href matches the current path exactly (or starts with for dropdowns if needed)
                 const linkPath = link.getAttribute('href');
                 if (linkPath === currentPath) {
                     link.classList.remove('text-muted');
                     link.classList.add('text-dark');
                     link.style.background = 'rgba(0,0,0,0.05)';
                 } else if (linkPath !== '#') {
-                    // Reset others
                     link.classList.remove('text-dark');
                     link.classList.add('text-muted');
                     link.style.background = 'transparent';
+                }
+            });
+            // Mobile nav active state
+            const mobileLinks = document.querySelectorAll('#mobileNavLinks .nav-item > a.nav-link');
+            mobileLinks.forEach(link => {
+                const linkPath = link.getAttribute('href');
+                if (linkPath === currentPath) {
+                    link.style.background = 'rgba(73, 135, 164, 0.1)';
+                    link.style.color = '#4987A4';
                 }
             });
         });

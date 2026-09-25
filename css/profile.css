@@ -398,7 +398,6 @@ main {
     color: #ffffff !important;
 }
 
-
 /* ========================================= */
 /* Responsive Design Breakpoints             */
 /* ========================================= */
@@ -447,12 +446,72 @@ main {
     }
     
     .user-header-bar {
-        padding: 1rem !important;
+        padding: 0.8rem !important;
     }
 
     /* Tables */
     .custom-table th, .custom-table td {
         white-space: nowrap;
+    }
+
+    /* Profile */
+    .profile-banner-card {
+        border-radius: 14px !important;
+    }
+    .profile-avatar-img {
+        width: 90px !important;
+        height: 90px !important;
+    }
+    .avatar-edit-badge {
+        width: 30px !important;
+        height: 30px !important;
+    }
+    .glass-card {
+        border-radius: 14px !important;
+        padding: 1rem !important;
+    }
+    .card-header-custom {
+        font-size: 0.95rem !important;
+    }
+    .form-label {
+        font-size: 0.85rem !important;
+    }
+    .form-control-custom {
+        height: 42px !important;
+        font-size: 0.88rem !important;
+        padding: 8px 12px !important;
+    }
+    .btn-save-custom, .btn-cancel {
+        width: 130px !important;
+        font-size: 0.85rem !important;
+        padding: 8px 0 !important;
+    }
+    .btn-secondary {
+        width: 110px !important;
+        font-size: 0.85rem !important;
+    }
+
+    /* Sidebar nav */
+    .sidebar-nav-list .nav-link {
+        padding: 12px 18px !important;
+        font-size: 0.85rem !important;
+        gap: 10px !important;
+    }
+    .sidebar-nav-list .nav-icon-badge {
+        font-size: 1.2rem !important;
+        width: 28px !important;
+        min-width: 28px !important;
+    }
+    .sidebar-curved .logo-brand {
+        padding: 8px 20px 20px !important;
+        font-size: 1.2rem !important;
+    }
+    .sidebar-profile-block {
+        padding: 14px 14px 8px !important;
+    }
+    .sidebar-avatar-img {
+        width: 80px !important;
+        height: 80px !important;
     }
 }
 
@@ -481,7 +540,6 @@ main {
         /* Width is managed by col-lg-2 (16.66%) */
     }
 }
-
 
 @media (max-width: 768px) {
     .profile-avatar-img, .sidebar-avatar-img {
@@ -530,5 +588,69 @@ main {
     .user-header-bar .btn-light.d-md-none,
     header .btn-light.d-md-none {
         display: inline-block !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    .glass-card {
+        border-radius: 12px !important;
+        padding: 0.75rem !important;
+    }
+    .profile-banner-card {
+        border-radius: 12px !important;
+    }
+    .profile-banner-card::after {
+        width: 200px !important;
+        height: 200px !important;
+    }
+    .profile-avatar-img {
+        width: 75px !important;
+        height: 75px !important;
+        border-width: 3px !important;
+    }
+    .avatar-edit-badge {
+        width: 26px !important;
+        height: 26px !important;
+        border-width: 2px !important;
+    }
+    .card-header-custom {
+        font-size: 0.88rem !important;
+    }
+    .form-label {
+        font-size: 0.8rem !important;
+    }
+    .form-control-custom {
+        height: 38px !important;
+        font-size: 0.82rem !important;
+        padding: 6px 10px !important;
+    }
+    .input-group-text {
+        padding: 0 10px !important;
+        font-size: 0.82rem !important;
+    }
+    .btn-save-custom, .btn-cancel {
+        width: 110px !important;
+        font-size: 0.8rem !important;
+        padding: 7px 0 !important;
+        border-radius: 10px !important;
+    }
+    .btn-secondary {
+        width: 95px !important;
+        font-size: 0.8rem !important;
+        padding: 6px 0 !important;
+    }
+    .btn-outline-custom {
+        font-size: 0.82rem !important;
+        padding: 6px 12px !important;
+    }
+    .sidebar-logout-link {
+        font-size: 0.9rem !important;
+    }
+    .sidebar-back-link {
+        padding: 12px 16px 16px !important;
+        font-size: 0.9rem !important;
     }
 }

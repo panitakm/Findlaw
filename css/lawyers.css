@@ -224,31 +224,165 @@ body.lawyers-page {
     border-color: #4987A4;
 }
 
-/* รั้วกั้นสำหรับ Mobile/Tablet */
+/* ============================================= */
+/* Responsive: Tablet (max-width: 992px)         */
+/* ============================================= */
 @media (max-width: 992px) {
-    /* ปรับช่องค้นหาด้านบนไม่ให้ยาวเกินไปและเบียดกัน */
+    .main-content-container {
+        padding-top: 90px !important;
+    }
     .search-pill-container {
         padding: 4px;
-        flex-direction: column;
         border-radius: 12px;
+    }
+    .search-pill-input {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+    .search-pill-button {
+        width: 38px;
+        height: 38px;
+    }
+    .lawyer-card-img {
+        height: 180px !important;
+    }
+    .footer-custom {
+        height: auto;
+        padding: 20px 0;
+    }
+    /* Filter sidebar stacks on top */
+    .col-md-4.col-lg-3 {
+        margin-bottom: 1rem;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Tablet Small (max-width: 768px)   */
+/* ============================================= */
+@media (max-width: 768px) {
+    .main-content-container {
+        padding-top: 80px !important;
+    }
+    /* Search pill becomes full width column */
+    .search-pill-container {
+        flex-direction: column !important;
+        border-radius: 14px;
+        padding: 8px;
     }
     .search-pill-input {
         width: 100%;
         text-align: center;
         margin-bottom: 8px;
+        padding: 10px 14px;
     }
     .search-pill-button {
         width: 100%;
-        border-radius: 8px;
+        border-radius: 10px;
+        height: 40px;
     }
 
-    /* ปรับแต่งการ์ดทนายความบนมือถือ */
-    .lawyer-card-img {
-        height: 180px !important;
+    /* Filter chips */
+    .filter-chip {
+        font-size: 0.75rem !important;
+        padding: 0.2rem 0.6rem !important;
     }
-    
-    .footer-custom {
-        height: auto;
-        padding: 20px 0;
+
+    /* Sidebar filter form */
+    #sidebarFilterForm {
+        padding: 1rem !important;
+        border-radius: 12px !important;
+    }
+    .filter-label {
+        font-size: 0.85rem !important;
+    }
+    .filter-input {
+        padding: 8px !important;
+        font-size: 0.85rem !important;
+        min-height: 34px !important;
+    }
+
+    /* Lawyer cards - 2 columns on tablet */
+    .lawyer-card-img {
+        height: 160px !important;
+    }
+    .card-text {
+        font-size: 0.82rem !important;
+    }
+    .lawyer-specialty-text {
+        max-width: 120px !important;
+    }
+
+    /* Save button */
+    .btn-save-lawyer-custom {
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    /* Decoration */
+    .bg-decor-circle {
+        display: none;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    .main-content-container {
+        padding-top: 70px !important;
+    }
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    .search-pill-container {
+        padding: 6px;
+        border-radius: 12px;
+    }
+    .search-pill-input {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
+    .search-pill-button {
+        height: 36px;
+        font-size: 0.85rem;
+    }
+
+    /* Filter sidebar */
+    #sidebarFilterForm {
+        padding: 0.8rem !important;
+    }
+    .filter-label {
+        font-size: 0.8rem !important;
+    }
+    .filter-input {
+        padding: 6px 8px !important;
+        font-size: 0.8rem !important;
+    }
+    .filter-chip {
+        font-size: 0.7rem !important;
+    }
+
+    /* Lawyer cards */
+    .lawyer-card-img {
+        height: 140px !important;
+    }
+    .card-text {
+        font-size: 0.78rem !important;
+    }
+    .lawyer-specialty-text {
+        max-width: 100px !important;
+    }
+    .btn-save-lawyer-custom {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    /* Navbar brand */
+    .navbar-brand-logo {
+        font-size: 1.1rem !important;
+    }
+    .nav-link-custom {
+        font-size: 0.85rem !important;
     }
 }

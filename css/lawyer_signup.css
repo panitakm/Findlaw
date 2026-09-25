@@ -367,34 +367,161 @@ select.form-select option {
     opacity: 1;
 }
 
-/* รั้วกั้นสำหรับ Mobile/Tablet */
-@media (max-width: 1024px) {
-    .signup-container {
+/* ============================================= */
+/* Responsive: Tablet (max-width: 768px)         */
+/* ============================================= */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem 0;
+    }
+    .container {
         padding: 1.5rem !important;
         margin: 0 auto !important;
-        max-width: 550px !important;
+        max-width: 440px !important;
         width: calc(100% - 2rem) !important;
-        border-radius: 20px !important;
+        border-radius: 18px !important;
     }
-    .form-group-custom {
-        margin-bottom: 15px;
+    .header {
+        font-size: 1.5rem !important;
+        margin-bottom: 20px !important;
     }
-    .title {
-        font-size: 1.3rem !important;
-    }
-    .form-group-custom {
-        margin-bottom: 10px !important;
-    }
-    .form-control-custom, .form-select-custom, .btn-submit {
+    .step-btn {
+        width: 2rem !important;
+        height: 2rem !important;
         font-size: 0.85rem !important;
+    }
+    .form-control, .form-select {
+        font-size: 0.85rem !important;
+        height: 36px !important;
+    }
+    .form-control-custom {
         padding: 8px 12px !important;
+        font-size: 0.88rem !important;
     }
-    input[type="file"] {
-        max-width: 100% !important;
+    .form-label {
+        font-size: 0.85rem !important;
+    }
+    .btn {
+        font-size: 0.88rem !important;
+        padding: 7px 16px !important;
+    }
+    #btnPrev, #btnNext, #btnSubmit {
+        min-width: 100px !important;
+    }
+    .glass-card {
+        padding: 20px 20px !important;
+        margin-bottom: 15px !important;
+        border-radius: 14px !important;
+    }
+    .card-header-custom {
+        font-size: 0.95rem !important;
+    }
+    .box-category {
+        font-size: 1.05rem !important;
+    }
+    .category-badge {
+        font-size: 0.72rem !important;
+        padding: 4px 8px !important;
+    }
+    input[type="file"].form-control {
+        font-size: 0.8rem !important;
+    }
+    input[type="file"].form-control::file-selector-button {
+        font-size: 0.8rem !important;
+        padding: 6px 10px !important;
+        height: 34px !important;
+    }
+    .btn-link {
+        font-size: 0.85rem !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    body {
+        padding: 0.5rem 0;
+    }
+    .container {
+        padding: 1rem 0.8rem !important;
+        max-width: calc(100% - 1.2rem) !important;
+        width: calc(100% - 1.2rem) !important;
+        border-radius: 14px !important;
+    }
+    .header {
+        font-size: 1.25rem !important;
+        margin-bottom: 15px !important;
+        margin-top: 8px !important;
+    }
+    .step-btn {
+        width: 1.8rem !important;
+        height: 1.8rem !important;
         font-size: 0.75rem !important;
+    }
+    .form-control, .form-select {
+        font-size: 0.8rem !important;
+        height: 34px !important;
+        border-radius: 8px !important;
+    }
+    .form-control-custom {
+        padding: 7px 10px !important;
+        font-size: 0.82rem !important;
+    }
+    .form-label {
+        font-size: 0.78rem !important;
+        margin: 0 0 3px 3px !important;
+    }
+    .form-input {
+        margin-bottom: 8px !important;
+        font-size: 12px !important;
+    }
+    .btn {
+        font-size: 0.82rem !important;
+        padding: 6px 14px !important;
+    }
+    #btnPrev, #btnNext, #btnSubmit {
+        min-width: 85px !important;
+        font-size: 0.8rem !important;
+    }
+    .glass-card {
+        padding: 14px 12px !important;
+        margin-bottom: 10px !important;
+        border-radius: 12px !important;
+    }
+    .card-header-custom {
+        font-size: 0.88rem !important;
+        padding-bottom: 8px !important;
+    }
+    .box-category {
+        font-size: 0.95rem !important;
+    }
+    .category-badge {
+        font-size: 0.68rem !important;
+        padding: 3px 7px !important;
+    }
+    .btn-box-add {
+        padding: 6px 10px !important;
+        font-size: 0.78rem !important;
+        min-width: 80px !important;
+    }
+    .btn-add-tag {
+        font-size: 0.82rem !important;
+    }
+    .invalid-feedback {
+        font-size: 0.7rem !important;
+        margin-left: 5px !important;
+    }
+    input[type="file"].form-control {
+        font-size: 0.72rem !important;
         overflow: hidden;
     }
-    .signup-container {
-        overflow: hidden;
+    .uploadProfile, .profilePreview {
+        width: 90px !important;
+        height: 90px !important;
+    }
+    .btn-save-custom {
+        padding: 10px 24px !important;
+        font-size: 0.88rem !important;
     }
 }

@@ -171,3 +171,80 @@
     color: #1A435A;
     font-weight: 500;
 }
+
+/* ============================================= */
+/* Responsive: Tablet (max-width: 768px)         */
+/* ============================================= */
+@media (max-width: 768px) {
+    .lawyer-card {
+        border-radius: 14px !important;
+    }
+    .lawyer-avatar {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    .specialty-badge {
+        font-size: 0.7rem !important;
+        padding: 3px 8px !important;
+    }
+    .btn-view-profile, .btn-contact {
+        padding: 8px 12px !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+    }
+    .bookmark-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    .favorite-sort-select {
+        min-width: 120px !important;
+        font-size: 0.85rem !important;
+    }
+    .btn-save-lawyer-custom {
+        width: 34px !important;
+        height: 34px !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    .lawyer-card {
+        border-radius: 12px !important;
+        padding: 0.8rem !important;
+    }
+    .lawyer-avatar {
+        width: 50px !important;
+        height: 50px !important;
+        border-width: 2px !important;
+    }
+    .specialty-badge {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+    }
+    .btn-view-profile, .btn-contact {
+        padding: 6px 10px !important;
+        font-size: 0.78rem !important;
+    }
+    .bookmark-btn {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.75rem !important;
+    }
+    .favorite-sort-select {
+        min-width: 100px !important;
+        font-size: 0.8rem !important;
+    }
+    .lawyer-specialty-text {
+        max-width: 100px !important;
+    }
+    .sidebar-back-link {
+        padding: 15px 20px 20px !important;
+    }
+    .custom-toast {
+        bottom: 10px !important;
+        right: 10px !important;
+        left: 10px !important;
+    }
+}

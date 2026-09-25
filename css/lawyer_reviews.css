@@ -1,4 +1,4 @@
-﻿.sidebar-back-link {
+.sidebar-back-link {
     padding: 20px 30px 30px 30px;
     color: #ffffff;
     text-decoration: none;
@@ -88,4 +88,58 @@
     overflow: hidden;
     word-break: break-all;
     overflow-wrap: break-word;
+}
+
+/* ============================================= */
+/* Responsive: Tablet (max-width: 768px)         */
+/* ============================================= */
+@media (max-width: 768px) {
+    .review-item {
+        padding: 16px !important;
+        border-radius: 12px !important;
+    }
+    .review-user-avatar {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .review-content {
+        font-size: 13px !important;
+    }
+    .filter-pills .btn-filter {
+        padding: 4px 12px !important;
+        font-size: 12px !important;
+    }
+    #replyMessage {
+        padding: 8px !important;
+        font-size: 0.88rem !important;
+    }
+    .sidebar-back-link {
+        padding: 15px 20px 20px !important;
+    }
+}
+
+/* ============================================= */
+/* Responsive: Smartphone (max-width: 480px)     */
+/* ============================================= */
+@media (max-width: 480px) {
+    .review-item {
+        padding: 12px !important;
+        border-radius: 10px !important;
+    }
+    .review-user-avatar {
+        width: 34px !important;
+        height: 34px !important;
+    }
+    .review-content {
+        font-size: 12px !important;
+        line-height: 1.5 !important;
+    }
+    .filter-pills .btn-filter {
+        padding: 3px 10px !important;
+        font-size: 11px !important;
+        border-radius: 16px !important;
+    }
+    .sidebar-logout-link {
+        font-size: 0.9rem !important;
+    }
 }
