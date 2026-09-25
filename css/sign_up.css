@@ -154,3 +154,15 @@ body {
     border-color: #86b7fe !important;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
 }
+
+/* รั้วกั้นสำหรับ Mobile/Tablet */
+@media (max-width: 768px) {
+    .glass-card {
+        padding: 1.5rem !important;
+        margin: 1rem !important;
+        border-radius: 20px !important;
+    }
+    .fs-3 {
+        font-size: 1.5rem !important;
+    }
+}

@@ -489,3 +489,46 @@ main {
         height: auto;
     }
 }
+
+/* รั้วกั้นส่วนขยายเพิ่มเติมสำหรับ Tablet (iPad) ครอบคลุมทุกหน้า Dashboard */
+@media (max-width: 992px) {
+    /* เคลียร์ระยะขอบเนื้อหาหลักบนแท็บเล็ต ให้ตารางขยายเต็ม 100% */
+    main.col-md-9, main.col-lg-10 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    /* บังคับตารางให้เลื่อนได้เมื่ออยู่บนจอเล็ก */
+    .table-responsive {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ซ่อน Sidebar ปกติ และเปลี่ยนเป็น Offcanvas เมื่อหน้าจอเล็ก */
+    aside.sidebar-curved {
+        position: fixed !important;
+        top: 0;
+        left: -300px;
+        width: 280px !important;
+        height: 100vh !important;
+        z-index: 1050;
+        transition: left 0.3s ease-in-out;
+        background-color: white;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        display: block !important;
+    }
+
+    aside.sidebar-curved.show {
+        left: 0 !important;
+    }
+
+    /* บังคับให้ปุ่ม Hamburger แสดงบน Tablet */
+    .user-header-bar .btn-light.d-md-none,
+    header .btn-light.d-md-none {
+        display: inline-block !important;
+    }
+}

@@ -366,3 +366,18 @@ select.form-select option {
 .btn-delete:hover {
     opacity: 1;
 }
+
+/* รั้วกั้นสำหรับ Mobile/Tablet */
+@media (max-width: 768px) {
+    .signup-container {
+        padding: 1.5rem !important;
+        margin: 1rem !important;
+        border-radius: 20px !important;
+    }
+    .form-group-custom {
+        margin-bottom: 15px;
+    }
+    .title {
+        font-size: 1.5rem !important;
+    }
+}
