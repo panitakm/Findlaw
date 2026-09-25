@@ -155,3 +155,11 @@ body {
     border-color: #86b7fe !important;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
 }
+
+@media (max-width: 991.98px) {
+    .container {
+        max-width: 450px !important;
+        margin: auto;
+        padding: 1.5rem !important;
+    }
+}
