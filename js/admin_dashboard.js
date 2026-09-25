@@ -742,7 +742,7 @@ function renderReviews() {
                                 </td>
                                 <td class="align-top py-3">${reportCol}</td>
                                 <td class="text-center align-top py-3">
-                                    <span class="badge bg-danger-subtle text-danger-emphasis px-2 py-2" style="font-size: 0.75rem; font-weight: 600;">รายการที่ถูกลบ</span>
+                                    <span class="badge bg-danger-subtle text-danger-emphasis px-2 py-2" style="font-size: 0.75rem; font-weight: 600;">ถูกลบ</span>
                                 </td>
                             </tr>
                             `}).join('');
