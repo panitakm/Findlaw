@@ -151,7 +151,7 @@ router.post('/login', async (req, res) => {
 router.get('/users/:id', async (req, res) => {
     try {
         const [users] = await db.promise().query(
-            'SELECT id, first_name, last_name, email, phone, image_path, created_at FROM users WHERE id = ? AND IFNULL(status, "") != "deleted"',
+            `SELECT id, first_name, last_name, email, phone, image_path, created_at FROM users WHERE id = ? AND IFNULL(status, '') != 'deleted'`,
             [req.params.id]
         );
         if (users.length === 0) return res.status(404).json({ error: 'ไม่พบผู้ใช้งาน' });

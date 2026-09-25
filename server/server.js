@@ -69,6 +69,9 @@ app.use('/', reviewRoutes);
     }
 })();
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running at: http://localhost:${process.env.PORT}/`);
-});
+
+const serverPort = 3000;
+
+app.listen(serverPort, () => {  
+  console.log(`Server is running at: http://localhost:${serverPort}/`);  
+})
