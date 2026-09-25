@@ -151,7 +151,7 @@ router.post('/login', async (req, res) => {
 router.get('/users/:id', async (req, res) => {
     try {
         const [users] = await db.promise().query(
-            `SELECT id, first_name, last_name, email, phone, image_path, created_at FROM users WHERE id = ? AND IFNULL(status, '') != 'deleted'`,
+            `SELECT id, first_name, last_name, email, phone, image_path, created_at FROM users WHERE id = ? AND IFNULL(status, '') NOT IN ('deleted', 'suspended')`,
             [req.params.id]
         );
         if (users.length === 0) return res.status(404).json({ error: 'ไม่พบผู้ใช้งาน' });
@@ -181,13 +181,13 @@ router.get('/users/:id/favorites', async (req, res) => {
                        FROM lawyer_works
                        GROUP BY lawyer_id
                    ) w WHERE w.lawyer_id = l.id) as experience,
-                   (SELECT IFNULL(AVG(r.rating), 0) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as rating,
-                   (SELECT COUNT(*) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as review_count,
+                   (SELECT IFNULL(AVG(r.rating), 0) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') NOT IN ('deleted', 'suspended')) as rating,
+                   (SELECT COUNT(*) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') NOT IN ('deleted', 'suspended')) as review_count,
                    s.created_at
             FROM saved_lawyers s
             JOIN users l ON s.lawyer_id = l.id
             JOIN lawyers lw ON s.lawyer_id = lw.id
-            WHERE s.user_id = ? AND IFNULL(l.status, '') != 'deleted'
+            WHERE s.user_id = ? AND IFNULL(l.status, '') NOT IN ('deleted', 'suspended')
         `;
         const [rows] = await db.promise().query(sql, [userId]);
         res.json(rows);
@@ -237,7 +237,7 @@ router.get('/users/:id/reviews', async (req, res) => {
                    l.id as lawyer_id, l.first_name as lawyer_first, l.last_name as lawyer_last, l.image_path as lawyer_image
             FROM reviews r
             JOIN users l ON r.lawyer_id = l.id
-            WHERE r.client_id = ? AND IFNULL(l.status, '') != 'deleted'
+            WHERE r.client_id = ? AND IFNULL(l.status, '') NOT IN ('deleted', 'suspended')
             ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql, [userId]);

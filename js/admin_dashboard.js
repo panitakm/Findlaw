@@ -207,7 +207,11 @@ let suspendUserModalInstance;
 
 function suspendUser(id) {
     document.getElementById('suspendUserId').value = id;
-    document.getElementById('suspendReason').value = '';
+    document.getElementById('suspendReasonSelect').value = '';
+    const otherReasonInput = document.getElementById('suspendReason');
+    otherReasonInput.value = '';
+    otherReasonInput.classList.add('d-none');
+    otherReasonInput.required = false;
     
     if (!suspendUserModalInstance) {
         suspendUserModalInstance = new bootstrap.Modal(document.getElementById('suspendUserModal'));
@@ -221,12 +225,14 @@ document.addEventListener('DOMContentLoaded', () => {
         suspendForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const id = document.getElementById('suspendUserId').value;
-            const reason = document.getElementById('suspendReason').value;
+            const selectedReason = document.getElementById('suspendReasonSelect').value;
+            const otherReason = document.getElementById('suspendReason').value;
+            const finalReason = selectedReason === 'อื่นๆ' ? otherReason : selectedReason;
 
             fetch('/admin/users/' + id + '/suspend', { 
                 headers: getAuthHeaders(), 
                 method: 'PUT',
-                body: JSON.stringify({ reason: reason })
+                body: JSON.stringify({ reason: finalReason })
             })
             .then(res => res.json())
             .then(data => {

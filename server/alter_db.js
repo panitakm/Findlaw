@@ -1,18 +1,19 @@
 const db = require('./config/db');
 
-async function alterDb() {
+async function alterTables() {
     try {
-        await db.promise().query("ALTER TABLE users MODIFY COLUMN image_path LONGTEXT;");
-        console.log("Altered users.image_path");
-        
-        await db.promise().query("ALTER TABLE lawyers MODIFY COLUMN license_file LONGTEXT;");
-        console.log("Altered lawyers.license_file");
-        
-        process.exit(0);
+        console.log("Altering users table...");
+        await db.promise().query("ALTER TABLE users MODIFY COLUMN image_path VARCHAR(255);");
+        console.log("Successfully altered users table.");
+
+        console.log("Altering lawyers table...");
+        await db.promise().query("ALTER TABLE lawyers MODIFY COLUMN license_file VARCHAR(255);");
+        console.log("Successfully altered lawyers table.");
     } catch (err) {
-        console.error(err);
-        process.exit(1);
+        console.error("Error altering tables:", err);
+    } finally {
+        process.exit(0);
     }
 }
 
-alterDb();
+alterTables();

@@ -6,15 +6,10 @@ const fs = require('fs');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const app = express();
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }))
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '5mb', extended: true }))
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
@@ -49,25 +44,6 @@ app.use('/', userRoutes);
 app.use('/', lawyerRoutes);
 app.use('/', adminRoutes);
 app.use('/', reviewRoutes);
-
-// Initialize saved_lawyers table
-(async () => {
-    try {
-        await db.promise().query(`
-            CREATE TABLE IF NOT EXISTS saved_lawyers (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                lawyer_id INT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE KEY unique_save (user_id, lawyer_id),
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-                FOREIGN KEY (lawyer_id) REFERENCES users(id) ON DELETE CASCADE
-            )
-        `);
-    } catch (err) {
-        console.error("Error creating saved_lawyers table:", err);
-    }
-})();
 
 
 const serverPort = 3000;

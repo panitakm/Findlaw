@@ -56,11 +56,13 @@ router.post('/lawyer/register', async (req, res) => {
             const [[dist]] = await connection.query('SELECT name_th FROM districts WHERE id = ?', [inputDistrict]);
             const [[subDist]] = await connection.query('SELECT name_th FROM sub_districts WHERE id = ?', [inputSubDistrict]);
 
-            const pName = prov ? prov.name : '';
-            const dName = dist ? dist.name_th : '';
-            const sdName = subDist ? subDist.name_th : '';
+            const pName = prov ? prov.name.replace(/จังหวัด\s*/g, '') : '';
+            const dName = dist ? dist.name_th.replace(/(อำเภอ|เขต)\s*/g, '') : '';
+            const sdName = subDist ? subDist.name_th.replace(/(ตำบล|แขวง)\s*/g, '') : '';
 
-            let formattedAddress = `${inputHouseNo}`;
+            let cleanHouseNo = (inputHouseNo || '').replace(/บ้านเลขที่\s*/g, '').replace(/เลขที่\s*/g, '').trim();
+
+            let formattedAddress = `${cleanHouseNo}`;
             if (inputMoo) formattedAddress += ` หมู่ ${inputMoo}`;
             if (inputSoi) formattedAddress += ` ซอย ${inputSoi}`;
             if (inputRoad) formattedAddress += ` ถนน ${inputRoad}`;
@@ -77,7 +79,7 @@ router.post('/lawyer/register', async (req, res) => {
             await connection.query(
                 `INSERT INTO lawyers (id, license_number, province_id, office_address, house_no, moo, soi, road, subdistrict_id, district_id, zipcode, license_file, line_id, facebook_url, fee_rate) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [newUserId, inputLicNum, inputProvince, formattedAddress, inputHouseNo || null, inputMoo || null, inputSoi || null, inputRoad || null, inputSubDistrict || null, inputDistrict || null, inputZipcode || null, dbLicFilePath, inputLineId || null, inputFacebook || null, inputFeeRate || null]
+                [newUserId, inputLicNum, inputProvince, formattedAddress, cleanHouseNo || null, inputMoo || null, inputSoi || null, inputRoad || null, inputSubDistrict || null, inputDistrict || null, inputZipcode || null, dbLicFilePath, inputLineId || null, inputFacebook || null, inputFeeRate || null]
             );
 
             if (categories && categories.length > 0) {
@@ -186,7 +188,7 @@ router.get('/lawyers/:id/edit', async (req, res) => {
                 l.license_number, l.license_file, l.line_id, l.facebook_url, 
                 l.province_id, l.office_address, l.house_no, l.moo, l.soi, l.road, l.subdistrict_id, l.district_id, l.zipcode, l.fee_rate, l.status, l.reject_reason
             FROM users u JOIN lawyers l ON u.id = l.id 
-            WHERE u.id = ? AND IFNULL(u.status, '') != 'deleted'`, [req.params.id]);
+            WHERE u.id = ? AND IFNULL(u.status, '') NOT IN ('deleted', 'suspended')`, [req.params.id]);
 
         const [schedules] = await db.promise().query(
             `SELECT day_of_week, time_start, time_end, is_open 
@@ -248,9 +250,27 @@ router.put('/lawyer/lawyer/save-profile/:id', async (req, res) => {
             , [data.first_name, data.last_name, data.email, data.phone, finalImagePath, id]
         );
 
+        let cleanAddress = data.office_address || '';
+        if (cleanAddress) {
+            cleanAddress = cleanAddress
+                .replace(/บ้านเลขที่\s*/g, '')
+                .replace(/เลขที่\s*/g, '')
+                .replace(/(?:ตำบล|แขวง)\s*\/?\s*/g, '')
+                .replace(/(?:อำเภอ|เขต)\s*\/?\s*/g, '')
+                .replace(/(?:จังหวัด)\s*\/?\s*/g, '')
+                .replace(/ต\.\s*|อ\.\s*|จ\.\s*/g, '')
+                .replace(/\s+\/\s+/g, ' ')
+                .replace(/\s+/g, ' ').trim();
+        }
+
+        let cleanHouseNo = data.house_no || '';
+        if (cleanHouseNo) {
+            cleanHouseNo = cleanHouseNo.replace(/บ้านเลขที่\s*/g, '').replace(/เลขที่\s*/g, '').trim();
+        }
+
         await db.promise().query(
             `UPDATE lawyers SET license_number = ?, line_id = ?, facebook_url = ?, province_id = ?, office_address = ?, house_no = ?, moo = ?, soi = ?, road = ?, subdistrict_id = ?, district_id = ?, zipcode = ?, fee_rate = ?, license_file = ?, status = IF(status = 'rejected', 'pending', status) 
-            WHERE id = ?`, [data.license_number, data.line_id, data.facebook_url, data.province_id || null, data.office_address, data.house_no || null, data.moo || null, data.soi || null, data.road || null, data.subdistrict_id || null, data.district_id || null, data.zipcode || null, data.fee_rate || null, finalLicensePath, id]
+            WHERE id = ?`, [data.license_number, data.line_id, data.facebook_url, data.province_id || null, cleanAddress, cleanHouseNo || null, data.moo || null, data.soi || null, data.road || null, data.subdistrict_id || null, data.district_id || null, data.zipcode || null, data.fee_rate || null, finalLicensePath, id]
         );
 
         if (data.new_password) {
@@ -336,15 +356,15 @@ router.get('/lawyer/search', async (req, res) => {
             IFNULL(exp.total_exp, 0) AS total_experience,
             l.fee_rate,
             GROUP_CONCAT(DISTINCT lc.name SEPARATOR ', ') AS specialties,
-            (SELECT IFNULL(AVG(r.rating), 0) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as rating,
-            (SELECT COUNT(*) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as review_count
+            (SELECT IFNULL(AVG(r.rating), 0) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') NOT IN ('deleted', 'suspended')) as rating,
+            (SELECT COUNT(*) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') NOT IN ('deleted', 'suspended')) as review_count
         FROM users u
         JOIN lawyers l ON u.id = l.id
         LEFT JOIN provinces p ON l.province_id = p.id
         LEFT JOIN LawyerExperience exp ON u.id = exp.lawyer_id
         LEFT JOIN lawyer_specialties ls ON l.id = ls.lawyer_id
         LEFT JOIN lawyer_categories lc ON ls.specialty_id = lc.id
-        WHERE u.role = 'lawyer' AND l.status = 'approved' AND IFNULL(u.status, '') != 'deleted'
+        WHERE u.role = 'lawyer' AND l.status = 'approved' AND IFNULL(u.status, '') NOT IN ('deleted', 'suspended')
     `;
 
     if (province) {

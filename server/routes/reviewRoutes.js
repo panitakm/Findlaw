@@ -12,7 +12,7 @@ router.get('/lawyers/:id/reviews', async (req, res) => {
                      c.first_name as user_first, c.last_name as user_last, c.image_path as user_image
               FROM reviews r
               JOIN users c ON r.client_id = c.id
-              WHERE r.lawyer_id = ? AND r.status IN ('published', 'reported') AND IFNULL(c.status, '') != 'deleted'
+              WHERE r.lawyer_id = ? AND r.status IN ('published', 'reported') AND IFNULL(c.status, '') NOT IN ('deleted', 'suspended')
             ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql, [lawyerId]);

@@ -223,7 +223,7 @@ router.get('/admin/reviews/all', authenticateAdmin, async (req, res) => {
             FROM reviews r
             JOIN users c ON r.client_id = c.id
             JOIN users l ON r.lawyer_id = l.id
-            WHERE r.status != 'reported' AND IFNULL(c.status, '') != 'deleted'
+            WHERE r.status != 'reported' AND IFNULL(c.status, '') NOT IN ('deleted', 'suspended')
             ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql);
@@ -245,7 +245,7 @@ router.get('/admin/reviews/reported', authenticateAdmin, async (req, res) => {
             JOIN users c ON r.client_id = c.id
             JOIN users l ON r.lawyer_id = l.id
             LEFT JOIN users rpt ON r.reporter_id = rpt.id
-            WHERE r.status = 'reported' AND IFNULL(c.status, '') != 'deleted'
+            WHERE r.status = 'reported' AND IFNULL(c.status, '') NOT IN ('deleted', 'suspended')
             ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql);
@@ -267,7 +267,7 @@ router.get('/admin/reviews/history', authenticateAdmin, async (req, res) => {
             JOIN users c ON r.client_id = c.id
             JOIN users l ON r.lawyer_id = l.id
             LEFT JOIN users rpt ON r.reporter_id = rpt.id
-            WHERE r.status IN ('published', 'hidden') AND (r.flag_reason IS NOT NULL OR r.is_hidden = 1) AND IFNULL(c.status, '') != 'deleted'
+            WHERE r.status IN ('published', 'hidden') AND (r.flag_reason IS NOT NULL OR r.is_hidden = 1) AND IFNULL(c.status, '') NOT IN ('deleted', 'suspended')
             ORDER BY r.created_at DESC
         `;
         const [rows] = await db.promise().query(sql);
