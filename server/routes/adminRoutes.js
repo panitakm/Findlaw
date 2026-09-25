@@ -158,7 +158,7 @@ router.get('/admin/lawyers/history', authenticateAdmin, async (req, res) => {
 router.put('/admin/lawyers/:id/approve', authenticateAdmin, async (req, res) => {
     const lawyerId = req.params.id;
     try {
-        await db.promise().query('UPDATE lawyers SET status="approved" WHERE id=?', [lawyerId]);
+        await db.promise().query("UPDATE lawyers SET status='approved' WHERE id=?", [lawyerId]);
         res.json({ success: true, message: 'Lawyer approved' });
     } catch (error) {
         console.error(error);
@@ -170,7 +170,7 @@ router.put('/admin/lawyers/:id/reject', authenticateAdmin, async (req, res) => {
     const lawyerId = req.params.id;
     const { reason } = req.body;
     try {
-        await db.promise().query('UPDATE lawyers SET status="rejected", reject_reason=? WHERE id=?', [reason, lawyerId]);
+        await db.promise().query("UPDATE lawyers SET status='rejected', reject_reason=? WHERE id=?", [reason, lawyerId]);
         res.json({ success: true, message: 'Lawyer rejected' });
     } catch (error) {
         console.error(error);
@@ -246,7 +246,7 @@ router.get('/admin/reviews/history', authenticateAdmin, async (req, res) => {
 router.put('/admin/reviews/:id/approve', authenticateAdmin, async (req, res) => {
     const reviewId = req.params.id;
     try {
-        await db.promise().query('UPDATE reviews SET status="published", is_hidden=0 WHERE id=?', [reviewId]);
+        await db.promise().query("UPDATE reviews SET status='published', is_hidden=0 WHERE id=?", [reviewId]);
         res.json({ success: true, message: 'Review approved' });
     } catch (error) {
         console.error(error);
@@ -257,7 +257,7 @@ router.put('/admin/reviews/:id/approve', authenticateAdmin, async (req, res) => 
 router.put('/admin/reviews/:id/report', authenticateAdmin, async (req, res) => {
     const reviewId = req.params.id;
     try {
-        await db.promise().query('UPDATE reviews SET status="reported", is_hidden=0 WHERE id=?', [reviewId]);
+        await db.promise().query("UPDATE reviews SET status='reported', is_hidden=0 WHERE id=?", [reviewId]);
         res.json({ success: true, message: 'Review marked as reported' });
     } catch (error) {
         console.error(error);
@@ -268,7 +268,7 @@ router.put('/admin/reviews/:id/report', authenticateAdmin, async (req, res) => {
 router.delete('/admin/reviews/:id', authenticateAdmin, async (req, res) => {
     const reviewId = req.params.id;
     try {
-        await db.promise().query('UPDATE reviews SET status="hidden", is_hidden=1 WHERE id=?', [reviewId]);
+        await db.promise().query("UPDATE reviews SET status='hidden', is_hidden=1 WHERE id=?", [reviewId]);
         res.json({ success: true, message: 'Review deleted/hidden' });
     } catch (error) {
         console.error(error);

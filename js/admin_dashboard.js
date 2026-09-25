@@ -405,7 +405,7 @@ async function openLawyerDetailModal(lawyerId, isReadOnly = false) {
         }
 
         // Fetch Provinces for Province Name
-        const provRes = await fetch('/provinces');
+        const provRes = await fetch('/lawyer/provinces');
         let provName = '';
         if (provRes.ok) {
             const provinces = await provRes.json();
