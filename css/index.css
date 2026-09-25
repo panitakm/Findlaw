@@ -438,13 +438,34 @@ section.container h5.text-center {
         flex-shrink: 0;
         padding-bottom: 120px !important;
     }
+    .title h1 {
+        font-size: 1.5rem !important;
+    }
+    .title p {
+        font-size: 0.9rem !important;
+    }
     .swiper-slide {
         height: auto !important;
         min-height: 100vh;
     }
     .search-container {
-        padding: 15px;
+        width: 92% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding: 20px !important;
         margin-top: -40px;
+        border-radius: 20px !important;
+    }
+    .search-container .form-label {
+        font-size: 0.85rem !important;
+    }
+    .search-container .form-select,
+    .search-container .form-control {
+        font-size: 0.9rem !important;
+        height: 38px;
+    }
+    .search-container .btn {
+        font-size: 0.95rem !important;
     }
     .form-select {
         min-width: 0 !important;
