@@ -67,6 +67,41 @@ router.get('/admin/users', authenticateAdmin, async (req, res) => {
     }
 });
 
+router.post('/admin/users', authenticateAdmin, async (req, res) => {
+    const { first_name, last_name, email, role, status, password } = req.body;
+    try {
+        if (!first_name || !email || !password) {
+            return res.status(400).json({ error: 'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน' });
+        }
+
+        const [existing] = await db.promise().query('SELECT id FROM users WHERE email = ?', [email]);
+        if (existing.length > 0) {
+            return res.status(409).json({ error: 'อีเมลนี้ถูกใช้งานแล้ว' });
+        }
+
+        const bcrypt = require('bcrypt');
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const [result] = await db.promise().query(
+            'INSERT INTO users (first_name, last_name, email, role, status, password) VALUES (?, ?, ?, ?, ?, ?)',
+            [first_name, last_name, email, role, status || 'active', hashedPassword]
+        );
+        const newUserId = result.insertId;
+
+        if (role === 'lawyer') {
+            await db.promise().query(
+                'INSERT INTO lawyers (id, status) VALUES (?, ?)',
+                [newUserId, status || 'pending']
+            );
+        }
+
+        res.json({ success: true, message: 'User created successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 router.put('/admin/users/:id', authenticateAdmin, async (req, res) => {
     const userId = req.params.id;
     const { first_name, last_name, email, role, status } = req.body;

@@ -167,6 +167,8 @@ function openUserModal(id = null) {
 
     if (id) {
         document.getElementById('userModalTitle').textContent = 'จัดการผู้ใช้งาน';
+        document.getElementById('passwordGroup').style.display = 'none';
+        document.getElementById('userPasswordInput').required = false;
         const user = users.find(u => u.id === id);
         if (user) {
             document.getElementById('userId').value = user.id;
@@ -181,6 +183,12 @@ function openUserModal(id = null) {
             }
             document.getElementById('userStatusInput').value = currentStatus;
         }
+    } else {
+        document.getElementById('userModalTitle').textContent = 'เพิ่มผู้ใช้ใหม่';
+        document.getElementById('passwordGroup').style.display = 'block';
+        document.getElementById('userPasswordInput').required = true;
+        document.getElementById('userNameInput').readOnly = false;
+        document.getElementById('userEmailInput').readOnly = false;
     }
 
     userModal.show();
@@ -247,15 +255,20 @@ async function restoreUser(id) {
 function handleUserSubmit(e) {
     e.preventDefault();
     const id = document.getElementById('userId').value;
+    const email = document.getElementById('userEmailInput').value;
     const role = document.getElementById('userRoleInput').value;
     const status = document.getElementById('userStatusInput').value;
+    const password = document.getElementById('userPasswordInput').value;
+    
+    let nameParts = document.getElementById('userNameInput').value.trim().split(/\s+/);
+    let first_name = nameParts[0] || '';
+    let last_name = nameParts.slice(1).join(' ') || '';
 
     if (id) {
         const user = users.find(u => u.id == id);
         fetch('/admin/users/' + id, {
             headers: getAuthHeaders(),
             method: 'PUT',
-
             body: JSON.stringify({
                 first_name: user.first_name,
                 last_name: user.last_name,
@@ -264,6 +277,29 @@ function handleUserSubmit(e) {
                 status
             })
         }).then(() => renderUsers()).catch(err => console.error(err));
+    } else {
+        fetch('/admin/users', {
+            headers: getAuthHeaders(),
+            method: 'POST',
+            body: JSON.stringify({
+                first_name,
+                last_name,
+                email,
+                role,
+                status,
+                password
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.showBSToast('เพิ่มผู้ใช้สำเร็จ', 'success');
+                renderUsers();
+            } else {
+                window.showBSAlert('เกิดข้อผิดพลาด!', data.error || 'ไม่สามารถเพิ่มผู้ใช้ได้', 'error');
+            }
+        })
+        .catch(err => console.error(err));
     }
 
     userModal.hide();
