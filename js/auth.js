@@ -78,11 +78,7 @@ const Auth = {
             if (user.role === 'admin') settingsHref = '/admin_dashboard';
             else if (user.role === 'lawyer') settingsHref = '/lawyer_dashboard';
             
-            profileDropdown += `
-                        <li class="d-lg-none"><a class="dropdown-item rounded-3 px-3 py-2 text-dark d-flex align-items-center" href='/'><i class="fa-solid fa-home text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>หน้าแรก</a></li>
-                        <li class="d-lg-none"><a class="dropdown-item rounded-3 px-3 py-2 text-dark d-flex align-items-center" href='/lawyers'><i class="fa-solid fa-scale-balanced text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ทนายความทั้งหมด</a></li>
-                        <li class="d-lg-none"><hr class="dropdown-divider my-1 mx-2"></li>
-                        <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href='${settingsHref}'><i class="fa-solid fa-gear text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ตั้งค่า</a></li>`;
+            profileDropdown += `<li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href='${settingsHref}'><i class="fa-solid fa-gear text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ตั้งค่า</a></li>`;
 
             profileDropdown += `
                         <li><hr class="dropdown-divider my-1 mx-2"></li>
@@ -102,9 +98,6 @@ const Auth = {
                         <i class="fa-solid fa-list fs-5"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
-                        <li><a class="dropdown-item py-2 fw-medium" href='/'>หน้าแรก</a></li>
-                        <li><a class="dropdown-item py-2 fw-medium" href='/lawyers'>ทนายความทั้งหมด</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item py-2 fw-medium" href='/sign_up'>สมัครใช้งาน</a></li>
                         <li><a class="dropdown-item py-2 fw-medium" href='/sign_in'>เข้าสู่ระบบ</a></li>
                         <li><hr class="dropdown-divider"></li>

@@ -12,7 +12,6 @@ body {
     border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.2);
-    margin: 2rem auto;
 }
 
 .header {

@@ -236,7 +236,4 @@ body {
     .review-comment-text {
         line-height: 1.6;
     }
-    .form-select {
-        min-width: 0 !important;
-    }
 }

@@ -485,9 +485,7 @@ main {
 
 @media (max-width: 768px) {
     .profile-avatar-img, .sidebar-avatar-img {
-        width: 100%;
-        max-width: 130px;
+        max-width: 100%;
         height: auto;
-        aspect-ratio: 1 / 1;
     }
 }
