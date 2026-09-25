@@ -34,7 +34,7 @@ router.post('/lawyers/:id/reviews', async (req, res) => {
         }
 
         await db.promise().query(
-            'INSERT INTO reviews (lawyer_id, client_id, rating, comment, status) VALUES (?, ?, ?, ?, "published")',
+            "INSERT INTO reviews (lawyer_id, client_id, rating, comment, status) VALUES (?, ?, ?, ?, 'published')",
             [lawyerId, client_id, rating, comment || null]
         );
         res.json({ success: true, message: 'Review submitted successfully' });
@@ -95,7 +95,7 @@ router.post('/reviews/:id/report', authenticateToken, async (req, res) => {
         const fullReason = prefix + flagReason;
 
         await db.promise().query(
-            'UPDATE reviews SET status = "reported", is_hidden = 0, flag_reason = ?, reporter_id = ? WHERE id = ?',
+            "UPDATE reviews SET status = 'reported', is_hidden = 0, flag_reason = ?, reporter_id = ? WHERE id = ?",
             [fullReason, req.user.id, reviewId]
         );
         res.json({ success: true, message: 'Report submitted successfully' });
