@@ -340,7 +340,7 @@
 
     const fetchLawyers = async () => {
         try {
-            elements.searchResults.innerHTML = '<div class="col-12 text-center mt-5"><div class="spinner-border text-primary"></div></div>';
+            elements.searchResults.innerHTML = '<div class="col-12 text-center mt-5"><div class="spinner-grow text-secondary"></div></div>';
             const params = new URLSearchParams();
             if(state.keyword) params.append('keyword', state.keyword);
             if(state.experience) params.append('experience', state.experience);

@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchInitialLawyers = async () => {
         try {
-            document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center mt-5"><div class="spinner-border text-primary"></div></div>';
+            document.getElementById('searchResults').innerHTML = '<div class="col-12 text-center mt-5"><div class="spinner-grow text-secondary"></div></div>';
             const response = await fetch('/lawyer/search');
             const data = await response.json();
             // Show more data to allow scrolling
