@@ -286,7 +286,7 @@
 
         lawyers.forEach(lawyer => {
             const imgHTML = lawyer.image_path 
-                ? `<img src="${lawyer.image_path}" class="card-img-top rounded-top-4 lawyer-card-img">`
+                ? `<img src="${lawyer.image_path}" class="card-img-top rounded-top-4 lawyer-card-img" onerror="this.onerror=null; this.outerHTML='<div class=\\'d-flex justify-content-center align-items-center bg-light rounded-top-4 lawyer-card-img\\'><i class=\\'fa-solid fa-user\\' style=\\'font-size: 80px; color: #dee2e6;\\'></i></div>';">`
                 : `<div class="d-flex justify-content-center align-items-center bg-light rounded-top-4 lawyer-card-img"><i class="fa-solid fa-user" style="font-size: 80px; color: #dee2e6;"></i></div>`;
             const expText = lawyer.total_experience > 0 ? `${lawyer.total_experience} ปี` : 'น้อยกว่า 1 ปี';
             let feeRate = 'ไม่ระบุ';
