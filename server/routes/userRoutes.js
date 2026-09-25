@@ -22,10 +22,11 @@ router.post('/user/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(inputPassword, saltRounds);
 
-        let finalProfilePic = profilePic;
-        if (finalProfilePic && finalProfilePic.startsWith('data:')) {
-            finalProfilePic = await saveFileFromBase64(finalProfilePic, 'user_profile');
-        }
+        // let finalProfilePic = profilePic;
+        // if (finalProfilePic && finalProfilePic.startsWith('data:')) {
+        //     finalProfilePic = await saveFileFromBase64(finalProfilePic, 'user_profile');
+        // }
+        let finalProfilePic = profilePic; // รับ Base64 สตริงยาวๆ มาเก็บไว้
 
         const sqlInsertUser = `
             INSERT INTO users (first_name, last_name, email, password, image_path, role) 
