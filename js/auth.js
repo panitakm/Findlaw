@@ -89,11 +89,11 @@ const Auth = {
             navRightSection.innerHTML = profileDropdown;
         } else {
             navRightSection.innerHTML = `
-                <div class="d-none d-md-flex gap-2">
+                <div class="d-none d-lg-flex gap-2">
                     <a href='/sign_up' class="btn btn-register rounded-pill-custom px-4 btn-glow">สมัครใช้งาน</a>
                     <a href='/sign_in' class="btn btn-login rounded-pill-custom px-4 btn-glow">เข้าสู่ระบบ</a>
                 </div>
-                <div class="dropdown d-md-none">
+                <div class="dropdown d-lg-none">
                     <button class="btn btn-outline-dark dropdown-toggle p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 12px;">
                         <i class="fa-solid fa-list fs-5"></i>
                     </button>
@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (sidebar && header) {
         // Create Hamburger Button
         const hamburgerBtn = document.createElement("button");
-        hamburgerBtn.className = "btn btn-light d-md-none me-3";
+        hamburgerBtn.className = "btn btn-light d-lg-none me-3";
         hamburgerBtn.innerHTML = "<i class=\"fa-solid fa-bars fs-5\"></i>";
         hamburgerBtn.style.border = "1px solid #dee2e6";
         hamburgerBtn.style.color = "#1A435A";

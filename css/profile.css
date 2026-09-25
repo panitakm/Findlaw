@@ -482,3 +482,10 @@ main {
     }
 }
 
+
+@media (max-width: 768px) {
+    .profile-avatar-img, .sidebar-avatar-img {
+        max-width: 100%;
+        height: auto;
+    }
+}
