@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
 
 main {
     font-family: 'Noto Sans Thai', sans-serif;
@@ -344,4 +344,76 @@ main {
     color: #6b21a8; /* purple-800 for contrast */
 }
 
+/* รั้วกั้นสำหรับ Tablet (iPad) และ Mobile */
+@media (max-width: 992px) {
+    /* 1. เคลียร์ระยะขอบเนื้อหาหลักบนแท็บเล็ต ให้ตารางขยายเต็ม 100% */
+    main.col-md-9, main.col-lg-10 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+    }
 
+    /* 2. บังคับตารางให้เลื่อนได้เมื่ออยู่บนจอเล็ก */
+    .table-responsive {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    .custom-table {
+        min-width: 800px; /* บังคับความกว้างให้ตารางไม่บีบตัวเกินไป */
+    }
+
+    /* ซ่อน Sidebar ปกติ และเปลี่ยนเป็น Offcanvas เมื่อหน้าจอเล็ก */
+    aside.sidebar-curved {
+        position: fixed !important;
+        top: 0;
+        left: -300px; /* ซ่อนไว้ด้านซ้าย */
+        width: 280px !important;
+        height: 100vh !important;
+        z-index: 1050;
+        transition: left 0.3s ease-in-out;
+        background-color: white;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        display: block !important; /* ยกเลิก d-none ของ Bootstrap ถ้ามี */
+    }
+
+    /* เมื่อกดปุ่ม Hamburger จะมีการเติมคลาส show (จาก JS) */
+    aside.sidebar-curved.show {
+        left: 0 !important;
+    }
+
+    /* บังคับให้ปุ่ม Hamburger แสดงบน Tablet (หักล้าง d-md-none) */
+    .user-header-bar .btn-light.d-md-none {
+        display: inline-block !important;
+    }
+
+    /* ฉากหลังตอนเปิด Sidebar */
+    .sidebar-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        display: none;
+    }
+    .sidebar-backdrop.show {
+        display: block;
+    }
+
+    /* 3. รูปภาพโปรไฟล์ยืดหยุ่น (ไม่ล็อคกว้างตายตัว) */
+    .position-relative[style*="width: 180px"],
+    #detailProfileImg {
+        width: 100% !important;
+        max-width: 180px;
+        height: auto !important;
+        aspect-ratio: 1 / 1;
+        margin: 0 auto;
+    }
+    .position-relative[style*="width: 180px"] i {
+        font-size: 50px !important;
+    }
+}
