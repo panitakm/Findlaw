@@ -181,8 +181,8 @@ router.get('/users/:id/favorites', async (req, res) => {
                        FROM lawyer_works
                        GROUP BY lawyer_id
                    ) w WHERE w.lawyer_id = l.id) as experience,
-                   (SELECT IFNULL(AVG(rating), 0) FROM reviews r WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported')) as rating,
-                   (SELECT COUNT(*) FROM reviews r WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported')) as review_count,
+                   (SELECT IFNULL(AVG(r.rating), 0) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as rating,
+                   (SELECT COUNT(*) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = l.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as review_count,
                    s.created_at
             FROM saved_lawyers s
             JOIN users l ON s.lawyer_id = l.id

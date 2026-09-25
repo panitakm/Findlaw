@@ -336,8 +336,8 @@ router.get('/lawyer/search', async (req, res) => {
             IFNULL(exp.total_exp, 0) AS total_experience,
             l.fee_rate,
             GROUP_CONCAT(DISTINCT lc.name SEPARATOR ', ') AS specialties,
-            (SELECT IFNULL(AVG(rating), 0) FROM reviews r WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported')) as rating,
-            (SELECT COUNT(*) FROM reviews r WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported')) as review_count
+            (SELECT IFNULL(AVG(r.rating), 0) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as rating,
+            (SELECT COUNT(*) FROM reviews r JOIN users client ON r.client_id = client.id WHERE r.lawyer_id = u.id AND r.status IN ('published', 'reported') AND IFNULL(client.status, '') != 'deleted') as review_count
         FROM users u
         JOIN lawyers l ON u.id = l.id
         LEFT JOIN provinces p ON l.province_id = p.id
