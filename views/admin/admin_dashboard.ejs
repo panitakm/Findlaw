@@ -76,54 +76,10 @@
               <div class="fw-bold" style="font-size: 0.95rem; color: #1A435A;">ผู้ดูแลระบบ</div>
               <div class="small" style="color: #1A435A;">Admin</div>
             </div>
-            <div class="d-flex justify-content-center align-items-center rounded-circle" id="adminProfileIcon"
-              style="width: 44px; height: 44px; color: white; font-weight: bold; font-size: 1.1rem; letter-spacing: 1px;">
-              AD
+            <div class="d-flex justify-content-center align-items-center bg-light rounded-circle shadow-sm border border-2 border-white" id="adminProfileIcon"
+              style="width: 44px; height: 44px;">
+              <i class="fa-solid fa-user" style="font-size: 24px; color: #dee2e6;"></i>
             </div>
-            <script>
-              document.addEventListener('DOMContentLoaded', async () => {
-                const adminIcon = document.getElementById('adminProfileIcon');
-                let user = null;
-                
-                try {
-                  const storedUser = localStorage.getItem('user');
-                  if (storedUser) user = JSON.parse(storedUser);
-                } catch (e) { }
-
-                let finalColor = null;
-
-                if (user && user.image_path) {
-                    if (user.image_path.startsWith('#')) {
-                        finalColor = user.image_path;
-                    } else if (user.image_path.startsWith('http') || user.image_path.startsWith('data:')) {
-                        adminIcon.innerHTML = `<img src="${user.image_path}" class="w-100 h-100 rounded-circle object-fit-cover">`;
-                        adminIcon.style.backgroundColor = 'transparent';
-                        return;
-                    }
-                }
-
-                if (!finalColor) {
-                    const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#ff9800', '#ff5722'];
-                    finalColor = colors[Math.floor(Math.random() * colors.length)];
-                    
-                    if (user && typeof getAuthHeaders === 'function') {
-                        try {
-                            const res = await fetch('/admin/profile/color', {
-                                method: 'PUT',
-                                headers: getAuthHeaders(),
-                                body: JSON.stringify({ color: finalColor })
-                            });
-                            if (res.ok) {
-                                user.image_path = finalColor;
-                                localStorage.setItem('user', JSON.stringify(user));
-                            }
-                        } catch (e) { console.error('Failed to save color', e); }
-                    }
-                }
-                
-                adminIcon.style.backgroundColor = finalColor;
-              });
-            </script>
           </div>
         </div>
 
