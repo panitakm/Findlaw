@@ -368,14 +368,24 @@ async function submitForm(e) {
         inputFacebook: document.getElementById('inputFacebook').value,
         inputFeeRate: document.getElementById('inputFeeRate').value,
         
-        profilePic: profilePicBase64,
-        LicFile: licenseFileBase64,
-        
         categories: window.lawyerSpecialties.map(s => s.id),
         schedules: schedules,
         educations: educations,
         works: works
     };
+
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(payload));
+
+    const profilePicInput = document.getElementById('inputPic');
+    if (profilePicInput && profilePicInput.files.length > 0) {
+        formData.append('profilePic', profilePicInput.files[0]);
+    }
+
+    const licFileInput = document.getElementById('LicFile');
+    if (licFileInput && licFileInput.files.length > 0) {
+        formData.append('LicFile', licFileInput.files[0]);
+    }
 
     const btnSubmit = document.getElementById('btnSubmit');
     const spinner = document.getElementById('submitSpinner');
@@ -388,8 +398,7 @@ async function submitForm(e) {
     try {
         const res = await fetch('/lawyer/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: formData
         });
         
         const result = await res.json();

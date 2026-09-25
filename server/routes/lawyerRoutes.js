@@ -2,16 +2,28 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../config/db');
-const { uploadBase64ToCloudinary } = require('../utils/cloudinaryUtils');
+const multer = require('multer');
+const { uploadBase64ToCloudinary, uploadBufferToCloudinary } = require('../utils/cloudinaryUtils');
 const saltRounds = 10;
 
-router.post('/lawyer/register', async (req, res) => {
+const upload = multer({ storage: multer.memoryStorage() });
+
+router.post('/lawyer/register', upload.fields([{ name: 'profilePic', maxCount: 1 }, { name: 'LicFile', maxCount: 1 }]), async (req, res) => {
+    let bodyData;
+    try {
+        // We sent JSON as a string inside a field named "data" or we send individual fields.
+        // Assuming we send "data" as a JSON string from FormData
+        bodyData = req.body.data ? JSON.parse(req.body.data) : req.body;
+    } catch(e) {
+        bodyData = req.body;
+    }
+
     const {
         inputFirsname, inputLastname, inputEmail, inputPhone, inputPassword, inputLicNum, inputProvince,
         inputHouseNo, inputMoo, inputSoi, inputRoad, inputSubDistrict, inputDistrict, inputZipcode,
-        profilePic, LicFile, categories, inputLineId, inputFacebook, inputFeeRate,
+        categories, inputLineId, inputFacebook, inputFeeRate,
         schedules, educations, works
-    } = req.body;
+    } = bodyData;
 
     try {
         if (!inputFirsname || !inputLastname || !inputEmail || !inputPhone || !inputPassword || !inputLicNum || !inputProvince) {
@@ -34,18 +46,28 @@ router.post('/lawyer/register', async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(inputPassword, saltRounds);
-        let dbImgePath = profilePic || null;
-        let dbLicFilePath = LicFile || null;
+        let dbImgePath = null;
+        let dbLicFilePath = null;
 
         try {
-            if (profilePic && profilePic.startsWith('data:')) {
-                dbImgePath = await uploadBase64ToCloudinary(profilePic, 'profile');
+            const uploadPromises = [];
+            
+            if (req.files && req.files['profilePic']) {
+                uploadPromises.push(
+                    uploadBufferToCloudinary(req.files['profilePic'][0].buffer, 'profile')
+                        .then(url => { dbImgePath = url; })
+                );
             }
-            if (LicFile && LicFile.startsWith('data:')) {
-                dbLicFilePath = await uploadBase64ToCloudinary(LicFile, 'license');
+            if (req.files && req.files['LicFile']) {
+                uploadPromises.push(
+                    uploadBufferToCloudinary(req.files['LicFile'][0].buffer, 'license')
+                        .then(url => { dbLicFilePath = url; })
+                );
             }
+            
+            await Promise.all(uploadPromises);
         } catch (uploadError) {
-            return res.status(400).json({ error: uploadError.message });
+            return res.status(400).json({ error: "เกิดข้อผิดพลาดในการอัปโหลดไฟล์รูปภาพ" });
         }
 
         const connection = db.promise();
@@ -83,7 +105,7 @@ router.post('/lawyer/register', async (req, res) => {
             );
 
             if (categories && categories.length > 0) {
-                for (let cat of categories) {
+                const categoryPromises = categories.map(async (cat) => {
                     let catId = cat;
                     if (isNaN(cat)) {
                         const [existing] = await connection.query(`SELECT id FROM lawyer_categories WHERE name = ?`, [cat]);
@@ -94,35 +116,39 @@ router.post('/lawyer/register', async (req, res) => {
                             catId = insertCat.insertId;
                         }
                     }
-                    await connection.query(`INSERT INTO lawyer_specialties (lawyer_id, specialty_id) VALUES (?, ?)`, [newUserId, catId]);
-                }
+                    return connection.query(`INSERT INTO lawyer_specialties (lawyer_id, specialty_id) VALUES (?, ?)`, [newUserId, catId]);
+                });
+                await Promise.all(categoryPromises);
             }
 
             if (schedules && Array.isArray(schedules) && schedules.length > 0) {
-                for (const s of schedules) {
-                    await connection.query(
+                const schedulePromises = schedules.map(s => 
+                    connection.query(
                         `INSERT INTO lawyer_schedules (lawyer_id, day_of_week, time_start, time_end, is_open) VALUES (?, ?, ?, ?, ?)`,
                         [newUserId, s.day_of_week, s.time_start || null, s.time_end || null, s.is_open ? 1 : 0]
-                    );
-                }
+                    )
+                );
+                await Promise.all(schedulePromises);
             }
 
             if (educations && Array.isArray(educations) && educations.length > 0) {
-                for (const e of educations) {
-                    await connection.query(
+                const eduPromises = educations.map(e => 
+                    connection.query(
                         `INSERT INTO lawyer_educations (lawyer_id, university, degree, year_start, year_end) VALUES (?, ?, ?, ?, ?)`,
                         [newUserId, e.university, e.degree, e.year_start || null, e.year_end || null]
-                    );
-                }
+                    )
+                );
+                await Promise.all(eduPromises);
             }
 
             if (works && Array.isArray(works) && works.length > 0) {
-                for (const w of works) {
-                    await connection.query(
+                const workPromises = works.map(w => 
+                    connection.query(
                         `INSERT INTO lawyer_works (lawyer_id, company_name, job_position, year_start, year_end) VALUES (?, ?, ?, ?, ?)`,
                         [newUserId, w.company_name, w.job_position, w.year_start || null, w.year_end || null]
-                    );
-                }
+                    )
+                );
+                await Promise.all(workPromises);
             }
 
             await connection.query('COMMIT');

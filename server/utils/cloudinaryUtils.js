@@ -17,4 +17,20 @@ const uploadBase64ToCloudinary = async (base64String, folderName) => {
     }
 };
 
-module.exports = { uploadBase64ToCloudinary };
+const uploadBufferToCloudinary = (buffer, folderName) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            { folder: `findlaw/${folderName}` },
+            (error, result) => {
+                if (result) {
+                    resolve(result.secure_url);
+                } else {
+                    reject(error);
+                }
+            }
+        );
+        uploadStream.end(buffer);
+    });
+};
+
+module.exports = { uploadBase64ToCloudinary, uploadBufferToCloudinary };
