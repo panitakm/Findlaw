@@ -107,7 +107,7 @@
                     <button class="nav-link" id="users-suspended-tab" data-bs-toggle="tab" data-bs-target="#users-suspended-pane" type="button" role="tab">ระงับบัญชี</button>
                   </li>
                   <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="users-deleted-tab" data-bs-toggle="tab" data-bs-target="#users-deleted-pane" type="button" role="tab">ลบบัญชี</button>
+                    <button class="nav-link" id="users-deleted-tab" data-bs-toggle="tab" data-bs-target="#users-deleted-pane" type="button" role="tab">รายการที่ถูกลบ</button>
                   </li>
                 </ul>
 
@@ -159,11 +159,12 @@
                     <table class="table table-hover align-middle custom-table">
                       <thead class="text-muted">
                         <tr>
-                          <th style="width: 25%">ชื่อ-นามสกุล</th>
-                          <th style="width: 25%">อีเมล</th>
-                          <th class="text-center" style="width: 15%">บทบาท</th>
-                          <th class="text-center" style="width: 15%">สถานะ</th>
-                          <th class="text-center" style="width: 20%">จัดการ</th>
+                          <th style="width: 20%">ชื่อ-นามสกุล</th>
+                          <th style="width: 20%">อีเมล</th>
+                          <th class="text-center" style="width: 10%">บทบาท</th>
+                          <th class="text-center" style="width: 10%">สถานะ</th>
+                          <th style="width: 25%">เหตุผลในการระงับ</th>
+                          <th class="text-center" style="width: 15%">จัดการ</th>
                         </tr>
                       </thead>
                       <tbody id="suspendedUserTableBody">
@@ -182,8 +183,7 @@
                           <th style="width: 25%">ชื่อ-นามสกุล</th>
                           <th style="width: 25%">อีเมล</th>
                           <th class="text-center" style="width: 15%">บทบาท</th>
-                          <th class="text-center" style="width: 15%">สถานะ</th>
-                          <th class="text-center" style="width: 20%">จัดการ</th>
+                          <th class="text-center" style="width: 35%">สถานะ</th>
                         </tr>
                       </thead>
                       <tbody id="deletedUserTableBody">

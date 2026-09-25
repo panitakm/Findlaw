@@ -81,8 +81,11 @@ function displayUsers(userList) {
     const renderTable = (list, tbodyId) => {
         const tbody = document.getElementById(tbodyId);
         if (!tbody) return;
-        if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted">
+            let cols = 5;
+            if (tbodyId === 'suspendedUserTableBody') cols = 6;
+            else if (tbodyId === 'deletedUserTableBody') cols = 4;
+
+            tbody.innerHTML = `<tr><td colspan="${cols}" class="text-center py-5 text-muted">
                 ไม่พบข้อมูลผู้ใช้งาน
             </td></tr>`;
             return;
@@ -97,13 +100,36 @@ function displayUsers(userList) {
 
             let statusHtml = '';
             if (u.user_status === 'deleted') {
-                statusHtml = `<span class="badge-status badge-suspended" style="background-color: #a8adb1ff; color: white;">ลบแล้ว</span>`;
+                statusHtml = `<span class="badge-status badge-deleted" style="background-color: #f8d7da; color: #842029;">ถูกลบ</span>`;
             } else if (u.user_status === 'suspended') {
                 statusHtml = `<span class="badge-status badge-suspended">ระงับ</span>`;
             } else if (u.user_status === 'pending' || (role === 'lawyer' && u.lawyer_status === 'pending')) {
                 statusHtml = `<span class="badge-status badge-pending">รอตรวจสอบ</span>`;
             } else {
                 statusHtml = `<span class="badge-status badge-active">ใช้งาน</span>`;
+            }
+
+            let actionHtml = '';
+            if (tbodyId === 'deletedUserTableBody') {
+                actionHtml = '';
+            } else if (tbodyId === 'suspendedUserTableBody') {
+                actionHtml = `
+                <td>${u.suspend_reason || '-'}</td>
+                <td class="text-center">
+                    <div class="d-flex justify-content-center gap-4">
+                        <i class="fa-solid fa-rotate-left text-success" style="cursor: pointer; font-size: 1.1rem; transition: opacity 0.2s;" onclick="restoreUser(${u.id})" title="ยกเลิกระงับบัญชี" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"></i>
+                    </div>
+                </td>
+                `;
+            } else {
+                actionHtml = `
+                <td class="text-center">
+                    <div class="d-flex justify-content-center gap-4">
+                        <i class="fa-solid fa-ban text-dark" style="cursor: pointer; font-size: 1.1rem; transition: opacity 0.2s;" onclick="suspendUser(${u.id})" title="ระงับการใช้งาน" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"></i>
+                        <i class="fa-solid fa-trash text-danger" style="cursor: pointer; font-size: 1.1rem; transition: opacity 0.2s;" onclick="deleteUser(${u.id})" title="ลบบัญชี" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"></i>
+                    </div>
+                </td>
+                `;
             }
 
             return `
@@ -114,18 +140,7 @@ function displayUsers(userList) {
                 <td class="text-center">
                     ${statusHtml}
                 </td>
-                <td class="text-center">
-                    ${u.user_status === 'deleted' || u.user_status === 'suspended' ? `
-                    <div class="d-flex justify-content-center gap-4">
-                        <i class="fa-solid fa-rotate-left text-success" style="cursor: pointer; font-size: 1.1rem; transition: opacity 0.2s;" onclick="restoreUser(${u.id})" title="กู้คืนบัญชี" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"></i>
-                    </div>
-                    ` : `
-                    <div class="d-flex justify-content-center gap-4">
-                        <i class="fa-solid fa-ban text-dark" style="cursor: pointer; font-size: 1.1rem; transition: opacity 0.2s;" onclick="suspendUser(${u.id})" title="ระงับการใช้งาน" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"></i>
-                        <i class="fa-solid fa-trash text-danger" style="cursor: pointer; font-size: 1.1rem; transition: opacity 0.2s;" onclick="deleteUser(${u.id})" title="ลบบัญชี" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"></i>
-                    </div>
-                    `}
-                </td>
+                ${actionHtml}
             </tr>
             `;
         }).join('');

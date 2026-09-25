@@ -55,7 +55,7 @@ router.get('/admin/dashboard/overview', authenticateAdmin, async (req, res) => {
 router.get('/admin/users', authenticateAdmin, async (req, res) => {
     try {
         const [rows] = await db.promise().query(`
-            SELECT u.id, u.first_name, u.last_name, u.email, u.role, u.status as user_status, l.status as lawyer_status 
+            SELECT u.id, u.first_name, u.last_name, u.email, u.role, u.status as user_status, l.status as lawyer_status, u.suspend_reason 
             FROM users u 
             LEFT JOIN lawyers l ON u.id = l.id 
             ORDER BY u.created_at DESC
