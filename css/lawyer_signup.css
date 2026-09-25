@@ -373,6 +373,7 @@ select.form-select option {
         padding: 1.5rem !important;
         margin: 0 auto !important;
         max-width: 550px !important;
+        width: 88% !important;
         border-radius: 20px !important;
     }
     .form-group-custom {

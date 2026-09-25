@@ -161,6 +161,7 @@ body {
         padding: 1.5rem !important;
         margin: 0 auto !important;
         max-width: 450px !important;
+        width: 88% !important;
         border-radius: 20px !important;
     }
     .fs-3 {

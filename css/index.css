@@ -456,6 +456,11 @@ section.container h5.text-center {
 
 /* รั้วกั้นสำหรับ Mobile (เพิ่มเติม) */
 @media (max-width: 768px) {
+    .container {
+        width: 88% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
     .title {
         padding: 80px 0 40px !important;
     }
@@ -469,5 +474,6 @@ section.container h5.text-center {
         padding: 15px !important;
         margin-top: -20px !important;
         border-radius: 16px !important;
+        width: 100% !important;
     }
 }
