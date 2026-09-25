@@ -67,10 +67,7 @@ router.put('/users/update/:id', async (req, res) => {
     const { first_name, last_name, email, phone, old_password, new_password, image_path } = req.body;
 
     try {
-        let finalImagePath = image_path;
-        if (finalImagePath && finalImagePath.startsWith('data:')) {
-            finalImagePath = await saveFileFromBase64(finalImagePath, 'user_profile');
-        }
+        let finalImagePath = image_path || null;
 
         await db.promise().query(
             `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, image_path = COALESCE(?, image_path) WHERE id = ?`,

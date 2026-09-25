@@ -34,15 +34,8 @@ router.post('/lawyer/register', async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(inputPassword, saltRounds);
-        let dbImgePath = null;
-        let dbLicFilePath = null;
-
-        try {
-            dbImgePath = await saveFileFromBase64(profilePic, 'profile');
-            dbLicFilePath = await saveFileFromBase64(LicFile, 'license');
-        } catch (uploadError) {
-            return res.status(400).json({ error: uploadError.message });
-        }
+        let dbImgePath = profilePic || null;
+        let dbLicFilePath = LicFile || null;
 
         const connection = db.promise();
         await connection.query('BEGIN');
@@ -224,16 +217,8 @@ router.put('/lawyer/lawyer/save-profile/:id', async (req, res) => {
     const data = req.body;
 
     try {
-        let finalImagePath = data.image_path;
-        let finalLicensePath = data.license_file;
-
-        if (finalImagePath && finalImagePath.startsWith('data:')) {
-            finalImagePath = await saveFileFromBase64(finalImagePath, 'profile');
-        }
-
-        if (finalLicensePath && finalLicensePath.startsWith('data:')) {
-            finalLicensePath = await saveFileFromBase64(finalLicensePath, 'license');
-        }
+        let finalImagePath = data.image_path || null;
+        let finalLicensePath = data.license_file || null;
 
         await db.promise().query(
             `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, image_path = ? 
