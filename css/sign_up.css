@@ -156,10 +156,11 @@ body {
 }
 
 /* รั้วกั้นสำหรับ Mobile/Tablet */
-@media (max-width: 768px) {
-    .glass-card {
+@media (max-width: 1024px) {
+    .container {
         padding: 1.5rem !important;
-        margin: 1rem !important;
+        margin: 0 auto !important;
+        max-width: 450px !important;
         border-radius: 20px !important;
     }
     .fs-3 {
