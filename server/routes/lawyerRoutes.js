@@ -70,8 +70,8 @@ router.post('/lawyer/register', upload.fields([{ name: 'profilePic', maxCount: 1
             return res.status(400).json({ error: "เกิดข้อผิดพลาดในการอัปโหลดไฟล์รูปภาพ" });
         }
 
-        const connection = db.promise();
-        await connection.query('BEGIN');
+        const connection = await db.promise().getConnection();
+        await connection.beginTransaction();
 
         try {
             const [[prov]] = await connection.query('SELECT name_th as name FROM provinces WHERE id = ?', [inputProvince]);
@@ -151,11 +151,13 @@ router.post('/lawyer/register', upload.fields([{ name: 'profilePic', maxCount: 1
                 await Promise.all(workPromises);
             }
 
-            await connection.query('COMMIT');
+            await connection.commit();
+            connection.release();
             res.status(201).json({ message: "สมัครสมาชิกสำเร็จเรียบร้อยแล้ว!" });
 
         } catch (insertError) {
-            await connection.query('ROLLBACK');
+            await connection.rollback();
+            connection.release();
             console.error("Database Insert Error: ", insertError);
             res.status(500).json({ error: "เกิดข้อผิดพลาดในการบันทึกข้อมูลลงฐานข้อมูล" });
         }
