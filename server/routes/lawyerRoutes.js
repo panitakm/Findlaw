@@ -331,7 +331,7 @@ router.get('/lawyer/search', async (req, res) => {
         SELECT 
             u.id, 
             CONCAT(u.first_name, ' ', u.last_name) AS full_name, 
-            u.image_path, 
+            ANY_VALUE(u.image_path) AS image_path, 
             p.name_th AS province_name,
             IFNULL(exp.total_exp, 0) AS total_experience,
             l.fee_rate,
@@ -377,7 +377,7 @@ router.get('/lawyer/search', async (req, res) => {
         }
     }
 
-    sql += ` GROUP BY u.id, u.first_name, u.last_name, u.image_path, p.name_th, exp.total_exp, l.fee_rate`;
+    sql += ` GROUP BY u.id, u.first_name, u.last_name, p.name_th, exp.total_exp, l.fee_rate`;
 
     try {
         const [rows] = await db.promise().query(sql, queryParams);
