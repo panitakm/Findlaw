@@ -81,6 +81,7 @@ function displayUsers(userList) {
     const renderTable = (list, tbodyId) => {
         const tbody = document.getElementById(tbodyId);
         if (!tbody) return;
+        if (list.length === 0) {
             let cols = 5;
             if (tbodyId === 'suspendedUserTableBody') cols = 6;
             else if (tbodyId === 'deletedUserTableBody') cols = 4;
