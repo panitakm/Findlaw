@@ -434,11 +434,28 @@ section.container h5.text-center {
     }
 }
 @media (max-width: 768px) {
+    .title {
+        flex-shrink: 0;
+        padding-bottom: 120px !important;
+    }
+    .swiper-slide {
+        height: auto !important;
+        min-height: 100vh;
+    }
     .search-container {
         padding: 15px;
-        margin-top: -15px;
+        margin-top: -40px;
     }
     .form-select {
         min-width: 0 !important;
+    }
+    .navbar-brand {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+    .navbar-brand span {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 }
