@@ -161,10 +161,21 @@ body {
         padding: 1.5rem !important;
         margin: 0 auto !important;
         max-width: 450px !important;
-        width: 88% !important;
+        width: calc(100% - 2rem) !important;
         border-radius: 20px !important;
     }
     .fs-3 {
         font-size: 1.5rem !important;
+    }
+    .header {
+        font-size: 1.4rem !important;
+    }
+    .form-control, .btn {
+        font-size: 0.85rem !important;
+        height: auto !important;
+        padding: 8px 12px !important;
+    }
+    .form-input {
+        margin-bottom: 10px !important;
     }
 }

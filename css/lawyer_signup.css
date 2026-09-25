@@ -373,13 +373,28 @@ select.form-select option {
         padding: 1.5rem !important;
         margin: 0 auto !important;
         max-width: 550px !important;
-        width: 88% !important;
+        width: calc(100% - 2rem) !important;
         border-radius: 20px !important;
     }
     .form-group-custom {
         margin-bottom: 15px;
     }
     .title {
-        font-size: 1.5rem !important;
+        font-size: 1.3rem !important;
+    }
+    .form-group-custom {
+        margin-bottom: 10px !important;
+    }
+    .form-control-custom, .form-select-custom, .btn-submit {
+        font-size: 0.85rem !important;
+        padding: 8px 12px !important;
+    }
+    input[type="file"] {
+        max-width: 100% !important;
+        font-size: 0.75rem !important;
+        overflow: hidden;
+    }
+    .signup-container {
+        overflow: hidden;
     }
 }

@@ -457,23 +457,28 @@ section.container h5.text-center {
 /* รั้วกั้นสำหรับ Mobile (เพิ่มเติม) */
 @media (max-width: 768px) {
     .container {
-        width: 88% !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     .title {
-        padding: 80px 0 40px !important;
+        padding: 60px 0 30px !important;
     }
     .title h1 {
-        font-size: 1.4rem !important;
+        font-size: 1.2rem !important;
     }
     .title p.subtitle {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
     }
     .search-container {
-        padding: 15px !important;
-        margin-top: -20px !important;
-        border-radius: 16px !important;
+        padding: 12px !important;
+        margin-top: -15px !important;
+        border-radius: 12px !important;
         width: 100% !important;
+    }
+    .form-control, .form-select, .btn, .input-group-text {
+        font-size: 0.85rem !important;
+        padding: 8px 10px !important;
     }
 }
