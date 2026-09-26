@@ -282,12 +282,22 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(type, 500);
     };
 
+    const stopScrollPropagation = (elementId) => {
+        const el = document.getElementById(elementId);
+        if (el) {
+            el.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
+            el.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         loadProvinces();
         loadCategoriesForSuggestion();
         fetchInitialLawyers();
         setupMainSwiper();
         startTypingAnimation();
+        stopScrollPropagation('suggestionBox');
+        stopScrollPropagation('provinceList');
     });
 
 })();
