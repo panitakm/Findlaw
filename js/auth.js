@@ -54,57 +54,80 @@ const Auth = {
 
     updateNavbar() {
         const navRightSection = document.getElementById('navRightSection');
-        if (!navRightSection) return; 
+        const mobileNavLinks = document.getElementById('mobileNavLinks');
 
         if (this.isAuthenticated()) {
             const user = this.getUser();
-            let profileDropdown = `
-                <style>
-                    .dropdown-menu .dropdown-item:active {
-                        background-color: #e9ecef !important;
-                        color: #1e2125 !important;
-                    }
-                </style>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center link-dark text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+            let settingsHref = '/profile';
+            if (user.role === 'admin') settingsHref = '/admin_dashboard';
+            else if (user.role === 'lawyer') settingsHref = '/lawyer_dashboard';
+
+            if (navRightSection) {
+                let profileDropdown = `
+                    <style>
+                        .dropdown-menu .dropdown-item:active {
+                            background-color: #e9ecef !important;
+                            color: #1e2125 !important;
+                        }
+                    </style>
+                    <div class="dropdown d-none d-lg-block">
+                        <a href="#" class="d-flex align-items-center link-dark text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+                            ${user.image_path 
+                                ? `<img src="${user.image_path}" alt="Profile" width="38" height="38" class="rounded-circle shadow-sm border border-2 border-white" style="object-fit: cover;">`
+                                : `<div class="d-flex justify-content-center align-items-center bg-light rounded-circle shadow-sm border border-2 border-white" style="width: 38px; height: 38px;"><i class="fa-solid fa-user" style="font-size: 20px; color: #dee2e6;"></i></div>`
+                            }
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 fade-in" style="min-width: 220px;">
+                            <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href='${settingsHref}'><i class="fa-solid fa-gear text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ตั้งค่า</a></li>
+                            <li><hr class="dropdown-divider my-1 mx-2"></li>
+                            <li><a class="dropdown-item rounded-3 px-3 py-2 text-dark d-flex align-items-center" href="#" onclick="Auth.clearSession()"><i class="fa-solid fa-arrow-right-from-bracket text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ออกจากระบบ</a></li>
+                        </ul>
+                    </div>
+                    <div class="d-lg-none d-flex align-items-center">
                         ${user.image_path 
                             ? `<img src="${user.image_path}" alt="Profile" width="38" height="38" class="rounded-circle shadow-sm border border-2 border-white" style="object-fit: cover;">`
                             : `<div class="d-flex justify-content-center align-items-center bg-light rounded-circle shadow-sm border border-2 border-white" style="width: 38px; height: 38px;"><i class="fa-solid fa-user" style="font-size: 20px; color: #dee2e6;"></i></div>`
                         }
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 fade-in" style="min-width: 220px;">`;
+                    </div>
+                `;
+                navRightSection.innerHTML = profileDropdown;
+            }
 
-            let settingsHref = '/profile';
-            if (user.role === 'admin') settingsHref = '/admin_dashboard';
-            else if (user.role === 'lawyer') settingsHref = '/lawyer_dashboard';
-            
-            profileDropdown += `<li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href='${settingsHref}'><i class="fa-solid fa-gear text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ตั้งค่า</a></li>`;
-
-            profileDropdown += `
-                        <li><hr class="dropdown-divider my-1 mx-2"></li>
-                        <li><a class="dropdown-item rounded-3 px-3 py-2 text-dark d-flex align-items-center" href="#" onclick="Auth.clearSession()"><i class="fa-solid fa-arrow-right-from-bracket text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ออกจากระบบ</a></li>
-                    </ul>
-                </div>
-            `;
-            navRightSection.innerHTML = profileDropdown;
+            if (mobileNavLinks) {
+                mobileNavLinks.innerHTML = `
+                    <li class="nav-item">
+                        <a href="/" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-house me-2" style="color: #4987A4;"></i>หน้าแรก
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/lawyers" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-scale-balanced me-2" style="color: #4987A4;"></i>ทนายความทั้งหมด
+                        </a>
+                    </li>
+                    <li><hr class="my-2" style="border-color: #e2e8f0;"></li>
+                    <li class="px-3 py-1 text-muted small fw-semibold" style="font-size: 0.78rem;">บัญชีผู้ใช้</li>
+                    <li class="nav-item">
+                        <a href="${settingsHref}" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-gear me-2" style="color: #4987A4;"></i>ตั้งค่า
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="Auth.clearSession()" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #dc3545; font-size: 0.95rem;">
+                            <i class="fa-solid fa-right-from-bracket me-2" style="color: #dc3545;"></i>ออกจากระบบ
+                        </a>
+                    </li>
+                `;
+            }
         } else {
-            navRightSection.innerHTML = `
-                <div class="d-none d-lg-flex gap-2">
-                    <a href='/sign_up' class="btn btn-register rounded-pill-custom px-4 btn-glow">สมัครใช้งาน</a>
-                    <a href='/sign_in' class="btn btn-login rounded-pill-custom px-4 btn-glow">เข้าสู่ระบบ</a>
-                </div>
-                <div class="dropdown d-lg-none">
-                    <button class="btn btn-outline-dark dropdown-toggle p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 12px;">
-                        <i class="fa-solid fa-list fs-5"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
-                        <li><a class="dropdown-item py-2 fw-medium" href='/sign_up'>สมัครใช้งาน</a></li>
-                        <li><a class="dropdown-item py-2 fw-medium" href='/sign_in'>เข้าสู่ระบบ</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2 fw-medium" href='/lawyer_signup'>สำหรับทนายความ</a></li>
-                    </ul>
-                </div>
-            `;
+            if (navRightSection) {
+                navRightSection.innerHTML = `
+                    <div class="d-none d-lg-flex gap-2">
+                        <a href='/sign_up' class="btn btn-register rounded-pill-custom px-4 btn-glow">สมัครใช้งาน</a>
+                        <a href='/sign_in' class="btn btn-login rounded-pill-custom px-4 btn-glow">เข้าสู่ระบบ</a>
+                    </div>
+                `;
+            }
         }
     },
 
@@ -409,40 +432,57 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================
 document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.querySelector(".sidebar-curved");
-    const header = document.querySelector(".user-header-bar");
+    let header = document.querySelector(".user-header-bar");
+    const mainContent = document.querySelector("main");
 
-    if (sidebar && header) {
-        // Create Hamburger Button
-        const hamburgerBtn = document.createElement("button");
-        hamburgerBtn.className = "btn btn-light d-lg-none me-3";
-        hamburgerBtn.innerHTML = "<i class=\"fa-solid fa-bars fs-5\"></i>";
-        hamburgerBtn.style.border = "1px solid #dee2e6";
-        hamburgerBtn.style.color = "#1A435A";
-        
-        // Find the title div (first child of header)
-        const titleDiv = header.firstElementChild;
-        if (titleDiv) {
-            // Un-hide the title on mobile for better UX
-            titleDiv.classList.remove("d-none");
-            titleDiv.classList.add("d-flex", "align-items-center");
-            titleDiv.prepend(hamburgerBtn);
-        } else {
-            header.prepend(hamburgerBtn);
+    if (sidebar) {
+        // If there's no header, create one for mobile so the hamburger menu has a place to live
+        if (!header && mainContent) {
+            header = document.createElement("div");
+            header.className = "user-header-bar d-flex align-items-center bg-white shadow-sm p-3 d-md-none mb-3";
+            header.style.zIndex = "10";
+            
+            // Try to find a title from the page
+            const pageTitleElem = document.querySelector("h2.dash-main-title") || document.querySelector("h2.fw-bold");
+            const pageTitle = pageTitleElem ? pageTitleElem.innerText : "";
+            
+            header.innerHTML = `<h5 class="mb-0 fw-bold ms-3" style="color: #1A435A;">${pageTitle}</h5>`;
+            mainContent.prepend(header);
         }
 
-        // Create Backdrop
-        const backdrop = document.createElement("div");
-        backdrop.className = "sidebar-backdrop";
-        document.body.appendChild(backdrop);
+        if (header) {
+            // Create Hamburger Button
+            const hamburgerBtn = document.createElement("button");
+            hamburgerBtn.className = "btn btn-light d-lg-none me-2";
+            hamburgerBtn.innerHTML = "<i class=\"fa-solid fa-bars fs-5\"></i>";
+            hamburgerBtn.style.border = "1px solid #dee2e6";
+            hamburgerBtn.style.color = "#1A435A";
+            
+            // Find the title div (first child of header)
+            const titleDiv = header.firstElementChild;
+            if (titleDiv && titleDiv.tagName !== 'BUTTON') {
+                // Un-hide the title on mobile for better UX
+                titleDiv.classList.remove("d-none");
+                titleDiv.classList.add("d-flex", "align-items-center");
+                header.insertBefore(hamburgerBtn, titleDiv);
+            } else {
+                header.prepend(hamburgerBtn);
+            }
 
-        // Toggle logic
-        const toggleSidebar = () => {
-            sidebar.classList.toggle("show");
-            backdrop.classList.toggle("show");
-        };
+            // Create Backdrop
+            const backdrop = document.createElement("div");
+            backdrop.className = "sidebar-backdrop";
+            document.body.appendChild(backdrop);
 
-        hamburgerBtn.addEventListener("click", toggleSidebar);
-        backdrop.addEventListener("click", toggleSidebar);
+            // Toggle logic
+            const toggleSidebar = () => {
+                sidebar.classList.toggle("show");
+                backdrop.classList.toggle("show");
+            };
+
+            hamburgerBtn.addEventListener("click", toggleSidebar);
+            backdrop.addEventListener("click", toggleSidebar);
+        }
     }
 });
 
