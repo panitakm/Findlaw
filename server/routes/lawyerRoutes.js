@@ -425,6 +425,16 @@ router.get('/lawyer/search', async (req, res) => {
         }
     }
 
+    if (req.query.category) {
+        const categories = req.query.category.split(',');
+        sql += ` AND EXISTS (
+            SELECT 1 FROM lawyer_specialties ls2
+            JOIN lawyer_categories lc2 ON ls2.specialty_id = lc2.id
+            WHERE ls2.lawyer_id = l.id AND lc2.name IN (?)
+        )`;
+        queryParams.push(categories);
+    }
+
     sql += ` GROUP BY u.id, u.first_name, u.last_name, p.name_th, exp.total_exp, l.fee_rate`;
 
     try {
