@@ -1,12 +1,7 @@
-// ==========================================
-// 1. STATE & INITIALIZATION
-// ==========================================
 let reviews = [];
 let currentFilter = 'all';
 
-// Initialize the page
 document.addEventListener('DOMContentLoaded', async () => {
-    // Auth Check
     if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
         const user = Auth.getUser();
         if (user.role !== 'lawyer') {
@@ -15,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Fetch reviews from API
         try {
             const profileRes = await fetch(`/lawyers/${user.id}/edit`);
             if (profileRes.ok) {
@@ -79,7 +73,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     comment: r.comment,
                     reply: r.reply || null,
                     replied_at: r.replied_at || null,
-                    status: r.status
+                    status: r.status,
+                    topic: r.topic || null
                 }));
             }
         } catch (err) {
@@ -94,10 +89,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateReviewSummary();
     renderReviews();
 });
-
-// ==========================================
-// 2. RENDERING LOGIC
-// ==========================================
 
 function updateReviewSummary() {
     const total = reviews.length;
@@ -147,8 +138,6 @@ function updateReviewSummary() {
     }
 }
 
-
-// Render Reviews based on current filter
 function renderReviews() {
     const container = document.getElementById('reviewsContainer');
     container.innerHTML = '';
@@ -186,12 +175,9 @@ function renderReviews() {
     }
 
     filteredReviews.forEach(review => {
-        // Determine rating class for left border color
         let ratingClass = 'rating-5';
         if(review.rating === 4) ratingClass = 'rating-4';
         if(review.rating <= 3) ratingClass = 'rating-low';
-
-        // Generate stars HTML
         let starsHtml = '';
         for(let i = 1; i <= 5; i++) {
             if(i <= review.rating) {
@@ -201,7 +187,6 @@ function renderReviews() {
             }
         }
 
-        // Generate Reply Section or Reply Button
         let replyHtml = '';
         if (review.reply) {
             let lawyerNameStr = 'ทนายความ';
@@ -262,18 +247,30 @@ function renderReviews() {
             `;
         }
 
+          let topicHtml = '';
+          if (review.topic) {
+              let badgeClass = 'topic-badge';
+              if (review.topic.includes('สัญญา') || review.topic.includes('เอกสาร')) {
+                  badgeClass += ' document';
+              } else if (review.topic.includes('ปรึกษา') || review.topic.includes('อื่นๆ') || !review.topic.includes('คดี')) {
+                  badgeClass += ' consult';
+              }
+              topicHtml = `<div class="mb-1"><span class="${badgeClass}">${review.topic}</span></div>`;
+          }
+
           const imgHTML = review.userAvatar 
               ? `<img src="${review.userAvatar}" alt="${review.userName}" class="review-user-avatar">`
               : `<div class="d-flex justify-content-center align-items-center bg-light review-user-avatar"><i class="fa-solid fa-user" style="font-size: 24px; color: #dee2e6;"></i></div>`;
 
           const reviewHtml = `
               <div class="review-item ${ratingClass}" id="review-${review.id}">
-                  <div class="d-flex justify-content-between align-items-start mb-3">
-                      <div class="d-flex align-items-center gap-3">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                      <div class="d-flex align-items-start gap-3">
                           ${imgHTML}
                         <div>
                             <h6 class="mb-0 fw-bold">${review.userName}</h6>
-                            <small class="text-muted">${review.date}</small>
+                            <small class="text-muted d-block mb-1">${review.date}</small>
+                            ${topicHtml}
                         </div>
                     </div>
                     <div class="fs-5">
@@ -290,7 +287,6 @@ function renderReviews() {
         container.insertAdjacentHTML('beforeend', reviewHtml);
     });
 
-    // Setup Read More buttons
     const textContainers = container.querySelectorAll('.review-text-container');
     textContainers.forEach(textContainer => {
         const p = textContainer.querySelector('.review-comment-text');
@@ -298,7 +294,7 @@ function renderReviews() {
         if (p && btn && p.scrollHeight > p.clientHeight) {
             btn.style.display = 'inline-block';
             btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // prevent card click
+                e.stopPropagation(); 
                 if (p.classList.contains('text-clamp-2')) {
                     p.classList.remove('text-clamp-2');
                     textContainer.classList.add('expanded');
@@ -313,10 +309,6 @@ function renderReviews() {
     });
 }
 
-// ==========================================
-// 3. ACTIONS & EVENT LISTENERS
-// ==========================================
-
 function toggleReplyBox(reviewId) {
     const box = document.getElementById(`replyBoxContainer-${reviewId}`);
     if (box) {
@@ -324,11 +316,9 @@ function toggleReplyBox(reviewId) {
     }
 }
 
-// Filter function
 function filterReviews(filterType) {
     currentFilter = filterType;
     
-    // Update active button state
     document.querySelectorAll('.filter-pills .btn-filter').forEach(btn => {
         btn.classList.remove('active');
     });
@@ -337,7 +327,6 @@ function filterReviews(filterType) {
     renderReviews();
 }
 
-// Submit inline reply
 async function submitInlineReply(reviewId) {
     const replyInput = document.getElementById(`inlineReply-${reviewId}`);
     if (!replyInput) return;
@@ -382,7 +371,6 @@ async function submitInlineReply(reviewId) {
     }
 }
 
-// Report review function
 function reportReview(reviewId, status) {
     if (status === 'reported') {
         window.showBSAlert('แจ้งเตือน', 'เนื้อหานี้ถูกรายงานไปแล้วและกำลังรอการตรวจสอบจากผู้ดูแลระบบ', 'warning');
@@ -395,7 +383,6 @@ function reportReview(reviewId, status) {
     modal.show();
 }
 
-// Global report form submit listener
 document.addEventListener('DOMContentLoaded', () => {
     const reportForm = document.getElementById('reportForm');
     if (reportForm) {

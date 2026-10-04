@@ -87,14 +87,35 @@ main {
     border: none;
 }
 
-.btn-edit { background-color: #eff6ff; color: #2563eb; }
-.btn-edit:hover { background-color: #dbeafe; transform: translateY(-2px); }
+.btn-edit { 
+    background-color: #eff6ff; 
+    color: #2563eb; 
+}
 
-.btn-delete { background-color: #fef2f2; color: #dc2626; }
-.btn-delete:hover { background-color: #fee2e2; transform: translateY(-2px); }
+.btn-edit:hover { 
+    background-color: #dbeafe; 
+    transform: translateY(-2px); 
+}
 
-.btn-approve { background-color: #ecfdf5; color: #059669; }
-.btn-approve:hover { background-color: #d1fae5; transform: translateY(-2px); }
+.btn-delete { 
+    background-color: #fef2f2; 
+    color: #dc2626; 
+}
+
+.btn-delete:hover { 
+    background-color: #fee2e2; 
+    transform: translateY(-2px); 
+}
+
+.btn-approve { 
+    background-color: #ecfdf5; 
+    color: #059669; 
+}
+
+.btn-approve:hover { 
+    background-color: #d1fae5; 
+    transform: translateY(-2px); 
+}
 
 .dash-main-title {
     font-size: 1.2rem;
@@ -165,7 +186,6 @@ main {
     transition: transform 0.2s;
 }
 
-/* Lawyer Detail Modal Styles */
 .detail-section-title {
     font-size: 1.2rem;
     font-weight: 700;
@@ -184,7 +204,7 @@ main {
     color: #1A435A;
     margin-bottom: 0;
 }
-/* Custom Nav Tabs for Verification Section */
+
 .custom-nav-tabs {
     border-bottom: none;
     gap: 0.5rem;
@@ -215,7 +235,6 @@ main {
     border-bottom: 3px solid #111;
 }
 
-/* Custom Buttons and Inputs for Admin */
 .btn-primary-admin {
     background-color: #4987A4;
     color: white;
@@ -241,7 +260,6 @@ main {
     box-shadow: 0 0 0 0.25rem rgba(26, 67, 90, 0.25);
 }
 
-/* Custom Dropdown Item for Admin */
 .dropdown-item:active, .dropdown-item:focus {
     background-color: #f8f9fa !important;
     color: #1A435A !important;
@@ -251,7 +269,6 @@ main {
     color: #1A435A;
 }
 
-/* Softer Solid Buttons */
 .btn-soft-solid-danger {
     background-color: #d15664;
     color: white;
@@ -283,21 +300,16 @@ main {
     color: white;
 }
 
-/* Custom Role Badges */
 .badge-role-lawyer {
-    background-color: #cffafe; /* cyan-100 */
-    color: #155e75; /* cyan-800 for contrast */
+    background-color: #cffafe; 
+    color: #155e75; 
 }
 .badge-role-user {
-    background-color: #f3e8ff; /* purple-100 */
-    color: #6b21a8; /* purple-800 for contrast */
+    background-color: #f3e8ff; 
+    color: #6b21a8; 
 }
 
-/* ============================================= */
-/* Responsive: Tablet (max-width: 992px)         */
-/* ============================================= */
 @media (max-width: 992px) {
-    /* 1. เคลียร์ระยะขอบเนื้อหาหลักบนแท็บเล็ต ให้ตารางขยายเต็ม 100% */
     main.col-md-9, main.col-lg-10 {
         width: 100% !important;
         flex: 0 0 100% !important;
@@ -305,7 +317,6 @@ main {
         margin-left: 0 !important;
     }
 
-    /* 2. บังคับตารางให้เลื่อนได้เมื่ออยู่บนจอเล็ก */
     .table-responsive {
         display: block !important;
         width: 100% !important;
@@ -313,34 +324,29 @@ main {
         -webkit-overflow-scrolling: touch;
     }
     .custom-table {
-        min-width: 800px; /* บังคับความกว้างให้ตารางไม่บีบตัวเกินไป */
+        min-width: 800px; 
     }
 
-    /* ซ่อน Sidebar ปกติ และเปลี่ยนเป็น Offcanvas เมื่อหน้าจอเล็ก */
     aside.sidebar-curved {
         position: fixed !important;
         top: 0;
-        left: -300px; /* ซ่อนไว้ด้านซ้าย */
+        left: -300px; 
         width: 280px !important;
         height: 100vh !important;
         z-index: 1050;
         transition: left 0.3s ease-in-out;
         background-color: white;
         box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-        display: block !important; /* ยกเลิก d-none ของ Bootstrap ถ้ามี */
+        display: block !important; 
     }
 
-    /* เมื่อกดปุ่ม Hamburger จะมีการเติมคลาส show (จาก JS) */
     aside.sidebar-curved.show {
         left: 0 !important;
     }
-
-    /* บังคับให้ปุ่ม Hamburger แสดงบน Tablet (หักล้าง d-md-none) */
     .user-header-bar .btn-light.d-md-none {
         display: inline-block !important;
     }
 
-    /* ฉากหลังตอนเปิด Sidebar */
     .sidebar-backdrop {
         position: fixed;
         top: 0;
@@ -355,7 +361,6 @@ main {
         display: block;
     }
 
-    /* 3. รูปภาพโปรไฟล์ยืดหยุ่น (ไม่ล็อคกว้างตายตัว) */
     .position-relative[style*="width: 180px"],
     #detailProfileImg {
         width: 100% !important;
@@ -369,9 +374,6 @@ main {
     }
 }
 
-/* ============================================= */
-/* Responsive: Tablet Small (max-width: 768px)   */
-/* ============================================= */
 @media (max-width: 768px) {
     .user-header-bar {
         padding: 0.8rem 1rem !important;
@@ -443,9 +445,6 @@ main {
     }
 }
 
-/* ============================================= */
-/* Responsive: Smartphone (max-width: 480px)     */
-/* ============================================= */
 @media (max-width: 480px) {
     .user-header-bar {
         padding: 0.6rem 0.8rem !important;

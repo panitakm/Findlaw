@@ -8,7 +8,7 @@ router.get('/lawyers/:id/reviews', async (req, res) => {
     try {
         const lawyerId = req.params.id;
         const sql = `
-              SELECT r.id, r.rating, r.comment, r.status, r.created_at, r.reply, r.replied_at,
+              SELECT r.id, r.rating, r.comment, r.status, r.created_at, r.reply, r.replied_at, r.topic,
                      c.first_name as user_first, c.last_name as user_last, c.image_path as user_image
               FROM reviews r
               JOIN users c ON r.client_id = c.id
@@ -27,15 +27,15 @@ router.get('/lawyers/:id/reviews', async (req, res) => {
 router.post('/lawyers/:id/reviews', async (req, res) => {
     try {
         const lawyerId = req.params.id;
-        const { client_id, rating, comment } = req.body;
+        const { client_id, rating, comment, topic } = req.body;
 
         if (!client_id || !rating) {
             return res.status(400).json({ error: 'Missing parameters' });
         }
 
         await db.promise().query(
-            "INSERT INTO reviews (lawyer_id, client_id, rating, comment, status) VALUES (?, ?, ?, ?, 'published')",
-            [lawyerId, client_id, rating, comment || null]
+            "INSERT INTO reviews (lawyer_id, client_id, rating, comment, status, topic) VALUES (?, ?, ?, ?, 'published', ?)",
+            [lawyerId, client_id, rating, comment || null, topic || null]
         );
         res.json({ success: true, message: 'Review submitted successfully' });
     } catch (err) {

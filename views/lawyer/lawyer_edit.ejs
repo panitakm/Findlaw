@@ -236,14 +236,14 @@
 
             <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-5 bg-white">
               <div class="card-header-custom mb-4 border-bottom pb-3">
-                <i class="fa-solid fa-trophy me-2"></i> ผลงานและการอบรม (ถ้ามี)
+                <i class="fa-solid fa-briefcase me-2"></i> ผลงาน / คดีที่ผ่านมา
               </div>
-              <div id="achievementContainer" class="border-0">
-                <div class="text-center text-muted py-4 mb-2 bg-white border rounded" id="noAchievementText">ยังไม่มีประวัติผลงานและการอบรม</div>
+              <div id="portfolioContainer" class="border-0 d-flex flex-column gap-3">
+                <div class="text-center text-muted py-4 mb-2 bg-white border rounded" id="noPortfolioText">ยังไม่มีประวัติผลงาน / คดีความ</div>
               </div>
               <div class="border-top border-1 pt-3 mt-3">
-                <button type="button" class="btn btn-link text-decoration-none btn-add-tag" onclick="addAchievementRow()">
-                  <i class="fa-solid fa-circle-plus"></i>เพิ่ม
+                <button type="button" class="btn btn-link text-decoration-none btn-add-tag" data-bs-toggle="modal" data-bs-target="#addWorkModal">
+                  <i class="fa-solid fa-circle-plus"></i>เพิ่มผลงานใหม่
                 </button>
               </div>
             </div>
@@ -324,6 +324,65 @@
             </div>
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-box-add rounded-pill" onclick="addSpecialty()">เพิ่ม</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal สำหรับเพิ่ม/แก้ไขผลงาน -->
+      <div class="modal fade" id="addWorkModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
+            <div class="modal-header border-bottom-0 pb-0 mt-2">
+              <h5 class="modal-title fw-bold fs-5" id="addWorkModalLabel">เพิ่มผลงานที่ผ่านมา / คดีตัวอย่าง</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3 pb-4 px-4">
+              <form id="addWorkForm">
+                <input type="hidden" id="workId" value="">
+                
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-dark">หมวดหมู่คดีความ <span class="text-danger">*</span></label>
+                  <select class="form-select bg-light" id="caseCategory" style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 15px;" required>
+                    <option value="" selected disabled>เลือกหมวดหมู่คดี</option>
+                  </select>
+                  <div class="form-text text-muted mt-2"><i class="fa-solid fa-circle-info me-1"></i> ระบบจะแสดงเฉพาะหมวดหมู่ที่คุณได้เลือกไว้เท่านั้น</div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-dark">หัวข้อคดี / ชื่องาน <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control bg-light" id="caseTitle" placeholder="เช่น คดีฟ้องหย่าและแบ่งสินสมรส..." style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 15px;" required>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-dark">รายละเอียดคดีความ <span class="text-danger">*</span></label>
+                  <textarea class="form-control bg-light" id="caseDetails" rows="4" placeholder="อธิบายรายละเอียดเกี่ยวกับคดี..." style="resize: none; border-radius: 12px; border: 1px solid #dee2e6" required></textarea>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-dark">ผลลัพธ์ของคดี <span class="text-danger">*</span></label>
+                    <select class="form-select bg-light" id="caseOutcome" style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 15px;" required>
+                      <option value="" selected disabled>เลือกผลลัพธ์</option>
+                      <option value="ชนะคดี">ชนะคดี</option>
+                      <option value="แพ้คดี">แพ้คดี</option>
+                      <option value="ไกล่เกลี่ยสำเร็จ">ไกล่เกลี่ยสำเร็จ</option>
+                      <option value="ดำเนินการเสร็จสิ้น">ดำเนินการเสร็จสิ้น</option>
+                      <option value="อยู่ระหว่างการพิจารณา">อยู่ระหว่างการพิจารณา</option>
+                      <option value="อยู่ระหว่างการดำเนินการ">อยู่ระหว่างการดำเนินการ</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold text-dark">คำอธิบายผลลัพธ์ (พอสังเขป) <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control bg-light" id="caseSummary" placeholder="เช่น ลูกความได้รับสิทธิปกครองบุตร..." style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 15px;" required>
+                  </div>
+                </div>
+
+                <div class="text-end mt-4">
+                  <button type="button" class="btn btn-light px-4 rounded-pill fw-semibold shadow-sm me-2" data-bs-dismiss="modal">ยกเลิก</button>
+                  <button type="submit" class="btn btn-primary px-4 rounded-pill fw-semibold shadow-sm" style="background-color: #4987A4; border: none;" id="btnSaveWork">บันทึกผลงาน</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

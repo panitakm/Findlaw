@@ -58,9 +58,68 @@ const Auth = {
 
         if (this.isAuthenticated()) {
             const user = this.getUser();
-            let settingsHref = '/profile';
-            if (user.role === 'admin') settingsHref = '/admin_dashboard';
-            else if (user.role === 'lawyer') settingsHref = '/lawyer_dashboard';
+
+            let dropdownItems = '';
+            let mobileAccountItems = '';
+
+            if (user.role === 'admin') {
+                dropdownItems = `
+                    <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href="/admin_dashboard"><i class="fa-solid fa-gear text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ตั้งค่า</a></li>
+                `;
+                mobileAccountItems = `
+                    <li class="nav-item">
+                        <a href="/admin_dashboard" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-gear me-2" style="color: #4987A4;"></i>ตั้งค่า
+                        </a>
+                    </li>
+                `;
+            } else if (user.role === 'lawyer') {
+                dropdownItems = `
+                    <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href="/lawyer_dashboard"><i class="fa-solid fa-chart-column text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ภาพรวมข้อมูล</a></li>
+                    <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href="/lawyer_edit"><i class="fa-solid fa-user-pen text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>แก้ไขข้อมูลส่วนตัว</a></li>
+                    <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href="/lawyer_reviews"><i class="fa-solid fa-star text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ตรวจสอบรีวิว</a></li>
+                `;
+                mobileAccountItems = `
+                    <li class="nav-item">
+                        <a href="/lawyer_dashboard" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-chart-column me-2" style="color: #4987A4;"></i>ภาพรวมข้อมูล
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/lawyer_edit" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-user-pen me-2" style="color: #4987A4;"></i>แก้ไขข้อมูลส่วนตัว
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/lawyer_reviews" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-star me-2" style="color: #4987A4;"></i>ตรวจสอบรีวิว
+                        </a>
+                    </li>
+                `;
+            } else {
+                dropdownItems = `
+                    <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href="/profile"><i class="fa-solid fa-user text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ข้อมูลส่วนตัว</a></li>
+                    <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href="/favorites"><i class="fa-solid fa-bookmark text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ทนายความที่บันทึกไว้</a></li>
+                    <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href="/user_reviews"><i class="fa-solid fa-star text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>รีวิวและความคิดเห็น</a></li>
+                `;
+                mobileAccountItems = `
+                    <li class="nav-item">
+                        <a href="/profile" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-user me-2" style="color: #4987A4;"></i>ข้อมูลส่วนตัว
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/favorites" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-bookmark me-2" style="color: #4987A4;"></i>ทนายความที่บันทึกไว้
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/user_reviews" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
+                            <i class="fa-solid fa-star me-2" style="color: #4987A4;"></i>รีวิวและความคิดเห็น
+                        </a>
+                    </li>
+                `;
+            }
 
             if (navRightSection) {
                 let profileDropdown = `
@@ -78,7 +137,7 @@ const Auth = {
                             }
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 fade-in" style="min-width: 220px;">
-                            <li><a class="dropdown-item rounded-3 px-3 py-2 mt-1 text-dark d-flex align-items-center" href='${settingsHref}'><i class="fa-solid fa-gear text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ตั้งค่า</a></li>
+                            ${dropdownItems}
                             <li><hr class="dropdown-divider my-1 mx-2"></li>
                             <li><a class="dropdown-item rounded-3 px-3 py-2 text-dark d-flex align-items-center" href="#" onclick="Auth.clearSession()"><i class="fa-solid fa-arrow-right-from-bracket text-muted me-3" style="width: 16px; text-align: center; font-size: 0.9rem;"></i>ออกจากระบบ</a></li>
                         </ul>
@@ -107,11 +166,7 @@ const Auth = {
                     </li>
                     <li><hr class="my-2" style="border-color: #e2e8f0;"></li>
                     <li class="px-3 py-1 text-muted small fw-semibold" style="font-size: 0.78rem;">บัญชีผู้ใช้</li>
-                    <li class="nav-item">
-                        <a href="${settingsHref}" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #1A435A; font-size: 0.95rem;">
-                            <i class="fa-solid fa-gear me-2" style="color: #4987A4;"></i>ตั้งค่า
-                        </a>
-                    </li>
+                    ${mobileAccountItems}
                     <li class="nav-item">
                         <a href="#" onclick="Auth.clearSession()" class="nav-link fw-semibold px-3 py-2 rounded-3" style="color: #dc3545; font-size: 0.95rem;">
                             <i class="fa-solid fa-right-from-bracket me-2" style="color: #dc3545;"></i>ออกจากระบบ

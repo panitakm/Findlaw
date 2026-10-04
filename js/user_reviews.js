@@ -47,7 +47,8 @@ async function fetchUserReviews() {
                 comment: r.comment,
                 helpful_count: r.helpful_count || 0,
                 reply_text: r.reply || r.reply_text || null,
-                reply_date: (r.replied_at || r.reply_date) ? new Date(r.replied_at || r.reply_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : null
+                reply_date: (r.replied_at || r.reply_date) ? new Date(r.replied_at || r.reply_date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : null,
+                topic: r.topic || null
             }));
         } else {
             userReviews = [];
@@ -143,6 +144,17 @@ function renderReviewsList(reviews) {
             `;
         }
 
+        let topicHtml = '';
+        if (review.topic) {
+            let badgeClass = 'topic-badge';
+            if (review.topic.includes('สัญญา') || review.topic.includes('เอกสาร')) {
+                badgeClass += ' document';
+            } else if (review.topic.includes('ปรึกษา') || review.topic.includes('อื่นๆ') || !review.topic.includes('คดี')) {
+                badgeClass += ' consult';
+            }
+            topicHtml = `<div class="mb-1"><span class="${badgeClass}">${review.topic}</span></div>`;
+        }
+
         return `
         <div class="mb-3" id="review-card-${review.id}">
             <div class="review-card p-4 cursor-pointer" onclick="window.location.href='/lawyer_profile?id=${review.lawyer_id}'">
@@ -151,7 +163,10 @@ function renderReviewsList(reviews) {
                         <div class="d-flex justify-content-between align-items-start gap-2">
                             <div>
                                 <div class="fw-semibold" style="font-size:1.1rem; color:#1A435A;">${userName}</div>
-                                <span class="review-lawyer-badge mt-1">ถึง ${review.lawyer_name}</span>
+                                <div class="d-flex flex-column align-items-start">
+                                    <span class="review-lawyer-badge mt-1 mb-1">ถึง ${review.lawyer_name} </span>
+                                    ${topicHtml}
+                                </div>
                             </div>
                             <div class="text-end flex-shrink-0">
                                 <div class="review-stars" style="font-size:1rem;">${getStarRatingHTML(review.rating)}</div>

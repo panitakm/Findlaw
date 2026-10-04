@@ -129,8 +129,8 @@
           </section>
 
           <section class="card border-0 shadow-sm p-4" id="achievementsSection">
-            <div class="header-title mb-4 w-100">ผลงานและการอบรม</div>
-            <div class="custom-timeline" id="achievementTimeline"></div>
+            <div class="header-title mb-4 w-100">ผลงาน / คดีที่ผ่านมา</div>
+            <div id="achievementTimeline" class="d-flex flex-column gap-3"></div>
           </section>
         </div>
       </div>
@@ -260,6 +260,22 @@
               </div>
               <input type="hidden" id="selectedRating" value="0" required />
             </div>
+            <!-- Review Reason/Topic Section -->
+            <div class="mb-3">
+              <label class="form-label fw-bold text-dark" style="font-size: 0.95rem;">คุณใช้บริการในเรื่องใด? <span class="text-danger">*</span></label>
+              <div class="topic-selector d-flex flex-wrap gap-2 mb-2">
+                <input type="radio" class="btn-check" name="reviewTopic" id="topic1" value="ปรึกษากฎหมาย" autocomplete="off" checked required>
+                <label class="btn btn-outline-custom" for="topic1">ปรึกษากฎหมาย</label>
+
+                <input type="radio" class="btn-check" name="reviewTopic" id="topic2" value="จ้างว่าความ" autocomplete="off">
+                <label class="btn btn-outline-custom" for="topic2">จ้างว่าความ</label>
+                
+                <input type="radio" class="btn-check" name="reviewTopic" id="topic4" value="อื่นๆ" autocomplete="off">
+                <label class="btn btn-outline-custom" for="topic4">อื่นๆ</label>
+              </div>
+              <input type="text" class="form-control bg-light mt-2" id="otherTopicInput" placeholder="โปรดระบุเรื่องที่ใช้บริการ..." style="display: none; border-radius: 12px; border: 1px solid #dee2e6;">
+            </div>
+
             <div class="mb-3">
               <textarea class="form-control bg-light" id="reviewComment" rows="4" placeholder="ข้อเสนอแนะ..."
                 style="resize: none; border-radius: 12px; border: 1px solid #dee2e6"></textarea>

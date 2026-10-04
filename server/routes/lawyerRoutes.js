@@ -241,9 +241,9 @@ router.get('/lawyers/:id/edit', async (req, res) => {
             WHERE lawyer_id = ?`, [req.params.id]);
 
         const [achievements] = await db.promise().query(
-            `SELECT title, organization, year 
+            `SELECT id, title, case_category, details, result, summary 
             FROM lawyer_portfolios
-            WHERE lawyer_id = ?`, [req.params.id]);
+            WHERE lawyer_id = ? ORDER BY created_at DESC`, [req.params.id]);
 
         res.json({ profile: profile[0], schedules, specialties, educations, works, achievements });
 
@@ -341,17 +341,75 @@ router.put('/lawyer/lawyer/save-profile/:id', async (req, res) => {
             await db.promise().query(`INSERT INTO lawyer_works (lawyer_id, company_name, job_position, year_start, year_end) VALUES ?`, [workValues]);
         }
 
-        await db.promise().query(`DELETE FROM lawyer_portfolios WHERE lawyer_id = ?`, [id]);
-        if (data.achievements && data.achievements.length > 0) {
-            const achValues = data.achievements.map(a => [id, a.title, a.organization, a.year]);
-            await db.promise().query(`INSERT INTO lawyer_portfolios (lawyer_id, title, organization, year) VALUES ?`, [achValues]);
-        }
+        // Note: lawyer_portfolios is now managed by separate API endpoints
 
         res.json({ message: 'บันทึกข้อมูลเรียบร้อยแล้ว' });
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ' + error.message });
+    }
+});
+
+// ==========================================
+// API สำหรับจัดการผลงานและคดีที่ผ่านมา (Past Works)
+// ==========================================
+
+// 1. ดึงผลงานทั้งหมดของทนายคนนั้นๆ
+router.get('/lawyer/lawyer/:id/portfolios', async (req, res) => {
+    try {
+        const [portfolios] = await db.promise().query(
+            `SELECT * FROM lawyer_portfolios WHERE lawyer_id = ? ORDER BY created_at DESC`,
+            [req.params.id]
+        );
+        res.json(portfolios);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'เกิดข้อผิดพลาดในการดึงข้อมูลผลงาน' });
+    }
+});
+
+// 2. เพิ่มผลงานใหม่
+router.post('/lawyer/lawyer/:id/portfolios', async (req, res) => {
+    const lawyerId = req.params.id;
+    const { title, case_category, details, result, summary } = req.body;
+    try {
+        const [insert] = await db.promise().query(
+            `INSERT INTO lawyer_portfolios (lawyer_id, title, case_category, details, result, summary) 
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [lawyerId, title, case_category, details, result, summary]
+        );
+        res.json({ message: 'เพิ่มผลงานสำเร็จ', id: insert.insertId });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'เกิดข้อผิดพลาดในการเพิ่มผลงาน' });
+    }
+});
+
+// 3. แก้ไขผลงาน
+router.put('/lawyer/lawyer/:id/portfolios/:portfolio_id', async (req, res) => {
+    const portfolioId = req.params.portfolio_id;
+    const { title, case_category, details, result, summary } = req.body;
+    try {
+        await db.promise().query(
+            `UPDATE lawyer_portfolios SET title=?, case_category=?, details=?, result=?, summary=? WHERE id=?`,
+            [title, case_category, details, result, summary, portfolioId]
+        );
+        res.json({ message: 'อัปเดตผลงานสำเร็จ' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'เกิดข้อผิดพลาดในการแก้ไขผลงาน' });
+    }
+});
+
+// 4. ลบผลงาน
+router.delete('/lawyer/lawyer/:id/portfolios/:portfolio_id', async (req, res) => {
+    try {
+        await db.promise().query(`DELETE FROM lawyer_portfolios WHERE id = ?`, [req.params.portfolio_id]);
+        res.json({ message: 'ลบผลงานสำเร็จ' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'เกิดข้อผิดพลาดในการลบผลงาน' });
     }
 });
 

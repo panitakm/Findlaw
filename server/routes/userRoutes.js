@@ -233,7 +233,7 @@ router.get('/users/:id/reviews', async (req, res) => {
     try {
         const userId = req.params.id;
         const sql = `
-            SELECT r.id, r.rating, r.comment, r.status, r.created_at, r.reply, r.replied_at,
+            SELECT r.id, r.rating, r.comment, r.status, r.created_at, r.reply, r.replied_at, r.topic,
                    l.id as lawyer_id, l.first_name as lawyer_first, l.last_name as lawyer_last, l.image_path as lawyer_image
             FROM reviews r
             JOIN users l ON r.lawyer_id = l.id

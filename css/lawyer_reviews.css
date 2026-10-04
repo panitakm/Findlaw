@@ -143,3 +143,5 @@
         font-size: 0.9rem !important;
     }
 }
+
+.topic-badge { background: rgba(73, 135, 164, 0.08); padding: 4px 12px; border-radius: 50px; font-size: 0.85rem; color: #4987A4; font-weight: 500; display: inline-block; }

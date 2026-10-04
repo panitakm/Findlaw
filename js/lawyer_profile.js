@@ -215,20 +215,24 @@ window.onload = async () => {
 
         const achContainer = document.getElementById('achievementTimeline');
         if (data.achievements && data.achievements.length > 0) {
-            achContainer.classList.add('custom-timeline');
+            achContainer.classList.remove('custom-timeline');
             achContainer.innerHTML = data.achievements.map(a => {
                 return `
-                <div class="timeline-item">
-                    <div class="d-flex justify-content-between align-items-start mb-1">
-                        <div class="timeline-title fw-bold">${a.title}</div>
-                        <span class="timeline-date small">${a.year || ''}</span>
+                <div class="p-3 border rounded-3 position-relative" style="background: #fcfdffff;">
+                    <div class="mb-2"><span class="badge px-2 py-2" style="background-color: #4987A4; color: #ffffff; font-weight: 550; border-radius: 50px; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">${a.case_category}</span></div>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="fw-bold text-dark mb-0">${a.title}</h6>
                     </div>
-                    <p class="mb-0 small" style="color: #1A435A;">${a.organization}</p>
+                    <p class="text-muted mb-2 text-break" style="font-size: 0.9rem; line-height: 1.5;">${a.details}</p>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="badge" style="background-color: #ddfdeeff; color: #059669; font-weight: 500; border-radius: 50px;">${a.result}</span>
+                        <small class="text-muted">${a.summary}</small>
+                    </div>
                 </div>`;
             }).join('');
         } else {
             achContainer.classList.remove('custom-timeline');
-            achContainer.innerHTML = '<p class="text-muted text-center my-3">- ไม่มีข้อมูลผลงานและการอบรม -</p>';
+            achContainer.innerHTML = '<p class="text-muted text-center my-3">- ไม่มีข้อมูลผลงานและคดีที่ผ่านมา -</p>';
         }
 
         const eduContainer = document.getElementById('educationTimeline');
@@ -336,6 +340,7 @@ window.onload = async () => {
     }
 
     window.renderFilteredReviews = renderFilteredReviews;
+    let showingAllReviews = false;
     function renderFilteredReviews() {
         if (!reviewBox) return;
 
@@ -370,7 +375,7 @@ window.onload = async () => {
             return;
         }
 
-        reviewBox.innerHTML = filtered.map(review => {
+        const reviewHtmlGenerator = (review) => {
             let starsHtml = '';
             for (let i = 1; i <= 5; i++) {
                 if (i <= review.rating) {
@@ -441,10 +446,21 @@ window.onload = async () => {
                 `;
             }
 
+            let topicHtml = '';
+            if (review.topic) {
+                let badgeClass = 'topic-badge';
+                if (review.topic.includes('สัญญา') || review.topic.includes('เอกสาร')) {
+                    badgeClass += ' document';
+                } else if (review.topic.includes('ปรึกษา') || review.topic.includes('อื่นๆ') || !review.topic.includes('คดี')) {
+                    badgeClass += ' consult';
+                }
+                topicHtml = `<div class="mb-1"><span class="${badgeClass}">${review.topic}</span></div>`;
+            }
+
             return `
                 <div class="w-100">
                     <div class="card border-0 shadow-sm p-4">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
                             <div class="d-flex align-items-center gap-3">
                                 ${imgHTML}
                                 <div>
@@ -456,13 +472,51 @@ window.onload = async () => {
                                 <i class="fa-regular fa-flag text-muted" title="รายงานรีวิวนี้" style="cursor: pointer; transition: 0.2s;" onmouseover="this.classList.replace('text-muted', 'text-danger')" onmouseout="this.classList.replace('text-danger', 'text-muted')" onclick="openReportModal(${review.id}, 'review', '${review.status}')"></i>
                             </div>
                         </div>
+                        ${topicHtml}
                         <div class="fs-6 ${commentHtml || replyHtml ? 'mb-3' : 'mb-0'}">${starsHtml}</div>
                         ${commentHtml}
                         ${replyHtml}
                     </div>
                 </div>
             `;
-        }).join('');
+        };
+        
+
+        // If there are more than 3 reviews and we are not showing all, limit to 3 and add a "View All" button
+        if (!showingAllReviews && filtered.length > 3) {
+            const limitedHtml = filtered.slice(0, 3).map(review => {
+                // Re-run the mapping logic for the first 3
+                return reviewHtmlGenerator(review);
+            }).join('');
+            
+            reviewBox.innerHTML = limitedHtml + `
+                <div class="text-center mt-3 mb-2">
+                    <button class="btn btn-outline-secondary px-4 py-2" id="btnShowAllReviews">
+                        ดูรีวิวทั้งหมด (${filtered.length})
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('btnShowAllReviews').addEventListener('click', () => {
+                showingAllReviews = true;
+                renderFilteredReviews();
+            });
+        } else {
+            reviewBox.innerHTML = filtered.map(reviewHtmlGenerator).join('');
+            if (showingAllReviews && filtered.length > 3) {
+                reviewBox.innerHTML += `
+                    <div class="text-center mt-3 mb-2">
+                        <button class="btn btn-outline-secondary px-4 py-2" id="btnHideReviews">
+                            ย่อรีวิว
+                        </button>
+                    </div>
+                `;
+                document.getElementById('btnHideReviews').addEventListener('click', () => {
+                    showingAllReviews = false;
+                    renderFilteredReviews();
+                });
+            }
+        }
 
         // Setup Read More buttons
         const containers = reviewBox.querySelectorAll('.review-text-container');
@@ -488,8 +542,8 @@ window.onload = async () => {
 
     const ratingSelect = document.getElementById('reviewRatingSelect');
     const sortSelect = document.getElementById('reviewSortSelect');
-    if (ratingSelect) ratingSelect.addEventListener('change', renderFilteredReviews);
-    if (sortSelect) sortSelect.addEventListener('change', renderFilteredReviews);
+    if (ratingSelect) ratingSelect.addEventListener('change', () => { showingAllReviews = false; renderFilteredReviews(); });
+    if (sortSelect) sortSelect.addEventListener('change', () => { showingAllReviews = false; renderFilteredReviews(); });
 
     await loadReviews();
 
@@ -548,6 +602,24 @@ window.onload = async () => {
         });
     }
 
+    // Handle Toggle for "Other" Topic
+    const topicRadios = document.querySelectorAll('input[name="reviewTopic"]');
+    const otherTopicInput = document.getElementById('otherTopicInput');
+    
+    if (topicRadios && otherTopicInput) {
+        topicRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (document.getElementById('topic4').checked) {
+                    otherTopicInput.style.display = 'block';
+                    otherTopicInput.setAttribute('required', 'true');
+                } else {
+                    otherTopicInput.style.display = 'none';
+                    otherTopicInput.removeAttribute('required');
+                }
+            });
+        });
+    }
+
     // 3. Handle Review Submit from Modal
     const reviewForm = document.getElementById('addReviewForm');
     if (reviewForm) {
@@ -562,8 +634,17 @@ window.onload = async () => {
 
             const rating = ratingInput.value;
             const comment = document.getElementById('reviewComment').value;
-            // The isAnonymous is intentionally ignored for backend submission for now, 
-            // since DB doesn't support it yet.
+            
+            let selectedTopic = '';
+            const checkedRadio = document.querySelector('input[name="reviewTopic"]:checked');
+            if (checkedRadio) {
+                if (checkedRadio.value === 'อื่นๆ') {
+                    const customReason = otherTopicInput ? otherTopicInput.value.trim() : '';
+                    selectedTopic = customReason ? 'อื่นๆ: ' + customReason : 'อื่นๆ';
+                } else {
+                    selectedTopic = checkedRadio.value;
+                }
+            }
 
             if (rating === "0") {
                 await window.showBSAlert('แจ้งเตือน', 'กรุณาให้คะแนนดาวอย่างน้อย 1 ดาวก่อนบันทึกรีวิว', 'warning');
@@ -577,7 +658,8 @@ window.onload = async () => {
                     body: JSON.stringify({
                         client_id: currentUser.id,
                         rating: parseInt(rating),
-                        comment: comment
+                        comment: comment,
+                        topic: selectedTopic
                     })
                 });
 

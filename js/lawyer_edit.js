@@ -156,8 +156,9 @@ window.onload = async () => {
     renderSchedules(data.schedules || []);
     renderEducations(data.educations || []);
     renderWorks(data.works || []);
-    renderAchievements(data.achievements || []);
-
+    
+    // Fetch Portfolios via dedicated API
+    await fetchAndRenderPortfolios();
     // Save initial state to detect unmodified form
     initialPayloadString = JSON.stringify(getFormPayload());
 };
@@ -203,16 +204,7 @@ function getFormPayload() {
         });
     });
 
-    // Collect Achievements
-    const achievements = [];
-    document.querySelectorAll('.achievement-row').forEach(row => {
-        achievements.push({
-            title: row.querySelector('.ach-title').value,
-            organization: row.querySelector('.ach-org').value,
-            year: row.querySelector('.ach-year').value || null
-        });
-    });
-    
+
     // Address Concatenation
     const office_address = [
         document.getElementById('inputHouseNo').value ? document.getElementById('inputHouseNo').value : null,
@@ -250,7 +242,6 @@ function getFormPayload() {
         specialties: window.lawyerSpecialties,
         educations: educations, 
         works: works,
-        achievements: achievements,
         license_file: licenseFileData || existingLicenseFile        
     };
 }
@@ -391,50 +382,174 @@ function renderWorks(works) {
 
 // addWorkRow and checkEmptyWork extracted to lawyerSharedFunctions.js
 
-// Achievements
-let achievementCount = 0;
-function renderAchievements(achievements) {
-    if (achievements.length === 0) {
-        document.getElementById('noAchievementText').classList.remove('d-none');
-    } else {
-        achievements.forEach(a => addAchievementRow(a));
+// --- Portfolios (Past Works) ---
+async function fetchAndRenderPortfolios() {
+    try {
+        const res = await fetch(`/lawyer/lawyer/${lawyerId}/portfolios`);
+        if(res.ok) {
+            const portfolios = await res.json();
+            renderPortfolios(portfolios);
+        }
+    } catch(err) {
+        console.error(err);
     }
 }
 
-function addAchievementRow(data = null) {
-    achievementCount++;
-    document.getElementById('noAchievementText').classList.add('d-none');
+function renderPortfolios(portfolios) {
+    window.lawyerPortfoliosData = portfolios; // Store globally for easy lookup
+    const container = document.getElementById('portfolioContainer');
+    if(!container) return;
     
-    const row = document.createElement('div');
-    row.className = 'achievement-row mt-3 mb-3';
-    row.innerHTML = `
-        <div class="row g-2">
-            <div class="col-md-6">
-                <input type="text" class="form-control form-control-custom ach-title" placeholder="หัวข้อ/ชื่อผลงาน" value="${data ? data.title : ''}" required>
+    if (portfolios.length === 0) {
+        container.innerHTML = `<div class="text-center text-muted py-4 mb-2 bg-white border rounded" id="noPortfolioText">ยังไม่มีประวัติผลงาน / คดีความ</div>`;
+    } else {
+        container.innerHTML = portfolios.map(p => {
+            return `
+            <div class="p-3 border rounded-3 position-relative" style="background: #fcfdffff;">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="mb-2"><span class="badge px-2 py-2" style="background-color: #4987A4; color: #ffffff; font-weight: 550; border-radius: 50px; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">${p.case_category}</span></div>
+                    <div>
+                        <button type="button" class="btn-edit bg-transparent border-0 p-0 me-2" onclick="openEditWorkModal(${p.id})" style="font-size: 1.05rem;"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn-delete bg-transparent border-0 p-0" onclick="deletePortfolio(${p.id})" style="font-size: 1.05rem;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <h6 class="fw-bold text-dark mb-2">${p.title}</h6>
+                <p class="text-muted mb-2 text-break" style="font-size: 0.9rem; line-height: 1.5;">${p.details}</p>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <span class="badge" style="background-color: #ddfdeeff; color: #059669; font-weight: 500; border-radius: 50px;">${p.result}</span>
+                    <small class="text-muted">${p.summary}</small>
+                </div>
             </div>
-            <div class="col-md-6">
-                <input type="text" class="form-control form-control-custom ach-org" placeholder="หน่วยงาน/สถาบัน" value="${data ? data.organization : ''}" required>
-            </div>
-            <div class="col-md-12">
-                <select class="form-select form-control-custom ach-year" required>
-                    ${generateYearOptions(data ? data.year : '', 'ปี (พ.ศ.)')}
-                </select>
-            </div>
-            <div class="col-12 text-end mt-2 px-3">
-                <button type="button" class="btn-delete bg-transparent border-0 p-0" onclick="this.closest('.achievement-row').remove(); checkEmptyAchievement();">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    `;
-    document.getElementById('achievementContainer').appendChild(row);
-}
-
-function checkEmptyAchievement() {
-    if (document.querySelectorAll('.achievement-row').length === 0) {
-        document.getElementById('noAchievementText').classList.remove('d-none');
+        `}).join('');
     }
 }
+
+function syncCaseCategoryDropdown() {
+    const dropdown = document.getElementById('caseCategory');
+    if(!dropdown) return;
+    dropdown.innerHTML = '<option value="" selected disabled>เลือกหมวดหมู่คดี</option>';
+    window.lawyerSpecialties.forEach(sp => {
+        // sp could be a string or an object depending on how it's stored. Usually it's an object with a 'name' property.
+        const categoryName = sp.name || sp; 
+        dropdown.innerHTML += `<option value="${categoryName}">${categoryName}</option>`;
+    });
+}
+
+let isEditingWork = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const addWorkModalEl = document.getElementById('addWorkModal');
+    if(addWorkModalEl) {
+        addWorkModalEl.addEventListener('show.bs.modal', function (event) {
+            // If it was not opened by edit button, clear form and sync dropdown
+            if (!isEditingWork) {
+                syncCaseCategoryDropdown();
+                document.getElementById('addWorkForm').reset();
+                document.getElementById('workId').value = '';
+                document.getElementById('addWorkModalLabel').innerText = 'เพิ่มผลงาน/คดีที่ผ่านมา';
+            }
+            isEditingWork = false;
+        });
+    }
+
+    const addWorkForm = document.getElementById('addWorkForm');
+    if (addWorkForm) {
+        addWorkForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveWork');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+            const workId = document.getElementById('workId').value;
+            const payload = {
+                title: document.getElementById('caseTitle').value,
+                case_category: document.getElementById('caseCategory').value,
+                details: document.getElementById('caseDetails').value,
+                result: document.getElementById('caseOutcome').value,
+                summary: document.getElementById('caseSummary').value
+            };
+
+            try {
+                const method = workId ? 'PUT' : 'POST';
+                const url = workId ? `/lawyer/lawyer/${lawyerId}/portfolios/${workId}` : `/lawyer/lawyer/${lawyerId}/portfolios`;
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (res.ok) {
+                    await window.showBSAlert('สำเร็จ', 'บันทึกผลงานเรียบร้อยแล้ว', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('addWorkModal')).hide();
+                    fetchAndRenderPortfolios();
+                } else {
+                    const err = await res.json();
+                    window.showBSAlert('เกิดข้อผิดพลาด', err.error || 'ไม่สามารถบันทึกได้', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                window.showBSAlert('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'บันทึกผลงาน';
+            }
+        });
+    }
+});
+
+function openEditWorkModal(id) {
+    const p = window.lawyerPortfoliosData ? window.lawyerPortfoliosData.find(x => x.id === id) : null;
+    if (!p) return;
+    
+    isEditingWork = true;
+    syncCaseCategoryDropdown();
+    
+    const categorySelect = document.getElementById('caseCategory');
+    const val = p.case_category ? p.case_category.trim() : "";
+    let optionExists = false;
+    
+    for (let i = 0; i < categorySelect.options.length; i++) {
+        if (categorySelect.options[i].value === val) {
+            optionExists = true;
+            break;
+        }
+    }
+    
+    if (!optionExists && val) {
+        const newOpt = document.createElement('option');
+        newOpt.value = val;
+        newOpt.textContent = val;
+        categorySelect.appendChild(newOpt);
+    }
+    
+    categorySelect.value = val;
+    
+    document.getElementById('workId').value = p.id;
+    document.getElementById('caseTitle').value = p.title;
+    document.getElementById('caseDetails').value = p.details;
+    document.getElementById('caseOutcome').value = p.result;
+    document.getElementById('caseSummary').value = p.summary;
+    document.getElementById('addWorkModalLabel').innerText = 'แก้ไขผลงาน / คดีที่ผ่านมา';
+    
+    const modalEl = document.getElementById('addWorkModal');
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
+}
+
+async function deletePortfolio(id) {
+    const confirm = await window.showBSConfirm('ยืนยันการลบ', 'คุณแน่ใจหรือไม่ว่าต้องการลบผลงานนี้?');
+    if (!confirm) return;
+    
+    try {
+        const res = await fetch(`/lawyer/lawyer/${lawyerId}/portfolios/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            fetchAndRenderPortfolios();
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 
 async function saveAllData() {
     const oldPass = document.getElementById('oldPassword').value;
