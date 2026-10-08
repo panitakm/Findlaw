@@ -171,16 +171,22 @@ window.onload = async () => {
         // 3.5 Portfolios
         const portContainer = document.getElementById('dashPortfolios');
         if (data.achievements && data.achievements.length > 0) {
-            let portHtml = '<ul class="list-unstyled mb-0 ms-3">';
-            data.achievements.forEach(a => {
-                const year = a.year || '-';
-                portHtml += `<li class="d-flex mb-2 align-items-start"><i class="fa-solid fa-circle me-2 mt-2" style="font-size: 0.4rem; color: #4987A4;"></i>
-                <div>
-                    <span class="dash-topic-title fw-semibold">${a.title}</span> - <span class="dash-topic-value">${a.organization}</span> <span class="text-muted small">(${year})</span>
-                </div>
-                </li>`;
+            let portHtml = '<div class="d-flex flex-column gap-3 mt-1">';
+            data.achievements.forEach(p => {
+                portHtml += `
+                <div class="p-3 border rounded-3 position-relative" style="background: #fcfdffff;">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="mb-2"><span class="badge px-2 py-2" style="background-color: #4987A4; color: #ffffff; font-weight: 550; border-radius: 50px; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">${p.case_category}</span></div>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-2">${p.title}</h6>
+                    <p class="text-muted mb-2 text-break" style="font-size: 0.9rem; line-height: 1.5;">${p.details}</p>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="badge" style="background-color: #ddfdeeff; color: #059669; font-weight: 500; border-radius: 50px;">${p.result}</span>
+                        <small class="text-muted">${p.summary}</small>
+                    </div>
+                </div>`;
             });
-            portHtml += '</ul>';
+            portHtml += '</div>';
             portContainer.innerHTML = portHtml;
         }
 
