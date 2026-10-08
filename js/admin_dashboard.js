@@ -672,7 +672,9 @@ function renderReviews() {
                     let rawReviewText = (r.text === null || r.text.trim() === '' || r.text === 'null')
                         ? '<span class="text-muted fst-italic">- ไม่มีข้อความรีวิว -</span>'
                         : `"${r.text}"`;
+                    let titleHtml = r.title ? `<div class="mb-2"><span class="topic-badge">${r.title}</span></div>` : '';
                     let reviewTextHtml = `
+                        ${titleHtml}
                         <div class="mb-1">${starsHtml}</div>
                         <div>${rawReviewText}</div>
                     `;
@@ -754,7 +756,9 @@ function renderReviews() {
                             let rawReviewText = (r.text === null || r.text.trim() === '' || r.text === 'null')
                                 ? '<span class="text-muted fst-italic">- ไม่มีข้อความรีวิว -</span>'
                                 : `"${r.text}"`;
+                            let titleHtml = r.title ? `<div class="mb-2"><span class="topic-badge">${r.title}</span></div>` : '';
                             let reviewTextHtml = `
+                                ${titleHtml}
                                 <div class="mb-1">${starsHtml}</div>
                                 <div>${rawReviewText}</div>
                             `;

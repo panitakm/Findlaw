@@ -217,7 +217,7 @@ router.put('/admin/lawyers/:id/reject', authenticateAdmin, async (req, res) => {
 router.get('/admin/reviews/all', authenticateAdmin, async (req, res) => {
     try {
         const sql = `
-            SELECT r.id, r.rating, r.comment as text, r.flag_reason as flagReason, r.status, r.reply,
+            SELECT r.id, r.topic as title, r.rating, r.comment as text, r.flag_reason as flagReason, r.status, r.reply,
                    CONCAT(c.first_name, ' ', c.last_name) as reviewer,
                    CONCAT(l.first_name, ' ', l.last_name) as lawyer
             FROM reviews r
@@ -237,7 +237,7 @@ router.get('/admin/reviews/all', authenticateAdmin, async (req, res) => {
 router.get('/admin/reviews/reported', authenticateAdmin, async (req, res) => {
     try {
         const sql = `
-            SELECT r.id, r.rating, r.comment as text, r.flag_reason as flagReason, r.reply,
+            SELECT r.id, r.topic as title, r.rating, r.comment as text, r.flag_reason as flagReason, r.reply,
                    CONCAT(c.first_name, ' ', c.last_name) as reviewer,
                    CONCAT(l.first_name, ' ', l.last_name) as lawyer,
                    CONCAT(rpt.first_name, ' ', rpt.last_name) as reporter
@@ -259,7 +259,7 @@ router.get('/admin/reviews/reported', authenticateAdmin, async (req, res) => {
 router.get('/admin/reviews/history', authenticateAdmin, async (req, res) => {
     try {
         const sql = `
-            SELECT r.id, r.rating, r.comment as text, r.status, r.reply, r.flag_reason as flagReason,
+            SELECT r.id, r.topic as title, r.rating, r.comment as text, r.status, r.reply, r.flag_reason as flagReason,
                    CONCAT(c.first_name, ' ', c.last_name) as reviewer,
                    CONCAT(l.first_name, ' ', l.last_name) as lawyer,
                    CONCAT(rpt.first_name, ' ', rpt.last_name) as reporter
